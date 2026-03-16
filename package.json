@@ -14,7 +14,6 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.1.2",
     "@astrojs/mdx": "^5.0.0",
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.0.3",
@@ -24,8 +23,5 @@
     "rehype-external-links": "^3.0.0",
     "simple-icons-astro": "^16.1.0",
     "tailwindcss": "^4.2.1"
-  },
-  "devDependencies": {
-    "wrangler": "^4.74.0"
   }
 }
