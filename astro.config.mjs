@@ -6,6 +6,8 @@ import rehypeExternalLinks from 'rehype-external-links';
 import { remarkReadingTime } from './remark-reading-time.mjs';
 import icon from 'astro-icon';
 
+import cloudflare from '@astrojs/cloudflare';
+
 export default defineConfig({
   site: 'https://juanturk.com',
 
@@ -59,4 +61,6 @@ export default defineConfig({
       iconDir: './src/assets/icons',
     }),
   ],
+
+  adapter: cloudflare(),
 });
