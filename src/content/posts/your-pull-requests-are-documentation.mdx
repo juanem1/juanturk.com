@@ -1,0 +1,44 @@
+---
+date: 2023-09-16
+title: "Your Pull Requests Are Documentation (You Just Don't Know It Yet)"
+subtitle: 'How leaving a trail of breadcrumbs in your code reviews saves countless hours of software archaeology.'
+description: 'My perspective on why taking 5 extra minutes to write a proper PR is the best gift you can give your future self.'
+tags:
+  - Code Review
+  - Pull Requests
+  - Documentation
+tldr: 'We usually think of pull requests purely as a hurdle to get code merged. But in reality? They are the most organic form of documentation we have. This is my take on why explaining the "why" in your PR will save your team hours of confusion down the line.'
+heroImage: ../../assets/images/pr.png
+---
+
+It's 2 PM, a legacy feature is acting weird, and you finally trace the bug down to a single, cryptic line of code. You run `git blame` and find the Pull Request from three years ago, hoping for some context. The title? *"Update utils.js"*. The body? Empty. 
+
+We've all been there. 
+
+In all my years as a developer, I can't count the number of times I've had to spelunk through historic PRs to understand the context around a product decision. We often treat PRs as a simple code review mechanism, but they are so much more than that. They capture not just *what* change was made, but *who* made it, *why*, and what alternatives were considered. 
+
+When I write a PR today, I don't just write it for the immediate reviewer. I write it as a message in a bottle for the outsider (or my future self) who might land on it from a search result years from now. 
+
+In my experience, building this "organic documentation" requires a few simple habits:
+
+### 1. Stop using default titles
+Avoid the lazy *"Fix bug"* or *"Update FILE.md"*. Use the title to capture the essence of the change so it makes perfect sense when someone is scanning a list of 50 closed PRs.
+
+### 2. Explain the "Why", not just the "What"
+The diff tells me *what* changed. The PR body needs to tell me *why* we are doing this. What problem does it solve? What alternatives did we consider? What are the trade-offs or risks? Add a quick summary right at the top so anyone landing there can get the context in 10 seconds.
+
+### 3. Leave a trail of breadcrumbs
+Link related tracking issues (which automatically closes them—a nice bonus) and cross-reference other PRs. If you need a specific team to look at it, `@mention` them, but be explicit about *why* you are pinging them and what action you need. Don't just throw it over the fence.
+
+### 4. Show, don't just tell
+If you are changing the UI, drop a screenshot or an animated GIF in the description. Do not force your reviewers to spin up a local dev environment just to see that you changed a button from blue to green. 
+
+### 5. Review your own PR first
+Before you hit "Request Review," read your own diff. Leave inline comments on the tricky parts or nuanced changes to guide the reviewer. It's also the perfect place to ask the "dumb questions" that give you the confidence to ship.
+
+### 6. Keep your changes discrete
+Please, do not bundle three unrelated refactors and a new feature into a single PR. It makes reviewing a nightmare and hinders future discovery. Small, atomic commits and tightly scoped PRs are the way to go. 
+
+Yes, this takes more time upfront. But let's be honest: it is way less overhead than trying to keep static Confluence up to date. I promise you, it's well worth it—your future self, and your coworkers, will thank you.
+
+*For even more tips, check out how to write the [perfect pull request](https://github.blog/developer-skills/github/how-to-write-the-perfect-pull-request/) on the GitHub Blog.*

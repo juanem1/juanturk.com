@@ -1,0 +1,35 @@
+---
+interface Props {
+  tags?: string[];
+  compact?: boolean;
+  className?: string;
+  max?: number;
+}
+
+const { tags = [], compact = false, className, max } = Astro.props;
+const tagClass = compact
+  ? "px-0 py-1 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-orange-300"
+  : "px-0 py-1 text-xs font-medium uppercase tracking-[0.14em] text-orange-300";
+const maxTags = typeof max === "number" ? Math.max(0, Math.floor(max)) : undefined;
+const shuffledTags = [...tags];
+
+for (let index = shuffledTags.length - 1; index > 0; index -= 1) {
+  const randomIndex = Math.floor(Math.random() * (index + 1));
+  [shuffledTags[index], shuffledTags[randomIndex]] = [shuffledTags[randomIndex], shuffledTags[index]];
+}
+
+const selectedTags =
+  maxTags === undefined
+    ? tags
+    : shuffledTags.slice(0, Math.min(maxTags, tags.length));
+---
+
+{
+  selectedTags.length > 0 && (
+    <ul class:list={["flex flex-wrap items-center gap-2", className]} aria-label="Tags">
+      {selectedTags.map((tag) => (
+        <li class={tagClass}>{tag}</li>
+      ))}
+    </ul>
+  )
+}

@@ -1,17 +1,45 @@
 ---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { toPostSummary } from "../data/posts";
 
+const posts = (await getCollection("posts"))
+  .map(toPostSummary)
+  .sort((a, b) => b.date.getTime() - a.date.getTime());
+const latestPosts = posts.slice(0, 3);
+
+const description = "Recent posts by Juan Turk.";
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Juan Turk" description={description}>
+  <section aria-labelledby="recent-posts" class="py-12 sm:py-16">
+    <div>
+      <h1 id="recent-posts" class="text-4xl font-[760] tracking-[-0.05em] text-white sm:text-6xl">
+        Recent posts
+      </h1>
+    </div>
+
+    <div class="mt-10 grid gap-x-10 gap-y-12 lg:grid-cols-3">
+      {latestPosts.map((post) => (
+        <article class="space-y-4">
+          <p class="text-sm text-zinc-500">
+            <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
+          </p>
+          <h3 class="mt-4 text-2xl font-[720] leading-tight tracking-[-0.04em] text-white">
+            <a class="transition hover:text-zinc-200" href={`/blog/${post.slug}/`}>
+              {post.title}
+            </a>
+          </h3>
+          <p class="mt-4 text-base leading-7 text-zinc-400">{post.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,89 @@
+---
+import { getImage, Image } from "astro:assets";
+import { getCollection, render } from "astro:content";
+import PostMeta from "../../components/PostMeta.astro";
+import PostTags from "../../components/PostTags.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import PostTldr from "../../components/PostTldr.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
+const minutesRead = remarkPluginFrontmatter.minutesRead ?? "1 min read";
+const tableOfContents = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+const postUrl = new URL(`/blog/${post.id}/`, Astro.site ?? Astro.url).href;
+const ogImage = post.data.heroImage
+  ? new URL(
+      (
+        await getImage({
+          src: post.data.heroImage,
+          width: 1200,
+          height: 630,
+          format: "jpg",
+          fit: "cover",
+        })
+      ).src,
+      Astro.site ?? Astro.url
+    ).href
+  : undefined;
+---
+
+<BaseLayout title={`${post.data.title} | Juan Turk`} description={post.data.description} ogImage={ogImage}>
+  <article class="w-full">
+    <header class="mb-8">
+      <div class="relative mt-8 min-h-[clamp(20rem,52vh,30rem)]">
+        <div class="absolute inset-0 overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-[0_18px_40px_rgba(255,255,255,0.05)] xl:-inset-x-12">
+          {post.data.heroImage && (
+            <Image
+              src={post.data.heroImage}
+              alt={post.data.title}
+              loading="eager"
+              fetchpriority="high"
+              class="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
+          <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,11,0.18)_0%,rgba(9,9,11,0.42)_34%,rgba(9,9,11,0.82)_68%,rgba(9,9,11,0.96)_100%)]"></div>
+        </div>
+        <div class="relative z-10 flex min-h-[clamp(20rem,52vh,30rem)] items-end py-6 sm:py-8 lg:py-12">
+          <div class="w-full">
+            <h1 class="w-full max-w-none text-4xl font-[780] leading-none tracking-[-0.035em] text-white sm:text-5xl lg:text-6xl">
+              {post.data.title}
+            </h1>
+            <p class="mt-5 w-full max-w-none text-xl font-normal leading-8 text-zinc-200 sm:text-2xl">
+              {post.data.subtitle}
+            </p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <PostMeta
+      authorName="Juan Turk"
+      authorHandle="@juanem1 on GitHub"
+      avatarUrl="/avatar.png"
+      minutesRead={minutesRead}
+      date={post.data.date}
+      postTitle={post.data.title}
+      postUrl={postUrl}
+    />
+    <PostTags tags={post.data.tags} className="-mt-2 mb-8" />
+
+    <div class="grid gap-12 pb-10 lg:grid-cols-[minmax(0,1fr)_16rem] lg:pb-14">
+      <div class="post-content max-w-none">
+        <PostTldr text={post.data.tldr} />
+        <Content />
+      </div>
+
+      <TableOfContents headings={tableOfContents} />
+    </div>
+  </article>
+</BaseLayout>

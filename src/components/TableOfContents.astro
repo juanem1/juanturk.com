@@ -1,0 +1,174 @@
+---
+interface HeadingItem {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings?: HeadingItem[];
+  title?: string;
+  className?: string;
+}
+
+const { headings = [], title = "Table of Contents", className } = Astro.props;
+---
+
+{
+  headings.length > 0 && (
+    <aside class:list={["lg:block", className]} data-toc-root>
+      <div class="lg:sticky lg:top-28">
+        <p class="mb-4 pl-3 text-sm font-[650] tracking-[-0.02em] text-white">{title}</p>
+        <nav aria-label={title}>
+          <ol class="space-y-3">
+            {headings.map((heading) => (
+              <li class:list={["toc-item", heading.depth === 3 && "pl-0"]}>
+                <a class="toc-link" data-toc-link href={`#${heading.slug}`}>
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </div>
+    </aside>
+  )
+}
+
+<script is:inline>
+  const createTableOfContentsManager = () => {
+    const instances = new Map();
+    const bottomThreshold = 2;
+    const activationRatio = 0.35;
+    const minActivationOffset = 200;
+    const maxActivationOffset = 320;
+
+    const setup = () => {
+      instances.forEach((instance, tocRoot) => {
+        if (!document.contains(tocRoot)) {
+          instance.dispose();
+          instances.delete(tocRoot);
+        }
+      });
+
+      document.querySelectorAll('[data-toc-root]').forEach((tocRoot) => {
+        if (instances.has(tocRoot)) return;
+
+        const links = Array.from(tocRoot.querySelectorAll('[data-toc-link]'));
+        const sections = links
+          .map((link) => {
+            const href = link.getAttribute('href');
+            if (!href) return null;
+
+            const id = href.startsWith('#') ? decodeURIComponent(href.slice(1)) : href;
+            const section = document.getElementById(id);
+            if (!section) return null;
+
+            return { link, section };
+          })
+          .filter(Boolean);
+
+        if (sections.length === 0) return;
+
+        let activeId = '';
+        let scheduled = false;
+
+        const updateActiveLink = (id) => {
+          if (activeId === id) return;
+          activeId = id;
+
+          sections.forEach(({ link, section }) => {
+            const isActive = section.id === id;
+            link.classList.toggle('is-active', isActive);
+            if (isActive) {
+              link.setAttribute('aria-current', 'true');
+            } else {
+              link.removeAttribute('aria-current');
+            }
+          });
+        };
+
+        const syncActiveLink = () => {
+          const reachedPageBottom =
+            window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - bottomThreshold;
+
+          if (reachedPageBottom) {
+            updateActiveLink(sections[sections.length - 1].section.id);
+            return;
+          }
+
+          const activationOffset = Math.min(
+            Math.max(window.innerHeight * activationRatio, minActivationOffset),
+            maxActivationOffset
+          );
+
+          const activeSection =
+            sections.find((entry, index) => {
+              const currentTop = entry.section.getBoundingClientRect().top;
+              const nextTop =
+                index < sections.length - 1
+                  ? sections[index + 1].section.getBoundingClientRect().top
+                  : Number.POSITIVE_INFINITY;
+
+              return currentTop <= activationOffset && activationOffset < nextTop;
+            }) ??
+            sections.reduce((closestSection, entry) => {
+              const currentDistance = Math.abs(entry.section.getBoundingClientRect().top - activationOffset);
+              const closestDistance = Math.abs(
+                closestSection.section.getBoundingClientRect().top - activationOffset
+              );
+
+              return currentDistance < closestDistance ? entry : closestSection;
+            }, sections[0]);
+
+          updateActiveLink(activeSection.section.id);
+        };
+
+        const dispose = () => {
+          window.removeEventListener('scroll', requestSync);
+          window.removeEventListener('resize', requestSync);
+        };
+
+        const requestSync = () => {
+          if (scheduled) return;
+          scheduled = true;
+
+          requestAnimationFrame(() => {
+            scheduled = false;
+
+            if (!document.contains(tocRoot)) {
+              dispose();
+              instances.delete(tocRoot);
+              return;
+            }
+
+            syncActiveLink();
+          });
+        };
+
+        window.addEventListener('scroll', requestSync, { passive: true });
+        window.addEventListener('resize', requestSync);
+        instances.set(tocRoot, { dispose });
+        requestSync();
+      });
+    };
+
+    const teardown = () => {
+      instances.forEach((instance) => instance.dispose());
+      instances.clear();
+    };
+
+    return { bound: false, setup, teardown };
+  };
+
+  window.__tableOfContentsManager =
+    window.__tableOfContentsManager ?? createTableOfContentsManager();
+
+  if (!window.__tableOfContentsManager.bound) {
+    window.__tableOfContentsManager.bound = true;
+    document.addEventListener('astro:page-load', window.__tableOfContentsManager.setup);
+    document.addEventListener('astro:before-swap', window.__tableOfContentsManager.teardown);
+  }
+
+  window.__tableOfContentsManager.setup();
+</script>
