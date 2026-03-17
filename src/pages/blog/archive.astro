@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogLayout from "../../layouts/BlogLayout.astro";
 import { toPostSummary } from "../../data/posts";
 
 const posts = (await getCollection("posts"))
@@ -16,7 +16,7 @@ const postsByYear = Object.entries(
 ).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA));
 ---
 
-<BaseLayout title="Archive | Juan Turk" description="List of published blog posts">
+<BlogLayout title="Archive | Juan Turk" description="List of published blog posts">
   <section class="space-y-5 pb-12 pt-8">
     <h1 class="text-5xl font-[780] tracking-[-0.06em] text-white sm:text-7xl">
       The Archive
@@ -68,4 +68,4 @@ const postsByYear = Object.entries(
       </section>
     ))}
   </div>
-</BaseLayout>
+</BlogLayout>

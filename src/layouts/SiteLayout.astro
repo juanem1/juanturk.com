@@ -1,0 +1,18 @@
+---
+import SiteHeader from "../components/SiteHeader.astro";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogType?: "website" | "article";
+  ogImage?: string;
+}
+
+const { title, description, ogType, ogImage } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} ogType={ogType} ogImage={ogImage}>
+  <SiteHeader slot="header" />
+  <slot />
+</BaseLayout>

@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
 import { toPostSummary } from "../data/posts";
 
 const posts = (await getCollection("posts"))
@@ -18,12 +18,21 @@ const formatDate = (date: Date) =>
   });
 ---
 
-<BaseLayout title="Juan Turk" description={description}>
-  <section aria-labelledby="recent-posts" class="py-12 sm:py-16">
+<SiteLayout title="Juan Turk" description={description}>
+  <section aria-labelledby="about-me" class="space-y-6 py-8">
+    <h1 class="text-5xl font-[750] leading-none tracking-[-0.05em] text-white sm:text-7xl">
+      Hey, I'm Juan Turk!
+    </h1>
+    <p class="text-lg leading-8 text-zinc-300 sm:text-xl">
+      After 15+ years of building software across the stack and every stage of the development process, I always try to create simple solutions that are reliable, fail-safe, and have a true reason for existing. <br /> Lately, my curiosity has shifted toward automation, AI, and developing better software tools.
+    </p>
+  </section>
+  
+  <section aria-labelledby="recent-posts" class="py-6 sm:py-8">
     <div>
-      <h1 id="recent-posts" class="text-4xl font-[760] tracking-[-0.05em] text-white sm:text-6xl">
-        Recent posts
-      </h1>
+      <h3 id="recent-posts" class="text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">
+        Check my recent blog posts
+      </h3>
     </div>
 
     <div class="mt-10 grid gap-x-10 gap-y-12 lg:grid-cols-3">
@@ -42,4 +51,4 @@ const formatDate = (date: Date) =>
       ))}
     </div>
   </section>
-</BaseLayout>
+</SiteLayout>

@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import PostTags from "../../components/PostTags.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogLayout from "../../layouts/BlogLayout.astro";
 import { toPostSummary } from "../../data/posts";
 
 const posts = (await getCollection("posts"))
@@ -23,7 +23,7 @@ const formatDate = (date: Date) =>
   });
 ---
 
-<BaseLayout title="Blog | Juan Turk" description={description}>
+<BlogLayout title="Blog | Juan Turk" description={description}>
   <section class="space-y-6 py-8">
     <h1 class="text-5xl font-[750] leading-none tracking-[-0.05em] text-white sm:text-7xl">
       Engineering, in the real world
@@ -124,4 +124,4 @@ const formatDate = (date: Date) =>
       </div>
     )}
   </section>
-</BaseLayout>
+</BlogLayout>

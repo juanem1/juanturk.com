@@ -1,34 +1,36 @@
 ---
 import "../styles/global.css";
 import { Font } from "astro:assets";
-import { Icon } from "astro-icon/components";
 import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title: string;
   description?: string;
+  ogType?: "website" | "article";
   ogImage?: string;
+  bodyClass?: string;
+  htmlClass?: string;
+  mainClass?: string;
 }
 
-const { title, description = "Blog estatico personal", ogImage } = Astro.props;
+const {
+  title,
+  description = "Blog estatico personal",
+  ogType = "website",
+  ogImage,
+  bodyClass = "min-h-screen text-zinc-100 antialiased",
+  htmlClass = "bg-fixed bg-[linear-gradient(180deg,#1c2128,#22272e,#0d1117)]",
+  mainClass = "mx-auto w-full max-w-6xl pb-10",
+} = Astro.props;
 const currentYear = new Date().getFullYear();
-const pathname = Astro.url.pathname;
-const navLinkClass =
-  "rounded-lg border px-4 py-2 text-sm font-medium transition";
-const activeNavLinkClass =
-  "border-white/30 bg-white/10 text-white";
-const inactiveNavLinkClass =
-  "border-white/15 bg-white/5 text-zinc-100 hover:border-white/30 hover:bg-white/10";
-const isBlogRoute =
-  pathname === "/blog" ||
-  pathname.startsWith("/blog/");
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
 ---
 
 <html
   lang="es"
   transition:name="root"
   transition:animate="none"
-  class="bg-fixed bg-[linear-gradient(180deg,#1c2128,#22272e,#0d1117)]"
+  class={htmlClass}
 >
   <head>
     <meta charset="utf-8" />
@@ -38,9 +40,11 @@ const isBlogRoute =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -49,48 +53,10 @@ const isBlogRoute =
     <title>{title}</title>
     <ClientRouter />
   </head>
-  <body class="min-h-screen text-zinc-100 antialiased">
-    <header
-      transition:persist
-      class="sticky top-0 z-50 border-b border-white/15 bg-[linear-gradient(to_bottom,#0d1117fa,#161b22f7,#1c2128f2)] backdrop-blur-md"
-    >
-      <nav aria-label="Principal" class="mx-auto flex max-w-6xl items-center justify-between py-4">
-        <a href="/" class="text-lg font-[650] tracking-[-0.02em] text-white transition hover:text-zinc-200">
-          Juan Turk
-        </a>
-        <div class="flex items-center gap-2 sm:gap-4">
-          <a
-            href="/blog/"
-            aria-current={isBlogRoute ? "page" : undefined}
-            class:list={[navLinkClass, isBlogRoute ? activeNavLinkClass : inactiveNavLinkClass]}
-          >
-            Blog
-          </a>
-          <a
-            href="https://github.com/juanem1"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub profile"
-            title="GitHub"
-            class="text-zinc-300 transition hover:text-white"
-          >
-            <Icon name="gh" class="h-5 w-5" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/juanemilioturk/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn profile"
-            title="LinkedIn"
-            class="text-zinc-300 transition hover:text-white"
-          >
-            <Icon name="in" class="h-5 w-5" />
-          </a>
-        </div>
-      </nav>
-    </header>
+  <body class={bodyClass}>
+    <slot name="header" />
 
-    <main transition:animate="fade" class="mx-auto w-full max-w-6xl pb-10">
+    <main transition:animate="fade" class={mainClass}>
       <slot />
     </main>
 

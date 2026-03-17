@@ -5,7 +5,7 @@ import PostMeta from "../../components/PostMeta.astro";
 import PostTags from "../../components/PostTags.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import PostTldr from "../../components/PostTldr.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogLayout from "../../layouts/BlogLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -37,7 +37,12 @@ const ogImage = post.data.heroImage
   : undefined;
 ---
 
-<BaseLayout title={`${post.data.title} | Juan Turk`} description={post.data.description} ogImage={ogImage}>
+<BlogLayout
+  title={`${post.data.title} | Juan Turk`}
+  description={post.data.description}
+  ogType="article"
+  ogImage={ogImage}
+>
   <article class="w-full">
     <header class="mb-8">
       <div class="relative mt-8 min-h-[clamp(20rem,52vh,30rem)]">
@@ -86,4 +91,4 @@ const ogImage = post.data.heroImage
       <TableOfContents headings={tableOfContents} />
     </div>
   </article>
-</BaseLayout>
+</BlogLayout>
