@@ -24,14 +24,14 @@ const formatDate = (date: Date) =>
 ---
 
 <BlogLayout title="Blog | Juan Turk" description={description}>
-  <section class="space-y-6 py-8">
+  <section class="space-y-6 py-8 px-5 lg:px-10">
     <h1 class="text-5xl font-[750] leading-none tracking-[-0.05em] text-white sm:text-7xl">
       Engineering, in the real world
     </h1>
     <p class="text-lg leading-8 text-zinc-300 sm:text-xl">{description}</p>
   </section>
 
-  <section aria-labelledby="featured-posts" class="space-y-6">
+  <section aria-labelledby="featured-posts" class="space-y-6 px-5 lg:px-10">
     <div class="flex items-center justify-between gap-4">
       <h2 id="featured-posts" class="text-2xl font-[650] tracking-[-0.03em] text-white">
         Featured posts
@@ -112,7 +112,7 @@ const formatDate = (date: Date) =>
                         {post.title}
                       </a>
                     </h3>
-                    <p class="mt-3 text-base text-zinc-400">
+                    <p class="mt-3 text-zinc-400">
                       {post.description}
                     </p>
                     <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white">

@@ -17,7 +17,7 @@ const postsByYear = Object.entries(
 ---
 
 <BlogLayout title="Archive | Juan Turk" description="List of published blog posts">
-  <section class="space-y-5 pb-12 pt-8">
+  <section class="space-y-5 pb-12 pt-8 px-5 lg:px-10">
     <h1 class="text-5xl font-[780] tracking-[-0.06em] text-white sm:text-7xl">
       The Archive
     </h1>
@@ -26,7 +26,7 @@ const postsByYear = Object.entries(
     </p>
   </section>
 
-  <div class="space-y-16">
+  <div class="space-y-16 px-5 lg:px-10">
     {postsByYear.map(([year, yearPosts], yearIndex) => (
       <section
         aria-labelledby={`year-${year}`}
@@ -50,7 +50,7 @@ const postsByYear = Object.entries(
               ]}
             >
               <article class="grid items-start gap-1 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-2">
-                <p class="text-base text-zinc-500">
+                <p class="text-zinc-500">
                   <time datetime={post.date.toISOString()}>
                     {post.date.toLocaleDateString("en-US", {
                       day: "numeric",

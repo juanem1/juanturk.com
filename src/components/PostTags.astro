@@ -8,8 +8,8 @@ interface Props {
 
 const { tags = [], compact = false, className, max } = Astro.props;
 const tagClass = compact
-  ? "px-0 py-1 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-orange-300"
-  : "px-0 py-1 text-xs font-medium uppercase tracking-[0.14em] text-orange-300";
+  ? "px-0 py-1 text-[0.68rem] font-medium uppercase tracking-tight text-orange-300"
+  : "px-0 py-1 text-xs font-medium uppercase tracking-tight text-orange-300";
 const maxTags = typeof max === "number" ? Math.max(0, Math.floor(max)) : undefined;
 const shuffledTags = [...tags];
 

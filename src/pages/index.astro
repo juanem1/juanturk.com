@@ -19,35 +19,82 @@ const formatDate = (date: Date) =>
 ---
 
 <SiteLayout title="Juan Turk" description={description}>
-  <section aria-labelledby="about-me" class="space-y-6 py-8">
-    <h1 class="text-5xl font-[750] leading-none tracking-[-0.05em] text-white sm:text-7xl">
-      Hey, I'm Juan Turk!
-    </h1>
-    <p class="text-lg leading-8 text-zinc-300 sm:text-xl">
-      After 15+ years of building software across the stack and every stage of the development process, I always try to create simple solutions that are reliable, fail-safe, and have a true reason for existing. <br /> Lately, my curiosity has shifted toward automation, AI, and developing better software tools.
-    </p>
+  <section aria-labelledby="about-me" class="px-5 py-10 sm:px-8 sm:py-12 lg:px-10">
+    <div class="space-y-6 lg:w-2/3">
+      <h1
+        id="about-me"
+        class="text-4xl font-[750] leading-[0.92] text-white sm:text-6xl lg:text-7xl"
+      >
+        Hey, I&apos;m Juan Turk!
+      </h1>
+      <div class="space-y-4 leading-7 text-zinc-300 sm:text-lg sm:leading-8 lg:text-xl">
+        <p>
+          After 15+ years of building software across the stack and every stage of the development
+          process, I always try to create simple solutions that are reliable, fail-safe, and have
+          a true reason for existing.
+        </p>
+        <p>
+          Lately, my curiosity has shifted toward automation, AI, and developing better software
+          tools.
+        </p>
+      </div>
+    </div>
   </section>
-  
-  <section aria-labelledby="recent-posts" class="py-6 sm:py-8">
-    <div>
-      <h3 id="recent-posts" class="text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">
-        Check my recent blog posts
-      </h3>
+
+  <section aria-labelledby="recent-posts" class="px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-2xl space-y-3">
+        <h2 id="recent-posts" class="text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">
+          Check my recent blog posts
+        </h2>
+        <p class="leading-7 text-zinc-400">
+          Check my latest posts and explore the ideas, lessons, and experiments I keep publishing over time.
+        </p>
+      </div>
+
+      <a
+        href="/blog/"
+        class="inline-flex items-center justify-center self-start rounded-full border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
+      >
+        Browse all posts
+      </a>
     </div>
 
-    <div class="mt-10 grid gap-x-10 gap-y-12 lg:grid-cols-3">
-      {latestPosts.map((post) => (
-        <article class="space-y-4">
-          <p class="text-sm text-zinc-500">
-            <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
-          </p>
-          <h3 class="mt-4 text-2xl font-[720] leading-tight tracking-[-0.04em] text-white">
-            <a class="transition hover:text-zinc-200" href={`/blog/${post.slug}/`}>
-              {post.title}
-            </a>
-          </h3>
-          <p class="mt-4 text-base leading-7 text-zinc-400">{post.description}</p>
-        </article>
+    <div class="mt-8 grid gap-y-8 sm:mt-10 lg:grid-cols-[minmax(0,1fr)_3rem_minmax(0,1fr)_3rem_minmax(0,1fr)]">
+      {latestPosts.map((post, index) => (
+        <div class="contents">
+          {index > 0 && (
+            <div
+              aria-hidden="true"
+              class="hidden w-px justify-self-center self-stretch bg-white/10 lg:block"
+            />
+          )}
+
+          <article
+            class:list={[
+              "flex h-full flex-col py-1",
+              index > 0 ? "border-t border-white/10 pt-8 lg:border-t-0 lg:pt-1" : "",
+            ]}
+          >
+            <p class="text-sm text-zinc-500">
+              <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
+            </p>
+            <h3 class="mt-4 text-xl font-[720] leading-tight tracking-[-0.04em] text-white sm:text-2xl">
+              <a class="transition hover:text-zinc-200" href={`/blog/${post.slug}/`}>
+                {post.title}
+              </a>
+            </h3>
+            <p class="mt-4 leading-7 text-zinc-400">{post.description}</p>
+            <div class="mt-auto pt-6">
+              <a
+                class="inline-flex items-center text-sm font-semibold text-orange-300 transition hover:text-orange-200"
+                href={`/blog/${post.slug}/`}
+              >
+                Read post
+              </a>
+            </div>
+          </article>
+        </div>
       ))}
     </div>
   </section>
