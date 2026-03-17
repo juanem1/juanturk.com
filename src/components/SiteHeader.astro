@@ -1,15 +1,5 @@
 ---
 import { Icon } from "astro-icon/components";
-
-interface Props {
-  activeSection?: "blog";
-}
-
-const { activeSection } = Astro.props;
-const navLinkClass = "rounded-lg border px-4 py-2 text-sm font-medium transition";
-const activeNavLinkClass = "border-white/30 bg-white/10 text-white";
-const inactiveNavLinkClass =
-  "border-white/15 bg-white/5 text-zinc-100 hover:border-white/30 hover:bg-white/10";
 ---
 
 <header
@@ -22,11 +12,7 @@ const inactiveNavLinkClass =
     </a>
 
     <div class="flex items-center gap-2 sm:gap-4">
-      <a
-        href="/blog/"
-        aria-current={activeSection === "blog" ? "page" : undefined}
-        class:list={[navLinkClass, activeSection === "blog" ? activeNavLinkClass : inactiveNavLinkClass]}
-      >
+      <a href="/blog/" class="inline-flex items-center rounded-full border border-transparent bg-transparent px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-white/30 hover:bg-white/10 hover:text-white">
         Blog
       </a>
       <a
