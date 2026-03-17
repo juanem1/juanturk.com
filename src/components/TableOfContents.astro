@@ -16,7 +16,7 @@ const { headings = [], title = "Table of Contents", className } = Astro.props;
 
 {
   headings.length > 0 && (
-    <aside class:list={["lg:block", className]} data-toc-root>
+    <aside class:list={["hidden lg:block", className]} data-toc-root>
       <div class="lg:sticky lg:top-28">
         <p class="mb-4 pl-3 text-sm font-[650] tracking-[-0.02em] text-white">{title}</p>
         <nav aria-label={title}>

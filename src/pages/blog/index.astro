@@ -24,7 +24,7 @@ const formatDate = (date: Date) =>
 ---
 
 <BlogLayout title="Blog | Juan Turk" description={description}>
-  <section class="space-y-6 py-8 px-5 lg:px-10">
+  <section class="space-y-6 pb-15 pt-8 px-5 lg:px-10 sm:pb-8">
     <h1 class="text-5xl font-[750] leading-none tracking-[-0.05em] text-white sm:text-7xl">
       Engineering, in the real world
     </h1>
@@ -33,11 +33,11 @@ const formatDate = (date: Date) =>
 
   <section aria-labelledby="featured-posts" class="space-y-6 px-5 lg:px-10">
     <div class="flex items-center justify-between gap-4">
-      <h2 id="featured-posts" class="text-2xl font-[650] tracking-[-0.03em] text-white">
+      <h2 id="featured-posts" class="text-3xl font-[650] tracking-[-0.03em] text-white sm:text-2xl">
         Featured posts
       </h2>
       <a
-        class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/14"
+        class="hidden items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/14 md:inline-flex"
         href="/blog/archive/"
       >
         View archive
@@ -47,7 +47,7 @@ const formatDate = (date: Date) =>
     {leadPost && (
       <div class="grid gap-6 xl:grid-cols-2">
         <article class="group">
-          <a class="block" href={`/blog/${leadPost.slug}/`}>
+          <a class="hidden md:block" href={`/blog/${leadPost.slug}/`}>
             {leadPost.heroImage && (
               <div class="overflow-hidden rounded-2xl border border-white/10">
                 <Image
@@ -67,12 +67,12 @@ const formatDate = (date: Date) =>
             <p class="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-300/90">
               <PostTags max={2} tags={leadPost.tags} />
             </p>
-            <h3 class="mt-4 max-w-4xl text-5xl font-[760] leading-[0.95] tracking-[-0.055em] text-white">
+            <h3 class="mt-4 max-w-4xl text-2xl font-[760] leading-tight tracking-[-0.04em] text-white md:text-4xl md:leading-[0.98] xl:text-5xl xl:leading-[0.95] xl:tracking-[-0.055em]">
               <a class="transition group-hover:text-zinc-200" href={`/blog/${leadPost.slug}/`}>
                 {leadPost.title}
               </a>
             </h3>
-            <p class="mt-5 max-w-3xl text-lg leading-8 text-zinc-200 sm:text-xl">
+            <p class="mt-5 max-w-3xl text-zinc-400 md:text-lg md:leading-8 xl:text-xl">
               {leadPost.description}
             </p>
 
@@ -83,11 +83,11 @@ const formatDate = (date: Date) =>
         </article>
 
         {secondaryPosts.length > 0 && (
-          <ul>
+          <ul class="border-t border-white/10 pt-4 sm:pt-5 md:border-t-0 md:pt-0">
             {secondaryPosts.map((post, index) => (
               <li class:list={["border-white/10 pb-4 sm:pb-5", index > 0 ? "border-t pt-4 sm:pt-5" : "pt-0"]}>
                 <article class="group grid gap-5 md:grid-cols-[168px_minmax(0,1fr)] md:items-start">
-                  <a class="block" href={`/blog/${post.slug}/`}>
+                  <a class="hidden md:block" href={`/blog/${post.slug}/`}>
                     {post.heroImage && (
                       <div class="overflow-hidden rounded-xl border border-white/10">
                         <Image
@@ -126,5 +126,14 @@ const formatDate = (date: Date) =>
         )}
       </div>
     )}
+
+    <div class="flex justify-center md:hidden">
+      <a
+        class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/14"
+        href="/blog/archive/"
+      >
+        View archive
+      </a>
+    </div>
   </section>
 </BlogLayout>
