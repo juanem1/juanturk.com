@@ -6,7 +6,7 @@ import { toPostSummary } from "../../data/posts";
 const posts = (await getCollection("posts"))
   .map(toPostSummary)
   .sort((a, b) => b.date.getTime() - a.date.getTime());
-const postsByYear = Object.entries(
+const groupedPosts = Object.entries(
   posts.reduce<Record<string, typeof posts>>((groups, post) => {
     const year = String(post.date.getFullYear());
     groups[year] ??= [];
@@ -14,25 +14,51 @@ const postsByYear = Object.entries(
     return groups;
   }, {})
 ).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA));
+
+let motionStep = 0;
+const introTitleStep = motionStep++;
+const introCopyStep = motionStep++;
+const postsByYear = groupedPosts.map(([year, yearPosts]) => {
+  const headingStep = motionStep++;
+
+  return {
+    year,
+    headingStep,
+    posts: yearPosts.map((post, postIndex) => ({
+      post,
+      postIndex,
+      motionStep: motionStep++,
+    })),
+  };
+});
 ---
 
 <BlogLayout title="Archive | Juan Turk" description="List of published blog posts">
   <section class="space-y-5 pb-12 pt-8 px-5 lg:px-10">
-    <h1 class="text-5xl font-[780] tracking-[-0.06em] text-white sm:text-7xl">
+    <h1
+      class="motion-enter motion-fade text-5xl font-[780] tracking-[-0.06em] text-white sm:text-7xl"
+      style={`--motion-step:${introTitleStep};`}
+    >
       The Archive
     </h1>
-    <p class="max-w-3xl text-lg leading-8 text-zinc-300 sm:text-xl">
+    <p
+      class="motion-enter motion-fade max-w-3xl text-lg leading-8 text-zinc-300 sm:text-xl"
+      style={`--motion-step:${introCopyStep};`}
+    >
       Everything I've written so far.
     </p>
   </section>
 
   <div class="space-y-16 px-5 lg:px-10">
-    {postsByYear.map(([year, yearPosts], yearIndex) => (
+    {postsByYear.map(({ year, headingStep, posts: yearPosts }, yearIndex) => (
       <section
         aria-labelledby={`year-${year}`}
         class:list={[yearIndex === postsByYear.length - 1 && "mb-12"]}
       >
-        <div class="flex items-center border-b border-white/8 pb-5">
+        <div
+          class="motion-enter motion-fade flex items-center border-b border-white/8 pb-5"
+          style={`--motion-step:${headingStep};`}
+        >
           <h2 id={`year-${year}`} class="mr-4 text-4xl font-[780] tracking-[-0.05em] text-white lg:top-28">
             {year}
           </h2>
@@ -42,34 +68,40 @@ const postsByYear = Object.entries(
         </div>
 
         <ol>
-          {yearPosts.map((post, postIndex) => (
+          {yearPosts.map(({ post, postIndex, motionStep: postMotionStep }) => (
             <li
               class:list={[
-                "py-5",
-                postIndex !== yearPosts.length - 1 && "border-b border-white/8",
+                "motion-enter motion-fade",
               ]}
+              style={`--motion-step:${postMotionStep};`}
             >
-              <article class="grid items-start gap-1 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-2">
-                <p class="text-zinc-500">
-                  <time datetime={post.date.toISOString()}>
-                    {post.date.toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                    })}
-                  </time>
-                </p>
-
-                <div class="min-w-0">
-                  <h3 class="text-2xl font-bold tracking-[-0.035em] text-white sm:text-3xl">
-                    <a class="transition hover:text-zinc-300" href={`/blog/${post.slug}/`}>
-                      {post.title}
-                    </a>
-                  </h3>
-                  <p class="mt-2 max-w-3xl truncate text-lg leading-8 text-zinc-400">
-                    {post.subtitle}
+              <a
+                href={`/blog/${post.slug}/`}
+                class:list={[
+                  "group block py-5 transition-all duration-300 ease-out hover:-translate-y-1",
+                  postIndex !== yearPosts.length - 1 && "border-b border-white/8",
+                ]}
+              >
+                <article class="grid items-start gap-1 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-2">
+                  <p class="text-zinc-500 transition-colors duration-300 group-hover:text-zinc-400">
+                    <time datetime={post.date.toISOString()}>
+                      {post.date.toLocaleDateString("en-US", {
+                        day: "numeric",
+                        month: "long",
+                      })}
+                    </time>
                   </p>
-                </div>
-              </article>
+
+                  <div class="min-w-0">
+                    <h3 class="text-2xl font-bold tracking-[-0.035em] text-white transition-colors duration-300 group-hover:text-zinc-200 sm:text-3xl">
+                      {post.title}
+                    </h3>
+                    <p class="mt-2 max-w-3xl truncate text-lg leading-8 text-zinc-400 transition-colors duration-300 group-hover:text-zinc-300">
+                      {post.subtitle}
+                    </p>
+                  </div>
+                </article>
+              </a>
             </li>
           ))}
         </ol>

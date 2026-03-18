@@ -37,7 +37,7 @@ const formatDate = (date: Date) =>
         Featured posts
       </h2>
       <a
-        class="hidden items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/14 md:inline-flex"
+        class="interactive-chip hidden items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/14 md:inline-flex"
         href="/blog/archive/"
       >
         View archive
@@ -46,10 +46,13 @@ const formatDate = (date: Date) =>
 
     {leadPost && (
       <div class="grid gap-6 xl:grid-cols-2">
-        <article class="group">
-          <a class="hidden md:block" href={`/blog/${leadPost.slug}/`}>
+        <article>
+          <a
+            href={`/blog/${leadPost.slug}/`}
+            class="group block transition-all duration-300 ease-out hover:-translate-y-1"
+          >
             {leadPost.heroImage && (
-              <div class="overflow-hidden rounded-2xl border border-white/10">
+              <div class="hidden overflow-hidden rounded-2xl border border-white/10 md:block">
                 <Image
                   src={leadPost.heroImage}
                   alt={leadPost.title}
@@ -61,75 +64,77 @@ const formatDate = (date: Date) =>
                 />
               </div>
             )}
-          </a>
 
-          <div class="mt-6">
-            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-300/90">
-              <PostTags max={2} tags={leadPost.tags} />
-            </p>
-            <h3 class="mt-4 max-w-4xl text-2xl font-[760] leading-tight tracking-[-0.04em] text-white md:text-4xl md:leading-[0.98] xl:text-5xl xl:leading-[0.95] xl:tracking-[-0.055em]">
-              <a class="transition group-hover:text-zinc-200" href={`/blog/${leadPost.slug}/`}>
+            <div class="mt-6">
+              <p class="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-300/90 transition-colors duration-300 group-hover:text-emerald-200">
+                <PostTags max={2} tags={leadPost.tags} />
+              </p>
+              <h3 class="mt-4 max-w-4xl text-2xl font-[760] leading-tight tracking-[-0.04em] text-white transition-colors duration-300 group-hover:text-zinc-200 md:text-4xl md:leading-[0.98] xl:text-5xl xl:leading-[0.95] xl:tracking-[-0.055em]">
                 {leadPost.title}
-              </a>
-            </h3>
-            <p class="mt-5 max-w-3xl text-zinc-400 md:text-lg md:leading-8 xl:text-xl">
-              {leadPost.description}
-            </p>
+              </h3>
+              <p class="mt-5 max-w-3xl text-zinc-400 transition-colors duration-300 group-hover:text-zinc-300 md:text-lg md:leading-8 xl:text-xl">
+                {leadPost.description}
+              </p>
 
-            <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white">
-              <time datetime={leadPost.date.toISOString()}>{formatDate(leadPost.date)}</time>
+              <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white transition-colors duration-300 group-hover:text-zinc-100">
+                <time datetime={leadPost.date.toISOString()}>{formatDate(leadPost.date)}</time>
+              </div>
             </div>
-          </div>
+          </a>
         </article>
 
-        {secondaryPosts.length > 0 && (
-          <ul class="border-t border-white/10 pt-4 sm:pt-5 md:border-t-0 md:pt-0">
-            {secondaryPosts.map((post, index) => (
-              <li class:list={["border-white/10 pb-4 sm:pb-5", index > 0 ? "border-t pt-4 sm:pt-5" : "pt-0"]}>
-                <article class="group grid gap-5 md:grid-cols-[168px_minmax(0,1fr)] md:items-start">
-                  <a class="hidden md:block" href={`/blog/${post.slug}/`}>
-                    {post.heroImage && (
-                      <div class="overflow-hidden rounded-xl border border-white/10">
-                        <Image
-                          src={post.heroImage}
-                          alt={post.title}
-                          class="aspect-square h-full w-full object-cover"
-                          widths={[336, 512, 768]}
-                          sizes="(min-width: 768px) 168px, 40vw"
-                          format="webp"
-                          loading="eager"
-                        />
-                      </div>
-                    )}
-                  </a>
+        <div class="border-t border-white/10 pt-4 sm:pt-5 md:border-t-0 md:pt-0">
+          {secondaryPosts.map((post, index) => (
+            <div
+              class:list={[
+                "group border-white/10 pb-4 transition-all duration-300 ease-out hover:-translate-y-1 sm:pb-5",
+                index > 0 ? "border-t pt-4 sm:pt-5" : "pt-0",
+              ]}
+            >
+              <article>
+                <a
+                  href={`/blog/${post.slug}/`}
+                  class="grid gap-5 md:grid-cols-[168px_minmax(0,1fr)] md:items-start"
+                >
+                  {post.heroImage && (
+                    <div class="hidden overflow-hidden rounded-xl border border-white/10 md:block">
+                      <Image
+                        src={post.heroImage}
+                        alt={post.title}
+                        class="aspect-square h-full w-full object-cover"
+                        widths={[336, 512, 768]}
+                        sizes="(min-width: 768px) 168px, 40vw"
+                        format="webp"
+                        loading="eager"
+                      />
+                    </div>
+                  )}
 
                   <div class="min-w-0">
-                    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-fuchsia-300 sm:text-sm">
+                    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-fuchsia-300 transition-colors duration-300 group-hover:text-fuchsia-200 sm:text-sm">
                       <PostTags max={2} tags={post.tags} compact />
                     </p>
-                    <h3 class="mt-3 text-2xl font-bold leading-tight tracking-[-0.04em] text-white">
-                      <a class="transition group-hover:text-zinc-200" href={`/blog/${post.slug}/`}>
-                        {post.title}
-                      </a>
+                    <h3 class="mt-3 text-2xl font-bold leading-tight tracking-[-0.04em] text-white transition-colors duration-300 group-hover:text-zinc-200">
+                      {post.title}
                     </h3>
-                    <p class="mt-3 text-zinc-400">
+                    <p class="mt-3 text-zinc-400 transition-colors duration-300 group-hover:text-zinc-300">
                       {post.description}
                     </p>
-                    <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white">
+                    <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white transition-colors duration-300 group-hover:text-zinc-100">
                       <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
                     </div>
                   </div>
-                </article>
-              </li>
-            ))}
-          </ul>
-        )}
+                </a>
+              </article>
+            </div>
+          ))}
+        </div>
       </div>
     )}
 
     <div class="flex justify-center md:hidden">
       <a
-        class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/14"
+        class="interactive-chip inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/14"
         href="/blog/archive/"
       >
         View archive
