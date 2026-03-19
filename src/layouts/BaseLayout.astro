@@ -1,7 +1,7 @@
 ---
-import "../styles/global.css";
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
+import globalStylesHref from "../styles/global.css?url";
 
 interface Props {
   title: string;
@@ -50,6 +50,11 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <meta name="twitter:description" content={description} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <link rel="preload" href={globalStylesHref} as="style" />
+    <link rel="stylesheet" href={globalStylesHref} media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href={globalStylesHref} />
+    </noscript>
     <title>{title}</title>
     <ClientRouter />
   </head>
