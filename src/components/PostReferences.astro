@@ -1,0 +1,12 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = "References" } = Astro.props;
+---
+
+<section class="post-references" aria-label={title}>
+  {title && <p class="post-references-title">{title}</p>}
+  <slot />
+</section>

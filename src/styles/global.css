@@ -148,6 +148,38 @@
   .post-content figcaption {
     @apply mt-3 text-center text-sm leading-6 text-zinc-500;
   }
+
+  .post-references {
+    @apply mt-12 border-t border-white/10 pt-5 text-zinc-400;
+    font-size: 0.75em;
+    line-height: 1.55;
+  }
+
+  .post-references > * + * {
+    @apply mt-3;
+  }
+
+  .post-references-title {
+    @apply text-[0.95em] font-medium tracking-[-0.01em] text-zinc-300;
+  }
+
+  .post-references p,
+  .post-references li {
+    @apply m-0 text-inherit;
+  }
+
+  .post-references ul,
+  .post-references ol {
+    @apply list-none space-y-2 pl-0;
+  }
+
+  .post-references a {
+    @apply font-normal text-orange-300 decoration-zinc-600 underline-offset-3;
+  }
+
+  .post-references a:hover {
+    @apply underline decoration-orange-300;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

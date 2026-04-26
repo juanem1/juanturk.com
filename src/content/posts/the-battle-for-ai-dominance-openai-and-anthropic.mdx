@@ -1,0 +1,73 @@
+---
+date: 2026-04-26
+title: "The Battle for AI Dominance: The Resurgence of OpenAI and a Stumbling Anthropic"
+subtitle: "Anthropic was the top contender for a couple of months. However, in the AI race, it takes more than a story, you need capabilities, capacity, and speed to deploy your solutions."
+description: "From February to April 2026, the clash between OpenAI and Anthropic showed a hard truth about AI leadership: it's all about computation, delivery, and operation, not about the name."
+tags:
+  - AI
+  - OpenAI
+  - Anthropic
+  - Infrastructure
+tldr: "For some time, Anthropic had the upper hand in the story. However, a series of operational challenges, security problems, and product issues proved that Anthropic lacked the necessary foundation to compete with OpenAI, which started releasing products at a breakneck pace with ample funding. It's evident that computation is the key to success in modern AI."
+heroImage: ../../assets/images/the-battle-for-ai-dominance.png
+---
+
+import PostReferences from "../../components/PostReferences.astro";
+
+It wasn't until the end of 2025 and beginning of 2026 that there was no doubt about who had taken control of the AI industry: Anthropic.
+
+> OpenAI seemed to belong to the past, reminiscent of the Yahoo of the 2000s in the age of the supremacy of Google.
+
+However, in less than a few months, a combination of blunders committed by Anthropic and an effective counter-strategy from OpenAI would leave the former in ruins. Let us dissect this tragic but avoidable failure.
+
+## The Beginning of the End: Ideals, the Pentagon, and the Crisis of Servers
+
+Unlike many other failures, the collapse of Anthropic started with its refusal to cooperate with the US government. As reported by [Associated Press](https://www.opb.org/article/2026/02/27/anthropic-refuses-to-bend-to-pentagon-on-ai-safeguards-as-dispute-nears-deadline/), Anthropic categorically declined to give access to its artificial intelligence to the Pentagon, citing ethical concerns surrounding mass surveillance and autonomous weapons.
+
+This decision led to a blockade on Anthropic's side, with the company being branded as a "national security risk." Paradoxically, their act of defiance became the symbol of corporate martyrdom and resulted in a social media revolution. Millions of internet users flocked to support Anthropic as they migrated en masse from ChatGPT to Anthropic. Specifically, around 2 million users abandoned their former platform within the course of one week!
+
+However, Anthropic's momentary victory soon revealed itself to be an Achilles heel. Specifically, [Anthropic's server crisis](https://www.anthropic.com/engineering/april-23-postmortem) exposed an underlying problem – **lack of computing power**. While their CEO dramatically underestimated (and even ridiculed) the accumulation of hardware that OpenAI was quietly working on with its billion-dollar deals with corporations, Anthropic found itself struggling with their own infrastructure. As a result, it was forced to take several steps which, while alleviating their financial troubles, did irreparable damage to their community:
+
+* **Silent nerfing:** They confessed that they decreased the reasoning capacity of their Opus model (by lowering the effort level from "high" to "medium") to free up computing resources. The users noticed a considerable drop in performance, with their AI becoming noticeably "slower and clumsier" [1].
+* **Overpriced launches:** By releasing a cloud-design platform (*Cloud Design*) with incredibly expensive processing costs (which consumed all of their credits in less than 20 minutes of use), they transformed the user hype into immediate disappointment.
+* **Erratic business decisions:** Anthropic tried to remove *Cloud Code* from their $20 PRO subscription in an effort to cut costs, which they had to backtrack after being denounced by the developers.
+* **Security leaks:** Under internal pressure, they made catastrophic mistakes, including severe information leaks of the source code of *Cloud Code* and, ironically, unauthorized access to the over-hyped *Mythos* model by subcontracted firms [2].
+
+## Counterattack by OpenAI: Action Over Propaganda
+
+In the meantime, while Anthropic fought its own flames of panic and deleted its GitHub repositories to hide its blunders, OpenAI successfully implemented its impeccable strategy. Namely, by adhering to the slogan *"build and ship"* and letting Anthropic choke in its own server crisis and reputation game, OpenAI took the fight to their competitor and gained an enormous advantage.
+
+First of all, on March 31, 2026, OpenAI closed a [$122 billion funding round](https://openai.com/index/accelerating-the-next-phase-ai/) and proved why hardware infrastructure will always be the key player in the industry.
+
+And then the April wave hit them:
+
+* On April 16, they released [GPT-Rosalind](https://openai.com/index/introducing-gpt-rosalind/) for biomedical studies.
+* On April 21, they introduced [ChatGPT Images 2.0](https://openai.com/index/introducing-chatgpt-images-2-0/) along with the enterprise expansion of [Codex](https://openai.com/index/scaling-codex-to-enterprises-worldwide).
+* On April 22, they launched [agents in ChatGPT workspace](https://openai.com/index/introducing-workspace-agents-in-chatgpt/).
+* On April 23, they topped the list with [GPT-5.5](https://openai.com/index/introducing-gpt-5-5/).
+
+## The Uncomfortable Lesson of This Battle
+
+What seems obvious to me from this case is that today, the dominance of companies specializing in AI can only be maintained with brute force.
+
+Certainly, it means having talents; certainly, it means having products. But increasingly, it means being able to handle a lot more practical issues, including data centers, chips, contracts with suppliers, [inference limits](/blog/the-end-unlimited-ai/), etc., so you can continue to serve your clients when millions of them suddenly appear on your platform.
+
+For this reason, OpenAI succeeded so quickly. Not because it prevailed in some ideological debates on Twitter or Reddit. Not because it has better visual aesthetics of its website. But because, when the battle moved from reputation games to practical implementation, it was better equipped to deal with the pressure and continue advancing.
+
+Still, this superiority might also be temporary.
+
+The next innovation might not come from the laboratory with the biggest hardware base, but rather from small, efficient models capable of running offline or on the edge. Should that happen, we would see how this rivalry between tech giants results in a very interesting irony – an artificial intelligence that is easily affordable without a huge budget.
+
+But this is another fight.
+
+For now, however, the battle is still being won by those who can afford the computing and build products before others.
+
+<PostReferences title="References">
+  <ul>
+    <li>[1] Anthropic Engineering Postmortem - [anthropic.com/engineering/april-23-postmortem](https://anthropic.com/engineering/april-23-postmortem)</li>
+    <li>[2] Unauthorized access to the Mythos model - [reuters.com/technology/anthropics-mythos-model-accessed](https://www.reuters.com/technology/anthropics-mythos-model-accessed-by-unauthorized-users-bloomberg-news-reports-2026-04-21/)</li>
+    <li>[3] Accelerating the next phase of AI - [openai.com/index/accelerating-the-next-phase-ai/](https://openai.com/index/accelerating-the-next-phase-ai/)</li>
+    <li>[4] Introducing ChatGPT Images 2.0 - [openai.com/index/introducing-chatgpt-images-2-0/](https://openai.com/index/introducing-chatgpt-images-2-0/)</li>
+    <li>[5] Introducing GPT Rosalind - [openai.com/index/introducing-gpt-rosalind/](https://openai.com/index/introducing-gpt-rosalind/)</li>
+  </ul>
+</PostReferences>
