@@ -1,0 +1,188 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const title = "Strategic Technical Review";
+const description =
+  "A selective one-call technical diagnostic for high-stakes architecture, scalability, and delivery decisions.";
+
+const processSteps = [
+  {
+    title: "Apply for review",
+    body:
+      "Complete the form below so I can understand the business context, technical stakes, and whether the problem is a strong fit for this format.",
+  },
+  {
+    title: "Share technical context",
+    body:
+      "If the application is accepted, I will request the key materials I need to review the stack, bottlenecks, constraints, and current implementation reality.",
+  },
+  {
+    title: "Single 60-minute diagnostic call",
+    body:
+      "We use one focused session to clarify the problem, challenge assumptions, and align the technical direction with the business context.",
+  },
+  {
+    title: "Loom + PDF within 3 business days",
+    body:
+      "You receive an asynchronous debrief with findings, trade-offs, quick wins, and a recommended path your team can execute.",
+  },
+];
+---
+
+<SiteLayout title={title} description={description}>
+  <section class="px-5 py-10 sm:px-8 sm:py-12 lg:px-10">
+    <div class="max-w-5xl space-y-10">
+      <div class="space-y-5">
+        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-orange-300">
+          Selective advisory engagement
+        </p>
+        <h1 class="max-w-4xl text-4xl font-[750] leading-[0.92] tracking-[-0.05em] text-white sm:text-6xl">
+          Strategic Technical Review
+        </h1>
+        <p class="max-w-3xl leading-7 text-zinc-200 sm:text-xl sm:leading-8">
+          A single diagnostic call for founders and technical leaders facing consequential
+          engineering decisions, scaling pressure, or stubborn delivery bottlenecks.
+        </p>
+        <p class="max-w-3xl leading-7 text-zinc-400 sm:text-lg sm:leading-8">
+          Led by Juan Turk, Senior Software Engineer at GitHub, this review applies 15+ years of
+          product and infrastructure experience with the rigor, trade-off analysis, and engineering
+          standards expected in Big Tech environments.
+        </p>
+      </div>
+
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,1.8fr)_minmax(280px,1fr)] lg:items-start">
+        <div class="space-y-8">
+          <div class="space-y-3">
+            <h2 class="text-2xl font-[720] tracking-[-0.04em] text-white sm:text-3xl">
+              Who this is for
+            </h2>
+            <p class="max-w-3xl leading-7 text-zinc-300">
+              Best fit for founders, technical leaders, and companies that need a sharp external
+              diagnostic before making an important technical decision, untangling a costly
+              bottleneck, or defining the right architecture for the next stage of growth.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <h2 class="text-2xl font-[720] tracking-[-0.04em] text-white sm:text-3xl">
+              What I&apos;ll ask for
+            </h2>
+            <p class="max-w-3xl leading-7 text-zinc-300">
+              Before the call, I ask for the context that changes the quality of the diagnostic:
+              your business goals, current stack, primary bottleneck, relevant technical or
+              organizational constraints, and whether your team is ready to implement the
+              recommendations internally.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <h2 class="text-2xl font-[720] tracking-[-0.04em] text-white sm:text-3xl">
+              How it works
+            </h2>
+            <ol class="list-none grid gap-4 pl-0 sm:grid-cols-2">
+              {processSteps.map((step, index) => (
+                <li class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                  <p class="text-sm font-semibold text-orange-300">0{index + 1}</p>
+                  <h3 class="mt-3 text-lg font-[700] leading-tight text-white">{step.title}</h3>
+                  <p class="mt-3 leading-7 text-zinc-400">{step.body}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div class="space-y-3">
+            <h2 class="text-2xl font-[720] tracking-[-0.04em] text-white sm:text-3xl">
+              What you receive
+            </h2>
+            <p class="max-w-3xl leading-7 text-zinc-300">
+              The deliverable is a Loom walkthrough plus a concise PDF that outlines the core
+              findings, material risks, key trade-offs, recommended technical direction, quick
+              wins, and practical next steps for your team to execute.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <h2 class="text-2xl font-[720] tracking-[-0.04em] text-white sm:text-3xl">
+              What this is not
+            </h2>
+            <p class="max-w-3xl leading-7 text-zinc-300">
+              This is not emergency support, hands-on implementation, or a part-time CTO
+              arrangement. I provide the diagnostic, the reasoning behind it, and the recommended
+              direction. Your team remains responsible for execution.
+            </p>
+          </div>
+        </div>
+
+        <aside class="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 lg:sticky lg:top-24">
+          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-orange-300">
+            Investment and fit
+          </p>
+          <p class="mt-4 text-3xl font-[760] tracking-[-0.05em] text-white">$2,000 USD</p>
+          <p class="mt-4 leading-7 text-zinc-300">
+            I take on a limited number of reviews to keep the work focused, sharp, and high
+            quality. Every submission is screened for fit before I accept the engagement.
+          </p>
+
+          <div class="mt-6 space-y-4 border-t border-white/10 pt-6 text-sm leading-6 text-zinc-300">
+            <div>
+              <p class="font-semibold text-white">Format</p>
+              <p>Single 60-minute diagnostic call</p>
+            </div>
+            <div>
+              <p class="font-semibold text-white">Delivery</p>
+              <p>Loom + PDF within 3 business days</p>
+            </div>
+            <div>
+              <p class="font-semibold text-white">Scope</p>
+              <p>Advisory only. No implementation, no retained support.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="max-w-3xl rounded-[1.5rem] border border-orange-300/20 bg-orange-300/[0.06] p-5 sm:p-6">
+        <p class="leading-7 text-zinc-100 sm:text-lg sm:leading-8">
+          If this matches the level of problem you want help diagnosing, apply for review below.
+          The form helps me understand your context and decide whether I am the right fit for the
+          engagement.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-3 pb-12 sm:px-6 sm:pb-14 lg:px-8">
+    <iframe
+      data-tally-src="https://tally.so/embed/rjlRxl?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+      loading="lazy"
+      width="100%"
+      height="974"
+      title={title}
+      class="block min-h-243.5 w-full border-0 bg-transparent"
+    />
+  </section>
+
+  <script is:inline>
+    const d = document;
+    const src = "https://tally.so/widgets/embed.js";
+    const loadEmbeds = () => {
+      if (typeof Tally !== "undefined") {
+        Tally.loadEmbeds();
+        return;
+      }
+
+      d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((iframe) => {
+        iframe.src = iframe.dataset.tallySrc;
+      });
+    };
+
+    if (typeof Tally !== "undefined") {
+      loadEmbeds();
+    } else if (!d.querySelector(`script[src="${src}"]`)) {
+      const script = d.createElement("script");
+      script.src = src;
+      script.onload = loadEmbeds;
+      script.onerror = loadEmbeds;
+      d.body.appendChild(script);
+    }
+  </script>
+</SiteLayout>
