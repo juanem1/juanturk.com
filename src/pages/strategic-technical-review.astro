@@ -1,0 +1,290 @@
+---
+import ArchitectureAssessmentCarousel from "../components/ArchitectureAssessmentCarousel.astro";
+import StrategicReviewForm from "../components/StrategicReviewForm.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+interface ReviewProcessStep {
+  readonly body: string;
+  readonly title: string;
+}
+
+interface ArchitectureAssessmentItem {
+  readonly body: string;
+  readonly title: string;
+}
+
+const title = "Strategic Technical Review";
+const description =
+  "A selective one-call technical diagnostic for founders and engineering leaders making high-stakes architecture, scalability, and delivery decisions.";
+const webhookUrl = "https://localhost:1234/something";
+
+const architectureAssessmentItems: readonly ArchitectureAssessmentItem[] = [
+  {
+    title: "Scaling Your Business",
+    body:
+      "Preparing for significant growth or handling an increase in user demand. An assessment ensures your architecture can support the expansion without performance dips.",
+  },
+  {
+    title: "Experiencing Performance Issues",
+    body:
+      "Facing slow response times, system outages, or unexplained inefficiencies? It may be time to evaluate your architecture to identify and resolve bottlenecks.",
+  },
+  {
+    title: "Exploring Cloud Migration",
+    body:
+      "Moving to the cloud or optimizing your current cloud setup? An architecture review can ensure the transition is smooth and efficient.",
+  },
+  {
+    title: "Modernizing Legacy Systems",
+    body:
+      "Struggling with outdated technology? An assessment can guide you on how to upgrade or transition while maintaining system stability.",
+  },
+  {
+    title: "Addressing Security Concerns",
+    body:
+      "Concerned about vulnerabilities or compliance? An architecture assessment can identify risks and provide a roadmap to fortify your defenses.",
+  },
+  {
+    title: "Planning Major Updates",
+    body:
+      "Adding new features, transitioning to microservices, or integrating with third-party tools? Ensure your architecture is ready to handle the changes seamlessly.",
+  },
+];
+
+const reviewProcessSteps: readonly ReviewProcessStep[] = [
+  {
+    title: "Share the problem",
+    body:
+      "You submit the form with the decision, business stakes, and the technical reality behind it.",
+  },
+  {
+    title: "Confirm fit and NDA",
+    body:
+      "If the problem is a strong fit, we sign a short NDA so internal context can be shared without dilution.",
+  },
+  {
+    title: "Send the materials",
+    body:
+      "I request the architecture notes, incidents, code references, diagrams, and constraints needed for the review.",
+  },
+  {
+    title: "Run the diagnostic call",
+    body:
+      "One focused 60-minute session to challenge assumptions, surface the real bottlenecks, and test the decision path.",
+  },
+  {
+    title: "Receive the output",
+    body:
+      "Within 3 business days, you get the Loom and PDF with concrete guidance your team can execute.",
+  },
+];
+---
+
+<SiteLayout title={title} description={description} headerTransparent={true}>
+  <section class="review-breakout review-hero">
+    <div class="review-hero-backdrop" aria-hidden="true" />
+
+    <div class="mx-auto flex min-h-[clamp(640px,78svh,800px)] w-full max-w-6xl items-center px-5 pb-14 pt-10 sm:px-8 sm:pb-20 sm:pt-14 lg:px-10">
+      <div class="max-w-4xl space-y-7">
+        <p class="motion-enter text-sm font-semibold uppercase tracking-widest text-orange-300" style="--motion-step: 0;">
+          Selective technical advisory
+        </p>
+
+        <div class="space-y-5">
+          <h1 class="motion-enter max-w-4xl text-5xl font-[780] leading-[0.88] tracking-tighter text-white sm:text-7xl lg:text-[5.8rem]" style="--motion-step: 1;">
+            Strategic Technical Review
+          </h1>
+          <p class="motion-enter max-w-2xl text-lg leading-8 text-zinc-200 sm:text-[1.35rem] sm:leading-9" style="--motion-step: 2;">
+            One sharp diagnostic call for founders and engineering leaders facing a consequential
+            architecture, scalability, or delivery decision.
+          </p>
+        </div>
+
+        <div class="motion-enter flex flex-col gap-3 pt-2 sm:flex-row" style="--motion-step: 3;">
+          <a
+            href="#application"
+            class="interactive-chip inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
+          >
+            Apply for review
+          </a>
+          <a
+            href="#process"
+            class="interactive-chip inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
+          >
+            See the process
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="fit-heading" class="px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
+    <div
+      class="motion-enter grid gap-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)] lg:items-start lg:gap-12"
+      style="--motion-step: 0;"
+    >
+      <div class="grid gap-5">
+        <div class="space-y-3">
+          <h2 id="fit-heading" class="text-2xl font-[720] tracking-tighter text-white sm:text-3xl lg:text-[2.15rem]">
+            Who is this for
+          </h2>
+        </div>
+
+        <p class="max-w-3xl leading-7 text-zinc-300 sm:text-lg sm:leading-8">
+          Best fit for founders, technical leaders, and companies that need a sharp external
+          diagnostic before making an important technical decision, untangling a costly
+          bottleneck, or defining the right architecture for the next stage of growth.
+        </p>
+      </div>
+
+      <div class="min-w-0">
+        <ArchitectureAssessmentCarousel
+          title="When You Should Have an Architecture Assessment"
+          items={architectureAssessmentItems}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section id="process" class="review-breakout review-process-band">
+    <div class="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
+      <div class="space-y-5">
+        <div class="motion-enter space-y-4" style="--motion-step: 1;">
+          <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">
+            Process
+          </p>
+          <h2 class="text-3xl font-[760] leading-tight tracking-tighter text-white sm:text-4xl">
+            Structured, short, and high signal.
+          </h2>
+        </div>
+
+        <ol class="review-process-list">
+          {reviewProcessSteps.map((step, index) => (
+            <li class="motion-enter review-process-item" style={`--motion-step: ${index + 2};`}>
+              <div class="review-process-marker" aria-hidden="true">
+                <span class="review-process-dot" />
+                {index < reviewProcessSteps.length - 1 && <span class="review-process-line" />}
+              </div>
+              <div class="space-y-3 pb-10">
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">
+                  Step 0{index + 1}
+                </p>
+                <h3 class="text-2xl font-[720] tracking-[-0.04em] text-white">
+                  {step.title}
+                </h3>
+                <p class="max-w-2xl leading-7 text-zinc-400 sm:text-lg sm:leading-8">
+                  {step.body}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-3 py-14 sm:px-6 sm:py-16 lg:px-8">
+    <div class="motion-enter max-w-3xl" style="--motion-step: 0;">
+      <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">
+        Apply form
+      </p>
+      <h2 class="mt-3 text-3xl font-[760] tracking-tighter text-white sm:text-4xl">
+        If the decision is material, start with the context.
+      </h2>
+      <p class="mt-4 leading-7 text-zinc-300 sm:text-lg sm:leading-8">
+        The application covers the business stakes, current technical reality, and the decision
+        you need to validate before we move forward.
+      </p>
+    </div>
+  </section>
+
+  <section id="application" class="scroll-mt-28 px-3 pb-12 sm:px-6 sm:pb-14 lg:px-8">
+    <div class="max-w-5xl border-t border-white/10 pt-6">
+      <StrategicReviewForm webhookUrl={webhookUrl} />
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .review-breakout {
+    position: relative;
+    left: 50%;
+    right: 50%;
+    width: 100vw;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+
+  .review-hero {
+    overflow: clip;
+    background:
+      radial-gradient(circle at top right, rgb(253 186 116 / 0.24), transparent 24rem),
+      radial-gradient(circle at 70% 35%, rgb(255 255 255 / 0.08), transparent 22rem),
+      linear-gradient(180deg, rgb(13 17 23), rgb(17 21 29) 42%, rgb(13 17 23));
+  }
+
+  .review-hero-backdrop {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size: 8rem 8rem;
+    mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.6), transparent 82%);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .review-process-band {
+    background:
+      radial-gradient(circle at 70% 60%,rgb(253 186 116 / 0.10),transparent 24rem),
+      radial-gradient(circle at 10% 15%,rgb(255 255 255 / 0.10),transparent 22rem),
+      linear-gradient(180deg,rgb(13 17 23),rgb(17 21 29) 42%,rgb(13 17 23));
+    border-top: 1px solid rgb(255 255 255 / 0.08);
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  .review-process-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .review-process-item {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .review-process-marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.35rem;
+  }
+
+  .review-process-dot {
+    position: relative;
+    z-index: 1;
+    height: 0.9rem;
+    width: 0.9rem;
+    border-radius: 9999px;
+    background: rgb(253 186 116);
+    box-shadow: 0 0 0 0.5rem rgb(253 186 116 / 0.08);
+  }
+
+  .review-process-line {
+    position: absolute;
+    top: 1.35rem;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, rgb(253 186 116 / 0.6), rgb(255 255 255 / 0.08));
+  }
+
+  @media (min-width: 1024px) {
+    .review-process-item {
+      grid-template-columns: 2.5rem minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+  }
+</style>

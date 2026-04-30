@@ -1,2 +1,3 @@
 User-agent: *
+Disallow: /strategic-technical-review
 Allow: /

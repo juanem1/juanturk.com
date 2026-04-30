@@ -1,10 +1,21 @@
 ---
 import { Icon } from "astro-icon/components";
+
+interface Props {
+  transparent?: boolean;
+}
+
+const { transparent }: Props = Astro.props;
 ---
 
 <header
   transition:persist
-  class="sticky top-0 z-50 border-b border-white/15 bg-[linear-gradient(to_bottom,#0d1117fa,#161b22f7,#1c2128f2)] backdrop-blur-md"
+  class:list={[
+    "top-0 z-50",
+    transparent
+      ? "absolute inset-x-0 border-b border-transparent bg-transparent backdrop-blur-none"
+      : "sticky border-b border-white/15 bg-[linear-gradient(to_bottom,#0d1117fa,#161b22f7,#1c2128f2)] backdrop-blur-md",
+  ]}
 >
   <nav
     aria-label="Principal"
