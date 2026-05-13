@@ -295,19 +295,6 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       </ol>
     </div>
   </section>
-
-  <section data-terminal-panel="sended" class="review-terminal" hidden>
-    <div class="review-step-head">
-      <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 4</p>
-      <h3 class="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl font-(family-name:--font-editorial-new)">
-        Application Received Successfully
-      </h3>
-      <p class="review-step-copy">
-        already sent
-      </p>
-    </div>
-  </section>
-
 </div>
 
 <script
@@ -325,20 +312,6 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       this.responseBody = responseBody;
       this.statusCode = statusCode;
     }
-  }
-
-  const hasQualifiedSubmissionCookie = () => {
-    const expectedCookie = `${formSentCookieName}=${encodeURIComponent(formSentCookieValue)}`;
-    return document.cookie.split('; ').includes(expectedCookie);
-  };
-
-  const showAlreadySentMessage = () => {
-
-  }
-  
-  const strategicReviewFormCookie = `${formSentCookieName}=${encodeURIComponent(formSentCookieValue)}`;
-  if (document.cookie.split('; ').includes(strategicReviewFormCookie)) {
-    document.documentElement.dataset.strategicReviewFormSent = 'true';
   }
 
   const initStrategicReviewForm = () => {
@@ -380,11 +353,6 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
 
     root.dataset.initialized = "true";
 
-    if (hasQualifiedSubmissionCookie()) {
-      showAlreadySentMessage();
-      return;
-    }
-
     const panelsByStep = {
       contact: contactPanel,
       diagnostic: diagnosticPanel,
@@ -413,16 +381,6 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       Object.keys(panelsByStep).forEach((stepId) => {
         panelsByStep[stepId].hidden = stepId !== step;
       });
-    };
-
-    const persistQualifiedSubmissionCookie = () => {
-      const sixMonthsInSeconds = 60 * 60 * 24 * 182;
-      document.cookie = [
-        `${formSentCookieName}=${encodeURIComponent(formSentCookieValue)}`,
-        `Max-Age=${sixMonthsInSeconds}`,
-        `Path=${sourcePath}`,
-        'SameSite=Lax',
-      ].join('; ');
     };
 
     const showQualifiedTerminal = () => {
@@ -558,9 +516,8 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       setQualifiedSubmittingState(true);
 
       try {
-        // const payload = createQualifiedSubmission(new FormData(form));
-        // await submitPayload(payload);
-        persistQualifiedSubmissionCookie();
+        const payload = createQualifiedSubmission(new FormData(form));
+        await submitPayload(payload);
         showQualifiedTerminal();
       } catch (error) {
         showErrorMessage(createActionableErrorMessage(error));
