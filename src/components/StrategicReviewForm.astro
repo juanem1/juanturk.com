@@ -1,38 +1,9 @@
 ---
+import { ArrowRight, ArrowLeft } from '@lucide/astro';
+
 interface Props {
+  readonly sourcePath: string;
   readonly webhookUrl: string;
-}
-
-type ReviewSubmissionPath = "qualified" | "not_fit";
-
-interface ContactStepData {
-  readonly companyWebsite: string;
-  readonly fullName: string;
-  readonly linkedinProfile: string;
-  readonly role: string;
-  readonly workEmail: string;
-}
-
-interface QualificationStepData {
-  readonly auditInvestment: string;
-  readonly engineeringTeamSize: string;
-  readonly implementationCapacity: string;
-}
-
-interface DiagnosticStepData {
-  readonly currentTechStack: string;
-  readonly estimatedBusinessImpact: string;
-  readonly primaryTechnicalBottleneck: string;
-  readonly specificDeadlinesOrConstraints: string;
-}
-
-interface StrategicReviewSubmission {
-  readonly contact: ContactStepData;
-  readonly diagnostic: DiagnosticStepData | null;
-  readonly qualification: QualificationStepData;
-  readonly sourcePath: "/strategic-technical-review";
-  readonly submissionPath: ReviewSubmissionPath;
-  readonly submittedAt: string;
 }
 
 interface ChoiceOption {
@@ -40,9 +11,17 @@ interface ChoiceOption {
   readonly value: string;
 }
 
-const { webhookUrl }: Props = Astro.props;
+const { sourcePath, webhookUrl }: Props = Astro.props;
+const consultancyAmount = import.meta.env.PUBLIC_CONSULTANCY_AMOUNT;
+const usDollar = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  currencyDisplay: 'code'
+});
 
-const sourcePath = "/strategic-technical-review" as const;
+const formSentCookieName = 'strategic_review_form_status';
+const formSentCookieValue = 'form sent';
+
 const roleOptions: readonly ChoiceOption[] = [
   { label: "Founder / CEO", value: "Founder / CEO" },
   { label: "CTO / VP of Engineering", value: "CTO / VP of Engineering" },
@@ -63,14 +42,21 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
     value: "No, we are looking for someone to code the solution",
   },
 ];
-const auditInvestmentOptions: readonly ChoiceOption[] = [
-  {
-    label: "Yes, we have an approved budget and are ready to start",
-    value: "Yes, we have an approved budget and are ready to start",
-  },
-  { label: "I am still evaluating options", value: "I am still evaluating options" },
-];
 ---
+
+<script
+  is:inline
+  define:vars={{
+    formSentCookieName,
+    formSentCookieValue,
+  }}
+>
+  const strategicReviewFormCookie = `${formSentCookieName}=${encodeURIComponent(formSentCookieValue)}`;
+
+  if (document.cookie.split('; ').includes(strategicReviewFormCookie)) {
+    document.documentElement.dataset.strategicReviewFormSent = 'true';
+  }
+</script>
 
 <div data-strategic-review-form class="review-form-root">
   <div class="review-form-message" data-form-message role="status" aria-live="polite" hidden />
@@ -78,12 +64,15 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
   <form data-review-form class="review-form">
     <section data-step-panel="contact" class="review-step">
       <div class="review-step-head">
-        <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 1 - User information</p>
+        <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 1 of 3</p>
+        <h3 class="font-(family-name:--font-editorial-new) mt-3 text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">
+          Business information
+        </h3>
       </div>
 
       <div class="review-field-group">
         <label class="review-field" for="fullName">
-          <span class="review-label">Full name <span class="review-required">*</span></span>
+          <span class="review-label">Contact full name <span class="review-required">*</span></span>
           <input
             class="review-input"
             id="fullName"
@@ -105,7 +94,6 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
             placeholder="Where I should send the next steps"
             required
           />
-          <!-- <span class="review-help">Where I should send the diagnostic, results and next steps.</span> -->
         </label>
 
         <label class="review-field" for="companyWebsite">
@@ -120,7 +108,6 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
             placeholder="I'll use this to research your product before our call"
             required
           />
-          <!-- <span class="review-help">I'll use this to research your product before our call</span> -->
         </label>
 
         <label class="review-field" for="linkedinProfile">
@@ -149,20 +136,16 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
 
       <div class="review-actions">
         <button type="button" class="review-button review-button-primary" data-action="next-contact">
-          Proceed to qualification
-          <span aria-hidden="true">→</span>
+          Continue
+          <ArrowRight />
         </button>
       </div>
     </section>
 
     <section data-step-panel="qualification" class="review-step" hidden>
       <div class="review-step-head">
-        <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 2</p>
-        <h3 class="mt-3 text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">Team &amp; Implementation</h3>
-        <p class="review-step-copy">
-          Before we dive into the technical details, let&apos;s ensure our operational requirements
-          are aligned for a successful engagement.
-        </p>
+        <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 2 of 3</p>
+        <h3 class="font-(family-name:--font-editorial-new) mt-3 text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">Fit & readiness</h3>
       </div>
 
       <div class="review-field-group">
@@ -181,64 +164,41 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
           </select>
         </label>
 
-        <fieldset class="review-field review-fieldset">
-          <legend class="review-label">Implementation capacity <span class="review-required">*</span></legend>
+        <label class="review-field" for="implementationCapacity">
+          <span class="review-label">Implementation capacity <span class="review-required">*</span></span>
           <p class="review-step-copy review-compact-copy">
             Do you have a dedicated team ready to implement the recommended roadmap?
           </p>
-          <div class="review-choice-grid">
+          <select
+            class="review-input review-select"
+            id="implementationCapacity"
+            name="implementationCapacity"
+            required
+          >
+            <option value="">Select your implementation capacity</option>
             {implementationCapacityOptions.map((option) => (
-              <label class="review-choice">
-                <input
-                  class="review-choice-input"
-                  type="radio"
-                  name="implementationCapacity"
-                  value={option.value}
-                  required
-                />
-                <span class="review-choice-label">{option.label}</span>
-              </label>
+              <option value={option.value}>{option.label}</option>
             ))}
-          </div>
-        </fieldset>
+          </select>
+        </label>
 
-        <fieldset class="review-field review-fieldset">
-          <legend class="review-label">Audit investment <span class="review-required">*</span></legend>
-          <p class="review-step-copy review-compact-copy">
-            The fixed investment for this high-level Audit &amp; Roadmap is $2,000 USD
-          </p>
-          <div class="review-choice-grid">
-            {auditInvestmentOptions.map((option) => (
-              <label class="review-choice">
-                <input
-                  class="review-choice-input"
-                  type="radio"
-                  name="auditInvestment"
-                  value={option.value}
-                  required
-                />
-                <span class="review-choice-label">{option.label}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
       </div>
 
       <div class="review-actions">
         <button type="button" class="review-button review-button-secondary" data-action="back-contact">
-          Back
+          <ArrowLeft /> Back
         </button>
         <button type="button" class="review-button review-button-primary" data-action="next-qualification">
-          Continue to technical diagnostic
-          <span aria-hidden="true">→</span>
+          Continue to technical details
+          <ArrowRight />
         </button>
       </div>
     </section>
 
     <section data-step-panel="diagnostic" class="review-step" hidden>
       <div class="review-step-head">
-        <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 3</p>
-        <h3 class="mt-3 text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">Diagnostic Focus</h3>
+        <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 3 of 3</p>
+        <h3 class="font-(family-name:--font-editorial-new) mt-3 text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">Diagnostic focus</h3>
       </div>
 
       <div class="review-field-group">
@@ -248,8 +208,7 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
           </span>
           <span class="review-step-copy review-compact-copy">
             Please provide specific context, describe where the friction is (e.g. &quot;Our API
-            response time spikes to 5s during peak hours&quot; or &quot;Our CI/CD pipeline is so brittle that
-            we&apos;ve stopped deploying on Fridays&quot;).
+            response time spikes to 5s during peak hours&quot;).
           </span>
           <textarea
             class="review-input review-textarea"
@@ -310,15 +269,15 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
 
       <div class="review-actions">
         <button type="button" class="review-button review-button-secondary" data-action="back-qualification">
-          Back
+          <ArrowLeft /> Back
         </button>
         <button
           type="submit"
           class="review-button review-button-primary"
           data-qualified-submit
         >
-          Submit application for review
-          <span aria-hidden="true">→</span>
+          Submit for review
+          <ArrowRight />
         </button>
       </div>
     </section>
@@ -327,66 +286,38 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
   <section data-terminal-panel="qualified" class="review-terminal" hidden>
     <div class="review-step-head">
       <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 4</p>
-      <h3 class="mt-3 text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">Application Received Successfully</h3>
+      <h3 class="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl font-(family-name:--font-editorial-new)">
+        Application Received Successfully
+      </h3>
       <p class="review-step-copy">
-        Thank you for providing these details. I personally review every application to ensure
-        that my expertise in high-scale architectural standards and engineering efficiency can
-        deliver the maximum strategic value for your organization.
+        Thank you for taking the time to complete this application. I personally review every submission to understand the context behind each engineering challenge and determine how I can best help your team move forward with clarity and confidence.
       </p>
     </div>
-
     <div class="review-terminal-copy">
-      <h4 class="review-terminal-heading">What happens next?</h4>
-      <p><strong>1. Review:</strong> I will evaluate your technical context and the potential business impact within the next 48 hours.</p>
-      <p><strong>2. Selection:</strong> To maintain the highest quality of delivery, I only accept a limited number of engagements each month, prioritizing projects where my diagnosis can unlock the most significant growth.</p>
-      <p>
-        <strong>3. Next Steps:</strong> If there is a strategic fit, you will receive an email with:
-      </p>
-      <p>- A secure <strong>payment link</strong> for the $2,000 USD audit fee.</p>
-      <p>- A <strong>Technical Onboarding Checklist</strong> with instructions on how to provide the necessary logs, metrics, and documentation for analysis.</p>
-      <p>- Following the receipt of the information, we will <strong>coordinate the next steps</strong> to initiate the diagnostic process.</p>
+      <h3 class="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl font-(family-name:--font-editorial-new)">
+        What happens next?
+      </h3>
+      <ol class="list-decimal list-inside text-zinc-300">
+        <li><strong>Review:</strong> I will evaluate your technical context and the potential business impact within the next 48 hours.</li>
+        <li><strong>Selection:</strong> To maintain the highest quality of delivery, I only accept a limited number of engagements each month, prioritizing projects where my diagnosis can unlock the most significant growth.</li>
+        <li><strong>Next Steps:</strong> If there is a strategic fit, you will receive an email with:</li>
+        <ul class="list-disc list-inside">
+          <li>A secure <strong>payment link</strong> for the {usDollar.format(consultancyAmount)} audit fee.</li>
+          <li>A <strong>Technical Onboarding Checklist</strong> with instructions on how to provide the necessary logs, metrics, and documentation for analysis.</li>
+          <li>Following the receipt of the information, we will <strong>coordinate the next steps</strong> to initiate the diagnostic process.</li>
+        </ul>
+      </ol>
     </div>
   </section>
 
-  <section data-terminal-panel="not_fit" class="review-terminal" hidden>
-    <div class="review-step-head">
-      <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">Page 5</p>
-      <h3 class="mt-3 text-3xl font-[760] tracking-[-0.05em] text-white sm:text-4xl">Strategic Guidance</h3>
-      <h4 class="review-terminal-heading">Ensuring the right fit for your stage</h4>
-      <p class="review-step-copy">
-        Thank you for your interest. Based on the information provided, it appears your current
-        needs lean more toward <strong>initial development and execution</strong> rather than a
-        architectural diagnostic.
-      </p>
-      <p class="review-step-copy">
-        My audit framework is specifically designed for organizations with
-        <strong> established engineering teams</strong> looking to optimize for scale, stability,
-        and delivery speed.
-      </p>
-      <p class="review-step-copy">
-        <strong>My recommendation for you:</strong><br />
-        At this stage, your resources are best invested in building your core team / executing
-        your current roadmap. Once you have a foundation ready for scaling, I would be happy to
-        review a new application.
-      </p>
-    </div>
-
-    <div class="review-actions">
-      <button type="button" class="review-button review-button-primary" data-not-fit-submit>
-        Submit
-        <span aria-hidden="true">→</span>
-      </button>
-    </div>
-  </section>
 </div>
 
 <script
   define:vars={{
-    nonFitEngineeringTeamSizeValue: "We don't have a dev team yet",
-    nonFitImplementationValue: "No, we are looking for someone to code the solution",
-    nonFitInvestmentValue: "I am still evaluating options",
     sourcePath,
     webhookUrl,
+    formSentCookieName,
+    formSentCookieValue,
   }}
 >
   class FormSubmissionError extends Error {
@@ -411,13 +342,13 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
     const qualificationPanel = root.querySelector('[data-step-panel="qualification"]');
     const diagnosticPanel = root.querySelector('[data-step-panel="diagnostic"]');
     const qualifiedPanel = root.querySelector('[data-terminal-panel="qualified"]');
-    const notFitPanel = root.querySelector('[data-terminal-panel="not_fit"]');
     const qualifiedSubmitButton = root.querySelector("[data-qualified-submit]");
-    const notFitSubmitButton = root.querySelector("[data-not-fit-submit]");
     const nextContactButton = root.querySelector('[data-action="next-contact"]');
     const backContactButton = root.querySelector('[data-action="back-contact"]');
     const nextQualificationButton = root.querySelector('[data-action="next-qualification"]');
-    const backQualificationButton = root.querySelector('[data-action="back-qualification"]');
+    const backQualificationButtons = Array.from(
+      root.querySelectorAll('[data-action="back-qualification"]'),
+    );
 
     if (
       !form ||
@@ -426,18 +357,21 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
       !qualificationPanel ||
       !diagnosticPanel ||
       !qualifiedPanel ||
-      !notFitPanel ||
       !qualifiedSubmitButton ||
-      !notFitSubmitButton ||
       !nextContactButton ||
       !backContactButton ||
       !nextQualificationButton ||
-      !backQualificationButton
+      backQualificationButtons.length === 0
     ) {
       throw new Error("Strategic review form is missing required elements.");
     }
 
     root.dataset.initialized = "true";
+
+    if (hasQualifiedSubmissionCookie()) {
+      showQualifiedTerminal();
+      return;
+    }
 
     const panelsByStep = {
       contact: contactPanel,
@@ -446,7 +380,6 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
     };
 
     const qualifiedSubmitLabel = qualifiedSubmitButton.innerHTML;
-    const notFitSubmitLabel = notFitSubmitButton.innerHTML;
 
     const clearMessage = () => {
       messageElement.hidden = true;
@@ -460,17 +393,10 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
       messageElement.dataset.state = "error";
     };
 
-    const showSuccessMessage = (message) => {
-      messageElement.hidden = false;
-      messageElement.textContent = message;
-      messageElement.dataset.state = "success";
-    };
-
     const showStep = (step) => {
       clearMessage();
       form.hidden = false;
       qualifiedPanel.hidden = true;
-      notFitPanel.hidden = true;
 
       Object.keys(panelsByStep).forEach((stepId) => {
         panelsByStep[stepId].hidden = stepId !== step;
@@ -481,14 +407,34 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
       clearMessage();
       form.hidden = true;
       qualifiedPanel.hidden = false;
-      notFitPanel.hidden = true;
+      document.documentElement.dataset.strategicReviewFormSent = 'true';
     };
 
-    const showNotFitTerminal = () => {
-      clearMessage();
-      form.hidden = true;
-      qualifiedPanel.hidden = true;
-      notFitPanel.hidden = false;
+    const hasQualifiedSubmissionCookie = () => {
+      const expectedCookie = `${formSentCookieName}=${encodeURIComponent(formSentCookieValue)}`;
+
+      return document.cookie.split('; ').includes(expectedCookie);
+    };
+
+    const persistQualifiedSubmissionCookie = () => {
+      const oneYearInSeconds = 60 * 60 * 24 * 365;
+      document.cookie = [
+        `${formSentCookieName}=${encodeURIComponent(formSentCookieValue)}`,
+        `Max-Age=${oneYearInSeconds}`,
+        `Path=${sourcePath}`,
+        'SameSite=Lax',
+      ].join('; ');
+    };
+
+    const scrollFormToTop = () => {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      requestAnimationFrame(() => {
+        root.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      });
     };
 
     const getPanelFields = (step) => {
@@ -512,69 +458,27 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
 
     const readString = (formData, fieldName) => {
       const value = formData.get(fieldName);
-
       if (typeof value !== "string") {
         throw new Error(`Missing expected string value for ${fieldName}.`);
       }
-
       return value.trim();
     };
 
-    const createContactStepData = (formData) => {
+    const createQualifiedSubmission = (formData) => {
       return {
         companyWebsite: readString(formData, "companyWebsite"),
         fullName: readString(formData, "fullName"),
         linkedinProfile: readString(formData, "linkedinProfile"),
         role: readString(formData, "role"),
         workEmail: readString(formData, "workEmail"),
-      };
-    };
-
-    const createQualificationStepData = (formData) => {
-      return {
-        auditInvestment: readString(formData, "auditInvestment"),
-        engineeringTeamSize: readString(formData, "engineeringTeamSize"),
-        implementationCapacity: readString(formData, "implementationCapacity"),
-      };
-    };
-
-    const createDiagnosticStepData = (formData) => {
-      return {
         currentTechStack: readString(formData, "currentTechStack"),
         estimatedBusinessImpact: readString(formData, "estimatedBusinessImpact"),
         primaryTechnicalBottleneck: readString(formData, "primaryTechnicalBottleneck"),
         specificDeadlinesOrConstraints: readString(formData, "specificDeadlinesOrConstraints"),
-      };
-    };
-
-    const createQualifiedSubmission = (formData) => {
-      return {
-        contact: createContactStepData(formData),
-        diagnostic: createDiagnosticStepData(formData),
-        qualification: createQualificationStepData(formData),
-        sourcePath,
-        submissionPath: "qualified",
+        engineeringTeamSize: readString(formData, "engineeringTeamSize"),
+        implementationCapacity: readString(formData, "implementationCapacity"),
         submittedAt: new Date().toISOString(),
       };
-    };
-
-    const createNotFitSubmission = (formData) => {
-      return {
-        contact: createContactStepData(formData),
-        diagnostic: null,
-        qualification: createQualificationStepData(formData),
-        sourcePath,
-        submissionPath: "not_fit",
-        submittedAt: new Date().toISOString(),
-      };
-    };
-
-    const isNotFitQualification = (qualification) => {
-      return (
-        qualification.engineeringTeamSize === nonFitEngineeringTeamSizeValue ||
-        qualification.implementationCapacity === nonFitImplementationValue ||
-        qualification.auditInvestment === nonFitInvestmentValue
-      );
     };
 
     const submitPayload = async (payload) => {
@@ -599,7 +503,6 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
 
     const setButtonsDisabled = (isDisabled) => {
       qualifiedSubmitButton.disabled = isDisabled;
-      notFitSubmitButton.disabled = isDisabled;
     };
 
     const setQualifiedSubmittingState = (isSubmitting) => {
@@ -608,21 +511,17 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
         : qualifiedSubmitLabel;
     };
 
-    const setNotFitSubmittingState = (isSubmitting) => {
-      notFitSubmitButton.innerHTML = isSubmitting ? "Submitting..." : notFitSubmitLabel;
-    };
-
     const createActionableErrorMessage = (error) => {
       if (error instanceof FormSubmissionError) {
-        const bodyPreview = error.responseBody.trim();
-        return `Unable to submit your application right now. Status ${error.statusCode}. Response: ${bodyPreview || "Empty response body."}`;
+        // const bodyPreview = error.responseBody.trim();
+        // return `Unable to submit your application right now. Status ${error.statusCode}. Response: ${bodyPreview || "Empty response body."}`;
       }
 
       if (error instanceof Error) {
-        return `Unable to submit your application right now. ${error.message}`;
+        // return `Unable to submit your application right now. ${error.message}`;
       }
 
-      return "Unable to submit your application right now due to an unknown error.";
+      return "Unable to submit your application right now. Please try again in a few minutes.";
     };
 
     const moveFromContactToQualification = () => {
@@ -631,6 +530,7 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
       }
 
       showStep("qualification");
+      scrollFormToTop();
     };
 
     const moveFromQualification = () => {
@@ -638,14 +538,8 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
         return;
       }
 
-      const qualification = createQualificationStepData(new FormData(form));
-
-      if (isNotFitQualification(qualification)) {
-        showNotFitTerminal();
-        return;
-      }
-
       showStep("diagnostic");
+      scrollFormToTop();
     };
 
     const submitQualifiedApplication = async () => {
@@ -669,34 +563,15 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
       }
     };
 
-    const submitNotFitApplication = async () => {
-      clearMessage();
-      setButtonsDisabled(true);
-      setNotFitSubmittingState(true);
-
-      try {
-        const payload = createNotFitSubmission(new FormData(form));
-        await submitPayload(payload);
-        showSuccessMessage("Thank you. Your response has been recorded.");
-        notFitSubmitButton.hidden = true;
-      } catch (error) {
-        showErrorMessage(createActionableErrorMessage(error));
-      } finally {
-        setNotFitSubmittingState(false);
-        setButtonsDisabled(false);
-      }
-    };
-
     nextContactButton.addEventListener("click", moveFromContactToQualification);
     backContactButton.addEventListener("click", () => {
       showStep("contact");
     });
     nextQualificationButton.addEventListener("click", moveFromQualification);
-    backQualificationButton.addEventListener("click", () => {
-      showStep("qualification");
-    });
-    notFitSubmitButton.addEventListener("click", () => {
-      void submitNotFitApplication();
+    backQualificationButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        showStep("qualification");
+      });
     });
     form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -796,7 +671,7 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
     width: 100%;
     border: 1px solid rgb(255 255 255 / 0.08);
     border-radius: 0.5rem;
-    background: rgb(255 255 255 / 0.04);
+    background-color: rgb(255 255 255 / 0.04);
     color: white;
     font: inherit;
     /* min-height: 3.5rem; */
@@ -819,7 +694,7 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
     outline: none;
     border-color: rgb(253 186 116 / 0.9);
     box-shadow: 0 0 0 0.2rem rgb(253 186 116 / 0.14);
-    background: rgb(255 255 255 / 0.06);
+    background-color: rgb(255 255 255 / 0.06);
   }
 
   .review-select {
@@ -828,8 +703,8 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
       linear-gradient(45deg, transparent 50%, rgb(161 161 170) 50%),
       linear-gradient(135deg, rgb(161 161 170) 50%, transparent 50%);
     background-position:
-      calc(100% - 1.25rem) calc(50% - 0.15rem),
-      calc(100% - 0.95rem) calc(50% - 0.15rem);
+      calc(100% - 1.25rem) calc(50% + 2px),
+      calc(100% - 0.95rem) calc(50% + 2px);
     background-repeat: no-repeat;
     background-size: 0.4rem 0.4rem;
     padding-right: 2.8rem;
@@ -910,7 +785,7 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
     font-size: 0.98rem;
     font-weight: 760;
     min-height: 3.4rem;
-    padding: 0.95rem 1.35rem;
+    padding: 0.8rem 1rem;
     transition:
       background 180ms ease,
       border-color 180ms ease,
@@ -959,15 +834,6 @@ const auditInvestmentOptions: readonly ChoiceOption[] = [
 
   .review-terminal-copy p {
     margin: 0;
-  }
-
-  .review-terminal-heading {
-    margin: 0;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 760;
-    letter-spacing: -0.04em;
-    line-height: 1.15;
   }
 
   @media (max-width: 640px) {

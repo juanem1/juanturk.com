@@ -1,0 +1,38 @@
+---
+import { Font } from "astro:assets";
+import StrategicReviewForm from "../../components/StrategicReviewForm.astro";
+import ConsultancyLayout from "../../layouts/ConsultancyLayout.astro";
+
+const title = "Apply for Strategic Technical Review";
+const description =
+  "Submit your application for a Strategic Technical Review and share the decision, business stakes, and technical context behind it.";
+const sourcePath = "/strategic-technical-review/apply";
+const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
+
+---
+
+<Font cssVariable="--font-editorial-new" preload />
+<ConsultancyLayout title={title} description={description} headerTransparent={true}>
+
+  <section class="motion-enter">
+    <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-28 sm:pb-20 sm:pt-32">
+      <div class="space-y-4">
+        <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">
+          Apply form
+        </p>
+        <h1 class="text-5xl font-bold tracking-tight text-white lg:text-8xl font-(family-name:--font-editorial-new)">
+          Apply for a Technical Diagnostic
+        </h1>
+        <p class="text-zinc-300">This application helps me understand your business context, technical situation, implementation capacity, and the decision you need to make. It allows me to assess whether this review is a good fit before scheduling any session.</p>
+        <p class="text-zinc-300">You'll be asked for basic contact details, team and budget readiness, the main technical bottleneck, business impact, current tech stack, and any relevant deadlines or constraints.</p>
+        <p class="text-zinc-500 italic">Usually takes between 5 to 10 minutes to complete</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="motion-enter pb-20">
+    <div class="mx-auto w-full">
+      <StrategicReviewForm sourcePath={sourcePath} webhookUrl={webhookUrl} />
+    </div>
+  </section>
+</ConsultancyLayout>

@@ -20,7 +20,7 @@ const {
   ogImage,
   bodyClass = "min-h-screen text-zinc-100 antialiased",
   htmlClass = "bg-fixed bg-[linear-gradient(180deg,#1c2128,#22272e,#0d1117)]",
-  mainClass = "mx-auto w-full max-w-6xl pb-10",
+  mainClass = "", //mx-auto w-full max-w-6xl pb-10
 } = Astro.props;
 const currentYear = new Date().getFullYear();
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;

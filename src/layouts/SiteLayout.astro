@@ -15,5 +15,7 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
 
 <BaseLayout title={title} description={description} ogType={ogType} ogImage={ogImage}>
   <SiteHeader slot="header" transparent={headerTransparent} />
-  <slot />
+  <div class="mx-auto w-full max-w-6xl pb-10">
+    <slot />
+  </div>
 </BaseLayout>
