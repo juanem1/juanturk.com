@@ -315,24 +315,24 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
   }
 
   const initStrategicReviewForm = () => {
-    const root = document.querySelector("[data-strategic-review-form]");
+    const root = document.querySelector<HTMLDivElement>("[data-strategic-review-form]");
 
     if (!root || root.dataset.initialized === "true") {
       return;
     }
 
-    const form = root.querySelector("[data-review-form]");
-    const messageElement = root.querySelector("[data-form-message]");
-    const contactPanel = root.querySelector('[data-step-panel="contact"]');
-    const qualificationPanel = root.querySelector('[data-step-panel="qualification"]');
-    const diagnosticPanel = root.querySelector('[data-step-panel="diagnostic"]');
-    const qualifiedPanel = root.querySelector('[data-terminal-panel="qualified"]');
-    const qualifiedSubmitButton = root.querySelector("[data-qualified-submit]");
-    const nextContactButton = root.querySelector('[data-action="next-contact"]');
-    const backContactButton = root.querySelector('[data-action="back-contact"]');
-    const nextQualificationButton = root.querySelector('[data-action="next-qualification"]');
+    const form = root.querySelector<HTMLFormElement>("[data-review-form]");
+    const messageElement = root.querySelector<HTMLDivElement>("[data-form-message]");
+    const contactPanel = root.querySelector<HTMLElement>('[data-step-panel="contact"]');
+    const qualificationPanel = root.querySelector<HTMLElement>('[data-step-panel="qualification"]');
+    const diagnosticPanel = root.querySelector<HTMLElement>('[data-step-panel="diagnostic"]');
+    const qualifiedPanel = root.querySelector<HTMLElement>('[data-terminal-panel="qualified"]');
+    const qualifiedSubmitButton = root.querySelector<HTMLButtonElement>("[data-qualified-submit]");
+    const nextContactButton = root.querySelector<HTMLButtonElement>('[data-action="next-contact"]');
+    const backContactButton = root.querySelector<HTMLButtonElement>('[data-action="back-contact"]');
+    const nextQualificationButton = root.querySelector<HTMLButtonElement>('[data-action="next-qualification"]');
     const backQualificationButtons = Array.from(
-      root.querySelectorAll('[data-action="back-qualification"]'),
+      root.querySelectorAll<HTMLButtonElement>('[data-action="back-qualification"]'),
     );
 
     if (
@@ -358,8 +358,27 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       diagnostic: diagnosticPanel,
       qualification: qualificationPanel,
     };
+    const formName = "strategic_review";
+    const stepNumbers = {
+      contact: 1,
+      qualification: 2,
+      diagnostic: 3,
+      qualified: 4,
+    };
 
     const qualifiedSubmitLabel = qualifiedSubmitButton.innerHTML;
+
+    const sendGtagEvent = (eventName, eventParams) => {
+      if (typeof window.gtag !== "function") {
+        return;
+      }
+
+      window.gtag("event", eventName, {
+        form_name: formName,
+        source_path: sourcePath,
+        ...eventParams,
+      });
+    };
 
     const clearMessage = () => {
       messageElement.hidden = true;
@@ -381,6 +400,12 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       Object.keys(panelsByStep).forEach((stepId) => {
         panelsByStep[stepId].hidden = stepId !== step;
       });
+
+      sendGtagEvent("strategic_review_form_step_view", {
+        page_path: window.location.pathname,
+        step_name: step,
+        step_number: stepNumbers[step],
+      });
     };
 
     const showQualifiedTerminal = () => {
@@ -388,6 +413,12 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       form.hidden = true;
       qualifiedPanel.hidden = false;
       document.documentElement.dataset.strategicReviewFormSent = 'true';
+
+      sendGtagEvent("strategic_review_form_step_view", {
+        page_path: window.location.pathname,
+        step_name: "qualified",
+        step_number: stepNumbers.qualified,
+      });
     };
 
     const scrollFormToTop = () => {
@@ -403,7 +434,9 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
 
     const getPanelFields = (step) => {
       return Array.from(
-        panelsByStep[step].querySelectorAll("input, select, textarea"),
+        panelsByStep[step].querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+          "input, select, textarea",
+        ),
       );
     };
 
@@ -415,6 +448,12 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
         return true;
       }
 
+      sendGtagEvent("strategic_review_form_validation_error", {
+        field_name: invalidField.getAttribute("name") || "",
+        page_path: window.location.pathname,
+        step_name: step,
+        step_number: stepNumbers[step],
+      });
       invalidField.reportValidity();
       invalidField.focus();
       return false;
@@ -493,6 +532,11 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
         return;
       }
 
+      sendGtagEvent("strategic_review_form_step_complete", {
+        page_path: window.location.pathname,
+        step_name: "contact",
+        step_number: stepNumbers.contact,
+      });
       showStep("qualification");
       scrollFormToTop();
     };
@@ -502,6 +546,11 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
         return;
       }
 
+      sendGtagEvent("strategic_review_form_step_complete", {
+        page_path: window.location.pathname,
+        step_name: "qualification",
+        step_number: stepNumbers.qualification,
+      });
       showStep("diagnostic");
       scrollFormToTop();
     };
@@ -515,11 +564,30 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       setButtonsDisabled(true);
       setQualifiedSubmittingState(true);
 
+      sendGtagEvent("strategic_review_form_submit_attempt", {
+        page_path: window.location.pathname,
+        step_name: "diagnostic",
+        step_number: stepNumbers.diagnostic,
+      });
+
       try {
         const payload = createQualifiedSubmission(new FormData(form));
         await submitPayload(payload);
+        sendGtagEvent("strategic_review_form_step_complete", {
+          page_path: window.location.pathname,
+          step_name: "diagnostic",
+          step_number: stepNumbers.diagnostic,
+        });
+        sendGtagEvent("strategic_review_form_submit_success", {
+          page_path: window.location.pathname,
+        });
         showQualifiedTerminal();
       } catch (error) {
+        sendGtagEvent("strategic_review_form_submit_error", {
+          error_name: error instanceof Error ? error.name : "UnknownError",
+          page_path: window.location.pathname,
+          status_code: error instanceof FormSubmissionError ? error.statusCode : "",
+        });
         showErrorMessage(createActionableErrorMessage(error));
       } finally {
         setQualifiedSubmittingState(false);
@@ -540,6 +608,12 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       void submitQualifiedApplication();
+    });
+
+    sendGtagEvent("strategic_review_form_step_view", {
+      page_path: window.location.pathname,
+      step_name: "contact",
+      step_number: stepNumbers.contact,
     });
   };
 

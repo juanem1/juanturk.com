@@ -14,7 +14,7 @@ const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
 <Font cssVariable="--font-editorial-new" preload />
 <ConsultancyLayout title={title} description={description} headerTransparent={true}>
 
-  <section class="motion-enter">
+  <section class="motion-enter" data-strategic-review-apply-page>
     <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-28 sm:pb-20 sm:pt-32">
       <div class="space-y-4">
         <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">
@@ -36,3 +36,27 @@ const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
     </div>
   </section>
 </ConsultancyLayout>
+
+<script>
+  const trackStrategicReviewApplyPage = () => {
+    const applyRoot = document.querySelector<HTMLElement>("[data-strategic-review-apply-page]");
+
+    if (!applyRoot || applyRoot.dataset.analyticsInitialized === "true") {
+      return;
+    }
+
+    applyRoot.dataset.analyticsInitialized = "true";
+
+    if (typeof window.gtag !== "function") {
+      return;
+    }
+
+    window.gtag("event", "strategic_review_apply_form", {
+      page_path: window.location.pathname,
+      page_type: "apply",
+    });
+  };
+
+  trackStrategicReviewApplyPage();
+  document.addEventListener("astro:page-load", trackStrategicReviewApplyPage);
+</script>

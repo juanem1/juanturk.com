@@ -86,7 +86,7 @@ const reviewProcessSteps = [
 <Font cssVariable="--font-editorial-new" preload />
 <ConsultancyLayout title={title} description={description} headerTransparent={true}>
   
-  <section class="motion-enter pt-30 mb-20">
+  <section class="motion-enter pt-30 mb-20" data-strategic-review-landing>
     <div class="mx-auto flex lg:min-h-[clamp(800px,78svh,800px)] w-full  items-center">
       <div class="max-w-4xl space-y-7">
         <p class="motion-enter text-sm font-semibold uppercase tracking-widest text-orange-300" style="--motion-step: 0;">
@@ -105,6 +105,7 @@ const reviewProcessSteps = [
         <div class="motion-enter flex flex-col gap-3 pt-2 sm:flex-row" style="--motion-step: 3;">
           <a
             href="#apply"
+            data-strategic-review-cta="hero_apply_section"
             class="interactive-chip inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
           >
             Apply for review
@@ -217,6 +218,7 @@ const reviewProcessSteps = [
       <div class="flex flex-col gap-5 pt-8 md:flex-row">
         <a
           href="/strategic-technical-review/apply"
+          data-strategic-review-cta="apply_page"
           class="interactive-chip mt-6 inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
         >
           Apply for review
@@ -225,3 +227,43 @@ const reviewProcessSteps = [
     </div>
   </section>
 </ConsultancyLayout>
+
+<script>
+  const trackStrategicReviewLanding = () => {
+    const landingRoot = document.querySelector<HTMLElement>("[data-strategic-review-landing]");
+
+    if (!landingRoot || landingRoot.dataset.analyticsInitialized === "true") {
+      return;
+    }
+
+    landingRoot.dataset.analyticsInitialized = "true";
+
+    const sendGtagEvent = (eventName, eventParams) => {
+      if (typeof window.gtag !== "function") {
+        return;
+      }
+
+      window.gtag("event", eventName, eventParams);
+    };
+
+    sendGtagEvent("strategic_review_landing_view", {
+      page_path: window.location.pathname,
+      page_type: "landing",
+    });
+
+    const ctaLinks = document.querySelectorAll<HTMLAnchorElement>("[data-strategic-review-cta]");
+
+    ctaLinks.forEach((ctaLink) => {
+      ctaLink.addEventListener("click", () => {
+        sendGtagEvent("strategic_review_apply_cta_click", {
+          cta_location: ctaLink.dataset.strategicReviewCta,
+          destination_path: ctaLink.getAttribute("href") || "",
+          page_path: window.location.pathname,
+        });
+      });
+    });
+  };
+
+  trackStrategicReviewLanding();
+  document.addEventListener("astro:page-load", trackStrategicReviewLanding);
+</script>
