@@ -1,5 +1,2 @@
 User-agent: *
-Disallow: /strategic-technical-review
-Disallow: /strategic-technical-review/apply
-
 Allow: /
