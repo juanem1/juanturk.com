@@ -13,14 +13,12 @@ interface ChoiceOption {
 
 const { sourcePath, webhookUrl }: Props = Astro.props;
 const consultancyAmount = import.meta.env.PUBLIC_CONSULTANCY_AMOUNT;
+const skipSubmitForTesting = import.meta.env.PUBLIC_SKIP_SUBMIT_FOR_TESTING;
 const usDollar = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   currencyDisplay: 'code'
 });
-
-const formSentCookieName = 'strategic_review_form_status';
-const formSentCookieValue = 'form sent';
 
 const roleOptions: readonly ChoiceOption[] = [
   { label: "Founder / CEO", value: "Founder / CEO" },
@@ -303,8 +301,7 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
   define:vars={{
     sourcePath,
     webhookUrl,
-    formSentCookieName,
-    formSentCookieValue,
+    skipSubmitForTesting,
   }}
 >
   class FormSubmissionError extends Error {
@@ -377,6 +374,13 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
     };
 
     const qualifiedSubmitLabel = qualifiedSubmitButton.innerHTML;
+
+    const triggerSubmit = () => {
+      if (skipSubmitForTesting && skipSubmitForTesting === "true") {
+        return false;
+      }
+      return true;
+    };
 
     const sendGtagEvent = (eventName, eventParams) => {
       if (typeof window.gtag !== "function") {
@@ -581,8 +585,10 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       });
 
       try {
-        const payload = createQualifiedSubmission(new FormData(form));
-        await submitPayload(payload);
+        if (triggerSubmit()) {
+          const payload = createQualifiedSubmission(new FormData(form));
+          await submitPayload(payload);
+        }
         sendGtagEvent("strategic_review_form_step_complete", {
           page_path: window.location.pathname,
           step_name: "diagnostic",
