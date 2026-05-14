@@ -38,6 +38,40 @@ export default defineConfig({
         ],
       },
     },
+    {
+      provider: fontProviders.local(),
+      name: 'PP Editorial New',
+      cssVariable: '--font-editorial-new',
+      fallbacks: ['system-ui', 'sans-serif'],
+      options: {
+        variants: [
+          {
+            src: [
+              './src/assets/fonts/PPEditorialNew-Bold.woff2',
+              './src/assets/fonts/PPEditorialNew-Bold.woff',
+            ],
+            weight: '700',
+            style: 'normal',
+          },
+          {
+            src: [
+              './src/assets/fonts/PPEditorialNew-Regular.woff2',
+              './src/assets/fonts/PPEditorialNew-Regular.woff',
+            ],
+            weight: '400',
+            style: 'normal',
+          },
+          {
+            src: [
+              './src/assets/fonts/PPEditorialNew-BoldItalic.woff2',
+              './src/assets/fonts/PPEditorialNew-BoldItalic.woff',
+            ],
+            weight: '700',
+            style: 'italic',
+          }
+        ],
+      },
+    },
   ],
 
   markdown: {

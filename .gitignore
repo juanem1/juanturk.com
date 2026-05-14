@@ -29,3 +29,6 @@ pnpm-debug.log*
 
 .dev.vars*
 !.dev.vars.example
+
+# local planning notes
+/CONSULTANCY.md

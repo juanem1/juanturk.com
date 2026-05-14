@@ -21,6 +21,7 @@
     font-family: var(--font-sans);
     font-feature-settings: 'ss01' on, 'ss03' on, 'ss05' on;
     font-optical-sizing: auto;
+    scroll-behavior: smooth;
   }
 }
 

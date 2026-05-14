@@ -7,12 +7,15 @@ interface Props {
   description?: string;
   ogType?: "website" | "article";
   ogImage?: string;
+  headerTransparent?: boolean;
 }
 
-const { title, description, ogType, ogImage } = Astro.props;
+const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} ogType={ogType} ogImage={ogImage}>
-  <SiteHeader slot="header" />
-  <slot />
+  <SiteHeader slot="header" transparent={headerTransparent} />
+  <div class="mx-auto w-full max-w-6xl pb-10">
+    <slot />
+  </div>
 </BaseLayout>

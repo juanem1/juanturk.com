@@ -1,0 +1,269 @@
+---
+import { Font } from "astro:assets";
+import { TrendingUp, Gauge, CloudUpload, RefreshCcw, ShieldAlert, GitBranchPlus } from '@lucide/astro';
+import ConsultancyLayout from "../../layouts/ConsultancyLayout.astro";
+import Divider from "../../components/Divider.astro"
+
+const title = "Strategic Technical Review";
+const description =
+  "A selective one-call technical diagnostic for founders and engineering leaders making high-stakes architecture, scalability, and delivery decisions.";
+
+const architectureAssessmentItems = [
+  {
+    icon: TrendingUp,
+    title: "SCALING YOUR BUSINESS OPERATIONS",
+    step: "--motion-step: 4",
+    cls: "lg:pr-6 lg:pt-5",
+    body:
+      "Preparing for significant growth or handling an increase in user demand. A diagnostic ensures your architecture can support the expansion without performance dips.",
+  },
+  {
+    icon: GitBranchPlus,
+    title: "PLANNING FOR MAJOR UPDATES",
+    step: "--motion-step: 5",
+    cls: "lg:px-6 lg:pt-5",
+    body:
+      "Adding new features, transitioning to microservices, or integrating with third-party tools? Ensure your architecture is ready to handle the changes seamlessly.",
+  },
+  {
+    icon: Gauge,
+    title: "SYSTEM PERFORMANCE ISSUES",
+    step: "--motion-step: 4",
+    cls: "lg:pl-6 lg:pt-5",
+    body:
+      "Facing slow response times, system outages, or unexplained inefficiencies? Identify the root cause of growth-stifling bottlenecks before they impact your LTV.",
+  },
+  {
+    icon: CloudUpload,
+    title: "EXPLORING CLOUD MIGRATION",
+    step: "--motion-step: 4",
+    cls: "lg:pr-6",
+    body:
+      "Moving to the cloud or optimizing your current cloud setup? An architecture review can ensure the transition is smooth and efficient.",
+  },
+  {
+    icon: RefreshCcw,
+    title: "MODERNIZING LEGACY SYSTEMS",
+    step: "--motion-step: 5",
+    cls: "lg:px-6",
+    body:
+      "Struggling with outdated technology? Get a clear technical direction on whether to refactor, migrate, or rebuild.",
+  },
+  {
+    icon: ShieldAlert,
+    title: "ADDRESSING SECURITY CONCERNS",
+    step: "--motion-step: 5",
+    cls: "lg:pl-6",
+    body:
+      "Concerned about vulnerabilities or compliance? An architecture review can identify risks and provide a roadmap to fortify your defenses.",
+  },
+];
+
+const reviewProcessSteps = [
+  {
+    title: "Start with the application",
+    body: "You submit a short application form with your business context, your team structure, and a high-level information about the technical issue or decision.",
+  },
+  {
+    title: "Assess applicability and NDA",
+    body: "Upon finding the technical problem to be a good fit, we will sign an NDA to ensure that all internal information can be discussed openly.",
+  },
+  {
+    title: "Collect the technical context",
+    body: "I will request architecture details, incident reports, technical constraints, product context, and other relevant details that will allow me to assess the system thoroughly.",
+  },
+  {
+    title: "Run the diagnostic session",
+    body: "A one-time 60-minute session to clarify assumptions, understand business direction, and identify the technical bottlenecks blocking progress.",
+  },
+  {
+    title: "Receive a technical guidance",
+    body: "Your deliverable will be a video walkthrough and PDF file outlining the trade-off and guidance with actionable insights for your team.",
+  },
+];
+---
+
+<Font cssVariable="--font-editorial-new" preload />
+<ConsultancyLayout title={title} description={description} headerTransparent={true}>
+  
+  <section class="motion-enter pt-30 mb-20" data-strategic-review-landing>
+    <div class="mx-auto flex lg:min-h-[clamp(800px,78svh,800px)] w-full  items-center">
+      <div class="max-w-4xl space-y-7">
+        <p class="motion-enter text-sm font-semibold uppercase tracking-widest text-orange-300" style="--motion-step: 0;">
+          Selective technical advisory
+        </p>
+
+        <div class="space-y-5">
+          <h1 class="motion-enter max-w-4xl text-5xl font-bold tracking-tight text-white lg:text-8xl font-(family-name:--font-editorial-new)" style="--motion-step: 1;">
+            Strategic Technical Review
+          </h1>
+          <p class="motion-enter max-w-2xl text-lg leading-8 text-zinc-200 sm:text-[1.35rem] sm:leading-9" style="--motion-step: 2;">
+            One sharp diagnostic call for founders and technical leaders facing high-stakes decisions, scaling pressure, or stubborn engineering bottlenecks
+          </p>
+        </div>
+
+        <div class="motion-enter flex flex-col gap-3 pt-2 sm:flex-row" style="--motion-step: 3;">
+          <a
+            href="#apply"
+            data-strategic-review-cta="hero_apply_section"
+            class="interactive-chip inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
+          >
+            Apply for review
+          </a>
+          <a
+            href="#process"
+            class="interactive-chip inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
+          >
+            See the process
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Divider />
+
+  <!-- When your system needs a technical diagnosis -->
+  <section class="motion-enter">
+    <h2 class="mb-14 text-3xl font-[720] tracking-tight text-white md:text-4xl lg:text-6xl text-center font-(family-name:--font-editorial-new)">
+      When your system <em>needs</em> a technical diagnosis
+    </h2>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-5 gap-y-15">
+      {architectureAssessmentItems.map((item) => {
+        const Icon = item.icon;
+        return (
+          <div class={`mx-auto w-4/5 lg:w-full ${item.cls}`} style={item.step}>
+            <div class="justify-center flex items-center mb-5">
+              <Icon class="text-orange-300 mr-5 hidden sm:block" />
+              <h3 class="text-center lg:text-left text-base font-semibold uppercase tracking-widest text-orange-300">
+                {item.title}
+              </h3>
+            </div>
+            <p class="text-center lg:text-left">{item.body}</p>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <Divider />
+
+  <!-- Process -->
+  <section id="process" class="motion-enter">
+    <div class="mx-auto w-full">
+      <div class="space-y-5">
+        <div class="motion-enter space-y-4" style="--motion-step: 1;">
+          <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">
+            Process
+          </p>
+          <h2 class="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new) mb-8">
+            A focused process for better technical decisions.
+          </h2>
+        </div>
+
+        <ol class="m-0 p-0 list-none">
+          {reviewProcessSteps.map((step, index) => (
+            <li class="motion-enter grid gap-4 grid-cols-[2rem_minmax(0,1fr)]" style={`--motion-step: ${index + 2};`}>
+              <div class="relative flex justify-center pt-[0.35rem]" aria-hidden="true">
+                <span class="relative z-1 h-3.5 w-3.5 rounded-full bg-[rgb(253_186_116)] [box-shadow:0_0_0_0.5rem_rgb(253_186_116/0.08)]" />
+                {index < reviewProcessSteps.length - 1 && <span class="absolute top-5 bottom-0 w-px bg-[linear-gradient(180deg,rgb(253_186_116/0.6),rgb(255_255_255/0.08))]" />}
+              </div>
+              <div class="space-y-3 pb-10">
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-300">
+                  Step 0{index + 1}
+                </p>
+                <h3 class="text-2xl font-[720] tracking-[-0.04em] text-white">
+                  {step.title}
+                </h3>
+                <p class="leading-6 text-zinc-400 sm:text-lg sm:leading-8">
+                  {step.body}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <Divider />
+
+  <!-- Who is this for -->
+  <section aria-labelledby="fit-heading" class="motion-enter">
+    <h2 id="fit-heading" class="mb-5 text-3xl font-[720] tracking-tight text-white md:text-4xl lg:text-6xl text-center font-(family-name:--font-editorial-new)">
+      Who is this for
+    </h2>
+    <p class="leading-7 text-zinc-300 sm:text-lg sm:leading-8 text-center">
+      Best fit for founders, technical leaders, and companies that need a sharp external
+      diagnostic before making an important technical decision, untangling a costly
+      bottleneck, or defining the right architecture for the next stage of growth.<br />
+      Designed for teams that need Big Tech rigor without the overhead of a full-time executive hire.
+    </p>
+  </section>
+
+  <Divider />
+
+  <!-- Apply -->
+  <section id="apply" class="motion-enter">
+    <div class="motion-enter" style="--motion-step: 0;">
+      <p class="text-sm font-semibold uppercase tracking-widest text-orange-300">
+        Apply form
+      </p>
+      <h2 class="mt-3 text-3xl font-[760] tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)">
+        If the decision is material, start with the context
+      </h2>
+      <p class="mt-4 leading-7 text-zinc-300 sm:text-lg sm:leading-8">
+        The application covers the business stakes, current technical reality, and the decision you need to validate before this review is considered.
+      </p>
+      <div class="flex flex-col gap-5 pt-8 md:flex-row">
+        <a
+          href="/strategic-technical-review/apply"
+          data-strategic-review-cta="apply_page"
+          class="interactive-chip mt-6 inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
+        >
+          Apply for review
+        </a>
+      </div>
+    </div>
+  </section>
+</ConsultancyLayout>
+
+<script>
+  const trackStrategicReviewLanding = () => {
+    const landingRoot = document.querySelector<HTMLElement>("[data-strategic-review-landing]");
+
+    if (!landingRoot || landingRoot.dataset.analyticsInitialized === "true") {
+      return;
+    }
+
+    landingRoot.dataset.analyticsInitialized = "true";
+
+    const sendGtagEvent = (eventName, eventParams) => {
+      if (typeof window.gtag !== "function") {
+        return;
+      }
+
+      window.gtag("event", eventName, eventParams);
+    };
+
+    sendGtagEvent("strategic_review_landing_view", {
+      page_path: window.location.pathname,
+      page_type: "landing",
+    });
+
+    const ctaLinks = document.querySelectorAll<HTMLAnchorElement>("[data-strategic-review-cta]");
+
+    ctaLinks.forEach((ctaLink) => {
+      ctaLink.addEventListener("click", () => {
+        sendGtagEvent("strategic_review_apply_cta_click", {
+          cta_location: ctaLink.dataset.strategicReviewCta,
+          destination_path: ctaLink.getAttribute("href") || "",
+          page_path: window.location.pathname,
+        });
+      });
+    });
+  };
+
+  trackStrategicReviewLanding();
+  document.addEventListener("astro:page-load", trackStrategicReviewLanding);
+</script>
