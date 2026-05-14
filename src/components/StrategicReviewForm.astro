@@ -13,14 +13,12 @@ interface ChoiceOption {
 
 const { sourcePath, webhookUrl }: Props = Astro.props;
 const consultancyAmount = import.meta.env.PUBLIC_CONSULTANCY_AMOUNT;
+const skipSubmitForTesting = import.meta.env.PUBLIC_SKIP_SUBMIT_FOR_TESTING;
 const usDollar = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   currencyDisplay: 'code'
 });
-
-const formSentCookieName = 'strategic_review_form_status';
-const formSentCookieValue = 'form sent';
 
 const roleOptions: readonly ChoiceOption[] = [
   { label: "Founder / CEO", value: "Founder / CEO" },
@@ -152,9 +150,9 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
 
         <label class="review-field" for="implementationCapacity">
           <span class="review-label">Implementation capacity <span class="review-required">*</span></span>
-          <p class="review-step-copy review-compact-copy">
+          <span class="review-step-copy review-compact-copy">
             Do you have a dedicated team ready to implement the recommended roadmap?
-          </p>
+          </span>
           <select
             class="review-input review-select"
             id="implementationCapacity"
@@ -286,12 +284,14 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       <ol class="list-decimal list-inside text-zinc-300">
         <li><strong>Review:</strong> I will evaluate your technical context and the potential business impact within the next 48 hours.</li>
         <li><strong>Selection:</strong> To maintain the highest quality of delivery, I only accept a limited number of engagements each month, prioritizing projects where my diagnosis can unlock the most significant growth.</li>
-        <li><strong>Next Steps:</strong> If there is a strategic fit, you will receive an email with:</li>
-        <ul class="list-disc list-inside">
-          <li>A secure <strong>payment link</strong> for the {usDollar.format(consultancyAmount)} audit fee.</li>
-          <li>A <strong>Technical Onboarding Checklist</strong> with instructions on how to provide the necessary logs, metrics, and documentation for analysis.</li>
-          <li>Following the receipt of the information, we will <strong>coordinate the next steps</strong> to initiate the diagnostic process.</li>
-        </ul>
+        <li>
+          <strong>Next Steps:</strong> If there is a strategic fit, you will receive an email with:
+          <ul class="list-disc list-inside">
+            <li>A secure <strong>payment link</strong> for the {usDollar.format(consultancyAmount)} audit fee.</li>
+            <li>A <strong>Technical Onboarding Checklist</strong> with instructions on how to provide the necessary logs, metrics, and documentation for analysis.</li>
+            <li>Following the receipt of the information, we will <strong>coordinate the next steps</strong> to initiate the diagnostic process.</li>
+          </ul>
+        </li>
       </ol>
     </div>
   </section>
@@ -301,8 +301,7 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
   define:vars={{
     sourcePath,
     webhookUrl,
-    formSentCookieName,
-    formSentCookieValue,
+    skipSubmitForTesting,
   }}
 >
   class FormSubmissionError extends Error {
@@ -314,42 +313,50 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
     }
   }
 
-  const initStrategicReviewForm = () => {
-    const root = document.querySelector<HTMLDivElement>("[data-strategic-review-form]");
+  const getRequiredElement = (parent, selector, ElementType) => {
+    const element = parent.querySelector(selector);
 
-    if (!root || root.dataset.initialized === "true") {
+    if (!(element instanceof ElementType)) {
+      throw new Error(`Strategic review form is missing required element: ${selector}`);
+    }
+
+    return element;
+  };
+
+  const getRequiredElements = (parent, selector, ElementType) => {
+    const elements = Array.from(parent.querySelectorAll(selector)).filter((element) => {
+      return element instanceof ElementType;
+    });
+
+    if (elements.length === 0) {
+      throw new Error(`Strategic review form is missing required elements: ${selector}`);
+    }
+
+    return elements;
+  };
+
+  const initStrategicReviewForm = () => {
+    const root = document.querySelector("[data-strategic-review-form]");
+
+    if (!(root instanceof HTMLDivElement) || root.dataset.initialized === "true") {
       return;
     }
 
-    const form = root.querySelector<HTMLFormElement>("[data-review-form]");
-    const messageElement = root.querySelector<HTMLDivElement>("[data-form-message]");
-    const contactPanel = root.querySelector<HTMLElement>('[data-step-panel="contact"]');
-    const qualificationPanel = root.querySelector<HTMLElement>('[data-step-panel="qualification"]');
-    const diagnosticPanel = root.querySelector<HTMLElement>('[data-step-panel="diagnostic"]');
-    const qualifiedPanel = root.querySelector<HTMLElement>('[data-terminal-panel="qualified"]');
-    const qualifiedSubmitButton = root.querySelector<HTMLButtonElement>("[data-qualified-submit]");
-    const nextContactButton = root.querySelector<HTMLButtonElement>('[data-action="next-contact"]');
-    const backContactButton = root.querySelector<HTMLButtonElement>('[data-action="back-contact"]');
-    const nextQualificationButton = root.querySelector<HTMLButtonElement>('[data-action="next-qualification"]');
-    const backQualificationButtons = Array.from(
-      root.querySelectorAll<HTMLButtonElement>('[data-action="back-qualification"]'),
+    const form = getRequiredElement(root, "[data-review-form]", HTMLFormElement);
+    const messageElement = getRequiredElement(root, "[data-form-message]", HTMLDivElement);
+    const contactPanel = getRequiredElement(root, '[data-step-panel="contact"]', HTMLElement);
+    const qualificationPanel = getRequiredElement(root, '[data-step-panel="qualification"]', HTMLElement);
+    const diagnosticPanel = getRequiredElement(root, '[data-step-panel="diagnostic"]', HTMLElement);
+    const qualifiedPanel = getRequiredElement(root, '[data-terminal-panel="qualified"]', HTMLElement);
+    const qualifiedSubmitButton = getRequiredElement(root, "[data-qualified-submit]", HTMLButtonElement);
+    const nextContactButton = getRequiredElement(root, '[data-action="next-contact"]', HTMLButtonElement);
+    const backContactButton = getRequiredElement(root, '[data-action="back-contact"]', HTMLButtonElement);
+    const nextQualificationButton = getRequiredElement(root, '[data-action="next-qualification"]', HTMLButtonElement);
+    const backQualificationButtons = getRequiredElements(
+      root,
+      '[data-action="back-qualification"]',
+      HTMLButtonElement,
     );
-
-    if (
-      !form ||
-      !messageElement ||
-      !contactPanel ||
-      !qualificationPanel ||
-      !diagnosticPanel ||
-      !qualifiedPanel ||
-      !qualifiedSubmitButton ||
-      !nextContactButton ||
-      !backContactButton ||
-      !nextQualificationButton ||
-      backQualificationButtons.length === 0
-    ) {
-      throw new Error("Strategic review form is missing required elements.");
-    }
 
     root.dataset.initialized = "true";
 
@@ -367,6 +374,13 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
     };
 
     const qualifiedSubmitLabel = qualifiedSubmitButton.innerHTML;
+
+    const triggerSubmit = () => {
+      if (skipSubmitForTesting && skipSubmitForTesting === "true") {
+        return false;
+      }
+      return true;
+    };
 
     const sendGtagEvent = (eventName, eventParams) => {
       if (typeof window.gtag !== "function") {
@@ -434,7 +448,7 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
 
     const getPanelFields = (step) => {
       return Array.from(
-        panelsByStep[step].querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+        panelsByStep[step].querySelectorAll(
           "input, select, textarea",
         ),
       );
@@ -571,8 +585,10 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       });
 
       try {
-        const payload = createQualifiedSubmission(new FormData(form));
-        await submitPayload(payload);
+        if (triggerSubmit()) {
+          const payload = createQualifiedSubmission(new FormData(form));
+          await submitPayload(payload);
+        }
         sendGtagEvent("strategic_review_form_step_complete", {
           page_path: window.location.pathname,
           step_name: "diagnostic",
