@@ -237,12 +237,13 @@ const reviewProcessSteps = [
     }
 
     landingRoot.dataset.analyticsInitialized = "true";
-
+    // @ts-expect-error
     const sendGtagEvent = (eventName, eventParams) => {
+      // @ts-expect-error
       if (typeof window.gtag !== "function") {
         return;
       }
-
+      // @ts-expect-error
       window.gtag("event", eventName, eventParams);
     };
 
