@@ -230,9 +230,9 @@ const reviewProcessSteps = [
 
 <script>
   const trackStrategicReviewLanding = () => {
-    const landingRoot = document.querySelector<HTMLElement>("[data-strategic-review-landing]");
+    const landingRoot = document.querySelector("[data-strategic-review-landing]");
 
-    if (!landingRoot || landingRoot.dataset.analyticsInitialized === "true") {
+    if (!(landingRoot instanceof HTMLElement) || landingRoot.dataset.analyticsInitialized === "true") {
       return;
     }
 
@@ -251,9 +251,13 @@ const reviewProcessSteps = [
       page_type: "landing",
     });
 
-    const ctaLinks = document.querySelectorAll<HTMLAnchorElement>("[data-strategic-review-cta]");
+    const ctaLinks = document.querySelectorAll("[data-strategic-review-cta]");
 
     ctaLinks.forEach((ctaLink) => {
+      if (!(ctaLink instanceof HTMLAnchorElement)) {
+        return;
+      }
+
       ctaLink.addEventListener("click", () => {
         sendGtagEvent("strategic_review_apply_cta_click", {
           cta_location: ctaLink.dataset.strategicReviewCta,

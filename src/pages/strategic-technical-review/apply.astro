@@ -39,9 +39,9 @@ const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
 
 <script>
   const trackStrategicReviewApplyPage = () => {
-    const applyRoot = document.querySelector<HTMLElement>("[data-strategic-review-apply-page]");
+    const applyRoot = document.querySelector("[data-strategic-review-apply-page]");
 
-    if (!applyRoot || applyRoot.dataset.analyticsInitialized === "true") {
+    if (!(applyRoot instanceof HTMLElement) || applyRoot.dataset.analyticsInitialized === "true") {
       return;
     }
 

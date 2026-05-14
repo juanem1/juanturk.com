@@ -316,42 +316,50 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
     }
   }
 
-  const initStrategicReviewForm = () => {
-    const root = document.querySelector<HTMLDivElement>("[data-strategic-review-form]");
+  const getRequiredElement = (parent, selector, ElementType) => {
+    const element = parent.querySelector(selector);
 
-    if (!root || root.dataset.initialized === "true") {
+    if (!(element instanceof ElementType)) {
+      throw new Error(`Strategic review form is missing required element: ${selector}`);
+    }
+
+    return element;
+  };
+
+  const getRequiredElements = (parent, selector, ElementType) => {
+    const elements = Array.from(parent.querySelectorAll(selector)).filter((element) => {
+      return element instanceof ElementType;
+    });
+
+    if (elements.length === 0) {
+      throw new Error(`Strategic review form is missing required elements: ${selector}`);
+    }
+
+    return elements;
+  };
+
+  const initStrategicReviewForm = () => {
+    const root = document.querySelector("[data-strategic-review-form]");
+
+    if (!(root instanceof HTMLDivElement) || root.dataset.initialized === "true") {
       return;
     }
 
-    const form = root.querySelector<HTMLFormElement>("[data-review-form]");
-    const messageElement = root.querySelector<HTMLDivElement>("[data-form-message]");
-    const contactPanel = root.querySelector<HTMLElement>('[data-step-panel="contact"]');
-    const qualificationPanel = root.querySelector<HTMLElement>('[data-step-panel="qualification"]');
-    const diagnosticPanel = root.querySelector<HTMLElement>('[data-step-panel="diagnostic"]');
-    const qualifiedPanel = root.querySelector<HTMLElement>('[data-terminal-panel="qualified"]');
-    const qualifiedSubmitButton = root.querySelector<HTMLButtonElement>("[data-qualified-submit]");
-    const nextContactButton = root.querySelector<HTMLButtonElement>('[data-action="next-contact"]');
-    const backContactButton = root.querySelector<HTMLButtonElement>('[data-action="back-contact"]');
-    const nextQualificationButton = root.querySelector<HTMLButtonElement>('[data-action="next-qualification"]');
-    const backQualificationButtons = Array.from(
-      root.querySelectorAll<HTMLButtonElement>('[data-action="back-qualification"]'),
+    const form = getRequiredElement(root, "[data-review-form]", HTMLFormElement);
+    const messageElement = getRequiredElement(root, "[data-form-message]", HTMLDivElement);
+    const contactPanel = getRequiredElement(root, '[data-step-panel="contact"]', HTMLElement);
+    const qualificationPanel = getRequiredElement(root, '[data-step-panel="qualification"]', HTMLElement);
+    const diagnosticPanel = getRequiredElement(root, '[data-step-panel="diagnostic"]', HTMLElement);
+    const qualifiedPanel = getRequiredElement(root, '[data-terminal-panel="qualified"]', HTMLElement);
+    const qualifiedSubmitButton = getRequiredElement(root, "[data-qualified-submit]", HTMLButtonElement);
+    const nextContactButton = getRequiredElement(root, '[data-action="next-contact"]', HTMLButtonElement);
+    const backContactButton = getRequiredElement(root, '[data-action="back-contact"]', HTMLButtonElement);
+    const nextQualificationButton = getRequiredElement(root, '[data-action="next-qualification"]', HTMLButtonElement);
+    const backQualificationButtons = getRequiredElements(
+      root,
+      '[data-action="back-qualification"]',
+      HTMLButtonElement,
     );
-
-    if (
-      !form ||
-      !messageElement ||
-      !contactPanel ||
-      !qualificationPanel ||
-      !diagnosticPanel ||
-      !qualifiedPanel ||
-      !qualifiedSubmitButton ||
-      !nextContactButton ||
-      !backContactButton ||
-      !nextQualificationButton ||
-      backQualificationButtons.length === 0
-    ) {
-      throw new Error("Strategic review form is missing required elements.");
-    }
 
     root.dataset.initialized = "true";
 
