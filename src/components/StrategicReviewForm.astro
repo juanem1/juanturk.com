@@ -152,9 +152,9 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
 
         <label class="review-field" for="implementationCapacity">
           <span class="review-label">Implementation capacity <span class="review-required">*</span></span>
-          <p class="review-step-copy review-compact-copy">
+          <span class="review-step-copy review-compact-copy">
             Do you have a dedicated team ready to implement the recommended roadmap?
-          </p>
+          </span>
           <select
             class="review-input review-select"
             id="implementationCapacity"
@@ -286,12 +286,14 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       <ol class="list-decimal list-inside text-zinc-300">
         <li><strong>Review:</strong> I will evaluate your technical context and the potential business impact within the next 48 hours.</li>
         <li><strong>Selection:</strong> To maintain the highest quality of delivery, I only accept a limited number of engagements each month, prioritizing projects where my diagnosis can unlock the most significant growth.</li>
-        <li><strong>Next Steps:</strong> If there is a strategic fit, you will receive an email with:</li>
-        <ul class="list-disc list-inside">
-          <li>A secure <strong>payment link</strong> for the {usDollar.format(consultancyAmount)} audit fee.</li>
-          <li>A <strong>Technical Onboarding Checklist</strong> with instructions on how to provide the necessary logs, metrics, and documentation for analysis.</li>
-          <li>Following the receipt of the information, we will <strong>coordinate the next steps</strong> to initiate the diagnostic process.</li>
-        </ul>
+        <li>
+          <strong>Next Steps:</strong> If there is a strategic fit, you will receive an email with:
+          <ul class="list-disc list-inside">
+            <li>A secure <strong>payment link</strong> for the {usDollar.format(consultancyAmount)} audit fee.</li>
+            <li>A <strong>Technical Onboarding Checklist</strong> with instructions on how to provide the necessary logs, metrics, and documentation for analysis.</li>
+            <li>Following the receipt of the information, we will <strong>coordinate the next steps</strong> to initiate the diagnostic process.</li>
+          </ul>
+        </li>
       </ol>
     </div>
   </section>
@@ -434,7 +436,7 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
 
     const getPanelFields = (step) => {
       return Array.from(
-        panelsByStep[step].querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+        panelsByStep[step].querySelectorAll(
           "input, select, textarea",
         ),
       );
