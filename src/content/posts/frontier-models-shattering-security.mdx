@@ -1,0 +1,142 @@
+---
+date: 2026-05-19
+title: 'The End of Manual Review: Why Frontier Models are Shattering Our Security Metrics'
+subtitle: 'Next-generation AI is finding vulnerabilities that have been hidden for decades. The phrase "audited by a senior engineer" no longer guarantees anything.'
+description: 'An analysis of how frontier models read code adversarially and why software engineering must abandon manual review in favor of autonomous validation.'
+tags: 
+  - AI
+  - Engineering
+  - Cybersecurity
+tldr: 'Language models of today start to find logical gaps in the code that humans did not notice for years. The security of the future relies on making the architecture readable so that autonomous agents can attack and defend them in real-time.'
+heroImage: ../../assets/images/frontier-models-shattering-security.png
+---
+
+import PostReferences from "../../components/PostReferences.astro";
+
+In all my years working as a software engineer, I always thought that by properly reviewing every PR, we could ensure the security of our codebase.
+
+This belief seemed reasonable for quite some time. It was us, humans, who wrote the code, designed the architecture, and verified that our implementation truly reflected our initial idea.
+
+But recently we started to see that frontier models are already capable of analyzing huge codebases and revealing logical gaps that have been alive for years inside some widely used software. For example, it is reported that Mozilla Firefox [1] found hundreds of vulnerabilities during its automated code analysis. A vulnerability in Linux [2] that is estimated to be present for almost 10 years, a vulnerability in OpenBSD [3] that was there for almost 27 years, projects as FFmpeg [4], and the list goes on and on.
+
+These were not some hobby projects, this is one of the most reviewed and used pieces of software out there.
+
+*The world is changing very fast.*
+
+Newest models already start to read code in a way that is not natural for a human mind. They do not get bored easily. They do not trust the author's intention. They do not skip lines of code they find unimportant. They follow paths, cases, state transitions, and strange combinations until they break something.
+
+And this is the main thesis of the current post. The future of software security will be based not on reading every line manually, but rather on building systems clear enough for machines to attack, validate, and protect them continuously.
+
+## 1. Machines do not read code politely.
+
+Let's face it, when a person is reviewing code, he is reading it with an intention.
+
+He thinks: *what does this function do?*
+While a machine thinks something different: *What is this function allowing?*
+
+The difference is quite obvious, but it has a lot of implications.
+
+Whereas a human reviewer may comprehend the idea of the feature, approve its implementation and overlook some strange edge case three layers deeper inside the code, a machine does not care whether the code looks good or not. It can go deep into combinations that would take ages for a human to check manually.
+
+This is why some logical gaps in the code survive inside highly reviewed and tested software. Not because noone cared, but because the current method of auditing had some limitations.
+
+I am not saying that people are bad engineers. I'm saying that software has become too complex, too interconnected, and too stateful for a person to validate everything manually.
+
+## 2. Zero-days are becoming easier to find.
+
+A few years ago finding a vulnerability in a piece of software was an activity requiring some special skills and a lot of time and patience.
+
+It is still true for the most difficult bugs. However, the floor level is moving.
+
+Today's IA agents are capable of scanning huge repositories of code, reasoning about suspicious logic, generating test cases and suggesting patches much faster than any human team. This does not mean that all reports are correct. What it means is that the price of finding a vulnerability is falling dramatically.
+
+This creates a whole new paradigm in security.
+
+If defenders can use AI to audit the code, attackers can use AI to discover it. It means that it does not matter anymore who has the most experienced developer anymore. What really matters is who runs more automated analysis faster against more targets.
+
+## 3. Support ticketing workflow is not enough anymore.
+
+Security work in companies today typically follows the standard support ticketing workflow.
+
+A scanner finds something. A ticket is created. Someone prioritizes it. Another team picks it up. The fix is waiting for a sprint. QA validates it and finally, it reaches production.
+
+This process was slow. Now it is getting ridiculous.
+
+While automated systems start to discover and exploit vulnerabilities in hours, a remediation cycle taking weeks or months is not a process. It is exposure.
+
+### What I'm doing right now?
+
+Today, in my team, after a vulnerability has been discovered, we already use [automated systems](/blog/how-we-built-an-ai-powered-vulnerability-fixer) to analyze it, validate the impact, generate pull requests that are close to be merged.
+
+Difference in speed is huge.
+
+What used to take weeks of coordination between several teams and releases, now takes hours. Manual processes are still required, but our focus shifted from checking every single step to monitoring, validating and defining the scope of automation itself.
+
+## 4. Old messy code becomes a security problem.
+
+This is the point that I believe will be underestimated by many teams.
+
+Recently, an old internal application went through an automated security validation process. Not surprisingly, after nearly 5 years of lack of attention, almost every dependency of the project became outdated. Not outdated by one or two major releases, but by 5 or 10 sometimes.
+
+The reason behind it was the old engineering mentality of *"if it works, do not touch it."* And to be honest, the application was still doing exactly what it was initially developed for.
+
+While business logic remained untouched, the ecosystem around it kept evolving. New vulnerabilities appeared, dependencies became unsupported, security patches were missed and the technical debt grew.
+
+There is no need to describe the security threat such an application poses to the company.
+
+The real question here was no longer whether to update package managers, but whether to refactor the whole application or rewrite it completely.
+
+## 5. Engineers move up one level.
+
+I do not think the future senior engineer will spend most of his day reviewing pull requests line by line. This work will still exist, but it will not be the core of his duties anymore.
+
+The new important duty will be architectural. Defining boundaries, writing specifications, designing review policies, and deciding what the system is allowed to change automatically.
+
+Or in other words, the senior engineer becomes an architect.
+
+It may sound abstract, but in fact, it is very practical. Someone has to define what the agent is allowed to change without any approval. Which tests are mandatory. Which files are too sensitive to be modified automatically. How to cross-check the models. When a human engineer has to stop the whole process.
+
+## 6. Who audits the auditor?
+
+Obviously, there is one big drawback in all of this. AI models can hallucinate. They can miss some context. They can suggest a patch that seems correct but changes the behavior in a wrong way. They can also create a false sense of security which might be even worse than no automation.
+
+So the answer cannot be full trust to AI.
+
+I think that the answer is *redundancy.*
+
+Different models should review the same changes. Automated test environments should be created. Formal verification should be applied when needed. Security critical patches should be enforced before they reach production.
+
+The question is not which actor you should trust. The question is how to create the process where none of the actors has absolute trust.
+
+Including AI.
+
+## 7. The attacker also has AI.
+
+This transition is not happening in some laboratory. It is happening right now in production systems.
+
+Not only the defender is using models to find and fix vulnerabilities, but the attacker is using models to scan codebases and generate new exploit ideas.
+
+It does not mean that tomorrow every application becomes vulnerable. But it definitely means that the window for a quick response is closing very fast.
+
+Security is moving away from occasional audits and towards continuous defense.
+
+## 8. What happens to Bug Bounty programs?
+
+I do not think that bug bounty programs will be gone anytime soon, but there are [clear signs](https://daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/) that the model is starting to wear down.
+
+But as models become more efficient at finding security vulnerabilities, companies will start to reconsider their reliance on bounty programs and shift a part of the budget to autonomous security solutions that will scan, validate and fix vulnerabilities continuously and before anyone else will discover them. Tools like [Aisle](https://aisle.com/) are an early example of such direction.
+
+
+## The real shift.
+
+The future of security is not humans versus AI. It is slow systems versus fast systems. Teams that will keep thinking that manual review is the ultimate solution will lose.
+
+
+<PostReferences title="References">
+  <ul>
+    <li>[1] [Mozilla used anthropics's mythos to find 271 bugs](https://www.wired.com/story/mozilla-used-anthropics-mythos-to-find-271-bugs-in-firefox/)</li>
+    <li>[2] [Copy Fail](https://copy.fail/)</li>
+    <li>[3] [Anthropic Mythos Discovers 27-Year-Old OpenBSD Vulnerability](https://www.desightstudio.com/en/insights/ai-security-audits-anthropic-mythos-openbsd-vulnerability)</li>
+    <li>[4] [Google's new AI-powered bug hunting tool finds major issues in open source software](https://www.techradar.com/pro/security/googles-new-ai-powered-bug-hunting-tool-finds-major-issues-in-open-source-software)</li>
+  </ul>
+</PostReferences>
