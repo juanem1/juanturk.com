@@ -2,10 +2,12 @@
 import { getImage, Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import PostMeta from "../../components/PostMeta.astro";
+import PostNavigation from "../../components/PostNavigation.astro";
 import PostTags from "../../components/PostTags.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import PostTldr from "../../components/PostTldr.astro";
 import BlogLayout from "../../layouts/BlogLayout.astro";
+import { getAdjacentPosts } from "../../utils/getAdjacentPosts";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -21,6 +23,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const minutesRead = remarkPluginFrontmatter.minutesRead ?? "1 min read";
 const tableOfContents = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 const postUrl = new URL(`/blog/${post.id}/`, Astro.site ?? Astro.url).href;
+const { previous, next } = await getAdjacentPosts(post.id);
 const ogImage = post.data.heroImage
   ? new URL(
       (
@@ -86,6 +89,9 @@ const ogImage = post.data.heroImage
       <div class="post-content max-w-none">
         <PostTldr text={post.data.tldr} />
         <Content />
+        <div class="mt-10">
+          <PostNavigation previous={previous} next={next} />
+        </div>
       </div>
 
       <TableOfContents headings={tableOfContents} />
