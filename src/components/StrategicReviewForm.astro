@@ -12,7 +12,6 @@ interface ChoiceOption {
 }
 
 const { sourcePath, webhookUrl }: Props = Astro.props;
-const consultancyAmount = import.meta.env.PUBLIC_CONSULTANCY_AMOUNT;
 const skipSubmitForTesting = import.meta.env.PUBLIC_SKIP_SUBMIT_FOR_TESTING;
 const usDollar = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -287,7 +286,7 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
         <li>
           <strong>Next Steps:</strong> If there is a strategic fit, you will receive an email with:
           <ul class="list-disc list-inside">
-            <li>A secure <strong>payment link</strong> for the {usDollar.format(consultancyAmount)} audit fee.</li>
+            <li>A secure payment link</li>
             <li>A <strong>Technical Onboarding Checklist</strong> with instructions on how to provide the necessary logs, metrics, and documentation for analysis.</li>
             <li>Following the receipt of the information, we will <strong>coordinate the next steps</strong> to initiate the diagnostic process.</li>
           </ul>
