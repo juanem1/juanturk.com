@@ -1,0 +1,59 @@
+---
+import { Font } from "astro:assets";
+import AIAutomationForm from "../../components/AIAutomationForm.astro";
+import ConsultancyLayout from "../../layouts/ConsultancyLayout.astro";
+
+const title = "Apply for AI & Automation Consulting";
+const description =
+  "Submit your application for an AI & Automation operational diagnosis and share the bottleneck, task volume, systems, and business impact behind it.";
+const sourcePath = "/ai-automation-consulting/apply";
+const webhookUrl = import.meta.env.PUBLIC_AI_AUTOMATION_WEBHOOK_URL;
+
+---
+
+<Font cssVariable="--font-editorial-new" preload />
+<ConsultancyLayout title={title} description={description} headerTransparent={true}>
+
+  <section class="motion-enter" data-ai-automation-apply-page>
+    <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-28 sm:pb-20 sm:pt-32">
+      <div class="space-y-4">
+        <h1 class="text-5xl font-bold tracking-tight text-balance text-white lg:text-8xl font-(family-name:--font-editorial-new)">
+          Apply for an Operational Diagnosis
+        </h1>
+        <p class="text-pretty text-zinc-300">This application helps me understand your business context, your operational reality, the repetitive work slowing you down, and the systems involved. It allows me to assess whether automation can deliver a measurable return before scheduling any session.</p>
+        <p class="text-pretty text-zinc-300">You'll be asked for basic contact details, company and industry context, the main operational bottleneck, task volume, current systems, business impact, and any relevant deadlines or constraints.</p>
+        <p class="text-zinc-400 italic">Usually takes between 5 to 10 minutes to complete</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="motion-enter pb-20">
+    <div class="mx-auto w-full">
+      <AIAutomationForm sourcePath={sourcePath} webhookUrl={webhookUrl} />
+    </div>
+  </section>
+</ConsultancyLayout>
+
+<script>
+  const trackAIAutomationApplyPage = () => {
+    const applyRoot = document.querySelector("[data-ai-automation-apply-page]");
+
+    if (!(applyRoot instanceof HTMLElement) || applyRoot.dataset.analyticsInitialized === "true") {
+      return;
+    }
+
+    applyRoot.dataset.analyticsInitialized = "true";
+
+    if (typeof window.gtag !== "function") {
+      return;
+    }
+
+    window.gtag("event", "ai_automation_apply_form", {
+      page_path: window.location.pathname,
+      page_type: "apply",
+    });
+  };
+
+  trackAIAutomationApplyPage();
+  document.addEventListener("astro:page-load", trackAIAutomationApplyPage);
+</script>

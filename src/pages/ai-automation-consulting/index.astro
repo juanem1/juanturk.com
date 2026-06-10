@@ -1,116 +1,108 @@
 ---
 import { Font, getImage } from "astro:assets";
-import { TrendingUp, Gauge, CloudUpload, RefreshCcw, ShieldAlert, GitBranchPlus } from '@lucide/astro';
+import { ClipboardList, Workflow, UserMinus, Sparkles, TrendingUp, AlertTriangle } from '@lucide/astro';
 import ConsultancyLayout from "../../layouts/ConsultancyLayout.astro";
 import Divider from "../../components/Divider.astro"
 import profilePicture from "../../assets/images/new_profile_picture.png";
 
 const optimizedBg = await getImage({ src: profilePicture });
-const title = "Strategic Technical Review";
+const title = "AI & Automation Consulting";
 const description =
-  "A selective one-call technical diagnostic for founders and engineering leaders making high-stakes architecture, scalability, and delivery decisions.";
+  "An independent systems architect helping traditional mid-size companies eliminate operational bottlenecks with reliable, agentic AI workflows and a measurable ROI.";
 
-const architectureAssessmentItems = [
+const bottleneckItems = [
   {
-    icon: TrendingUp,
-    title: "SCALING YOUR BUSINESS OPERATIONS",
+    icon: ClipboardList,
+    title: "MANUAL, REPETITIVE TASKS",
     step: "--motion-step: 4",
     cls: "lg:pr-6 lg:pt-5",
     body:
-      "Preparing for significant growth or handling an increase in user demand. A diagnostic ensures your architecture can support the expansion without performance dips.",
+      "Your team re-types data between systems, copies records by hand, and runs the same routine every day. That time is the first thing a well-designed automation gives back.",
   },
   {
-    icon: GitBranchPlus,
-    title: "PLANNING FOR MAJOR UPDATES",
+    icon: Workflow,
+    title: "OPERATIONAL BOTTLENECKS",
     step: "--motion-step: 5",
     cls: "lg:px-6 lg:pt-5",
     body:
-      "Adding new features, transitioning to microservices, or integrating with third-party tools? Ensure your architecture is ready to handle the changes seamlessly.",
+      "Critical processes stall because they depend on a few people manually moving work between disconnected tools. We map the flow of value and find where time and money leak.",
   },
   {
-    icon: Gauge,
-    title: "SYSTEM PERFORMANCE ISSUES",
+    icon: UserMinus,
+    title: "NO INTERNAL TECH TALENT",
     step: "--motion-step: 4",
     cls: "lg:pl-6 lg:pt-5",
     body:
-      "Facing slow response times, system outages, or unexplained inefficiencies? Identify the root cause of growth-stifling bottlenecks before they impact your LTV.",
+      "You don't have the in-house engineering to design and connect AI into your systems safely. You need an independent architect, not another full-time hire.",
   },
   {
-    icon: CloudUpload,
-    title: "EXPLORING CLOUD MIGRATION",
+    icon: Sparkles,
+    title: "AI WITHOUT A REAL PLAN",
     step: "--motion-step: 4",
     cls: "lg:pr-6",
     body:
-      "Moving to the cloud or optimizing your current cloud setup? An architecture review can ensure the transition is smooth and efficient.",
+      "Adopting AI out of FOMO, with no concrete, measurable plan, is how most companies see zero return. The goal here is operational impact, not a tech demo.",
   },
   {
-    icon: RefreshCcw,
-    title: "MODERNIZING LEGACY SYSTEMS",
+    icon: TrendingUp,
+    title: "GROWTH CHAINED TO HEADCOUNT",
     step: "--motion-step: 5",
     cls: "lg:px-6",
     body:
-      "Struggling with outdated technology? Get a clear technical direction on whether to refactor, migrate, or rebuild.",
+      "Every increase in volume means hiring more people to run the same manual work. Automating the bottleneck breaks the link between growth and payroll.",
   },
   {
-    icon: ShieldAlert,
-    title: "ADDRESSING SECURITY CONCERNS",
+    icon: AlertTriangle,
+    title: "COSTLY HUMAN ERRORS",
     step: "--motion-step: 5",
     cls: "lg:pl-6",
     body:
-      "Concerned about vulnerabilities or compliance? An architecture review can identify risks and provide a roadmap to fortify your defenses.",
+      "Routine manual work produces mistakes that require rework, create compliance risk, and erode trust. Reliable, agentic workflows reduce that error surface.",
   },
 ];
 
-const reviewProcessSteps = [
+const processSteps = [
   {
-    title: "Start with the application",
-    body: "You submit a short application form with your business context, your team structure, and a high-level information about the technical issue or decision.",
+    title: "Operational diagnosis",
+    body: "A focused 90-minute strategy session with your operational leadership, centered on the business and not the technology. We map your most painful processes, measure the volume of repetitive tasks, and quantify the impact of your critical bottlenecks.",
   },
   {
-    title: "Assess applicability and NDA",
-    body: "Upon finding the technical problem to be a good fit, we will sign an NDA to ensure that all internal information can be discussed openly.",
+    title: "Architecture and feasibility",
+    body: "Internal, asynchronous work where I cross your operational problems with the real capabilities of current AI: language models, agentic automation, and integrations. I design exactly how your existing systems should connect to AI agents, and calculate the time savings and technical viability.",
   },
   {
-    title: "Collect the technical context",
-    body: "I will request architecture details, incident reports, technical constraints, product context, and other relevant details that will allow me to assess the system thoroughly.",
-  },
-  {
-    title: "Run the diagnostic session",
-    body: "A one-time 60-minute session to clarify assumptions, understand business direction, and identify the technical bottlenecks blocking progress.",
-  },
-  {
-    title: "Receive a technical guidance",
-    body: "Your deliverable will be a video walkthrough and PDF file outlining the trade-off and guidance with actionable insights for your team.",
+    title: "Blueprint presentation",
+    body: "An executive session to deliver and explain the results. I present the operational diagnosis, reveal the quantified cost of inaction, and hand over the structured action plan and technical blueprint, so you can move toward a safe, delegable implementation.",
   },
 ];
 ---
 
 <Font cssVariable="--font-editorial-new" preload />
 <ConsultancyLayout title={title} description={description} headerTransparent={true}>
-  
-  <section class="motion-enter h-[calc(100dvh - 73px)] pt-18.25" data-strategic-review-landing>
+
+  <section class="motion-enter h-[calc(100dvh - 73px)] pt-18.25" data-ai-automation-landing>
     <div class="mx-auto flex lg:min-h-[clamp(800px,78svh,800px)] w-full items-center">
       <div class="max-w-4xl space-y-7">
         <p class="motion-enter text-sm font-semibold uppercase tracking-widest text-orange-300" style="--motion-step: 0;">
-          Selective technical advisory
+          AI &amp; automation advisory
         </p>
 
         <div class="space-y-5">
           <h1 class="motion-enter max-w-4xl text-5xl font-bold tracking-tight text-balance text-white lg:text-8xl font-(family-name:--font-editorial-new)" style="--motion-step: 1;">
-            Strategic Technical Review
+            AI &amp; Automation Consulting
           </h1>
           <p class="motion-enter max-w-2xl text-lg leading-8 text-pretty text-zinc-200 sm:text-[1.35rem] sm:leading-9" style="--motion-step: 2;">
-            One sharp diagnostic call for founders and technical leaders facing high-stakes decisions, scaling pressure, or stubborn engineering bottlenecks
+            I help traditional companies find their operational bottlenecks and design agentic AI workflows that cut manual work, reduce errors, and deliver a measurable ROI, without inflating your payroll
           </p>
         </div>
 
         <div class="motion-enter flex flex-col gap-3 pt-2 sm:flex-row" style="--motion-step: 3;">
           <a
             href="#apply"
-            data-strategic-review-cta="hero_apply_section"
+            data-ai-automation-cta="hero_apply_section"
             class="interactive-chip inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
           >
-            Apply for review
+            Apply for a diagnosis
           </a>
           <a
             href="#process"
@@ -139,10 +131,10 @@ const reviewProcessSteps = [
         </h2>
         <div class="space-y-4 text-center lg:space-y-5 lg:text-left">
           <p class="leading-7 text-zinc-300 sm:text-lg sm:leading-8 lg:text-[1.14rem] lg:leading-8">
-            Software engineer with 15+ years of experience working with companies across Silicon Valley and the rest of the world on complex software systems, architecture decisions, and high-stakes technical challenges.
+            Software engineer with 15+ years of experience building and integrating complex systems for companies across Silicon Valley and the rest of the world. I act as your independent systems architect, focused on operational reality over hype.
           </p>
           <p class="leading-7 text-zinc-300 sm:text-lg sm:leading-8 lg:text-[1.14rem] lg:leading-8">
-            This review is shaped by years of hands-on engineering work in demanding product environments where technical judgment has direct business impact.
+            I design AI and automation the same way I design any production system: reliable, fail-safe, secure, and built only where there is a true reason for it to exist and a return to justify it.
           </p>
         </div>
       </div>
@@ -151,13 +143,13 @@ const reviewProcessSteps = [
 
   <Divider />
 
-  <!-- When your system needs a technical diagnosis -->
+  <!-- When AI actually delivers ROI -->
   <section class="motion-enter">
     <h2 class="mb-14 text-3xl font-[720] tracking-tight text-balance text-white md:text-4xl lg:text-6xl text-center font-(family-name:--font-editorial-new)">
-      When your system <em>needs</em> a technical diagnosis
+      When AI actually <em>delivers</em> a return
     </h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-5 gap-y-15">
-      {architectureAssessmentItems.map((item) => {
+      {bottleneckItems.map((item) => {
         const Icon = item.icon;
         return (
           <div class={`mx-auto w-4/5 lg:w-full ${item.cls}`} style={item.step}>
@@ -182,20 +174,20 @@ const reviewProcessSteps = [
       <div class="space-y-5">
         <div class="motion-enter" style="--motion-step: 1;">
           <h2 class="text-3xl font-bold tracking-tight text-balance text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new) mb-8">
-            A focused process for better technical decisions.
+            From operational pain to a delegable blueprint.
           </h2>
         </div>
 
         <ol class="m-0 p-0 list-none">
-          {reviewProcessSteps.map((step, index) => (
+          {processSteps.map((step, index) => (
             <li class="motion-enter grid gap-4 grid-cols-[2rem_minmax(0,1fr)]" style={`--motion-step: ${index + 2};`}>
               <div class="relative flex justify-center pt-[0.35rem]" aria-hidden="true">
                 <span class="relative z-1 h-3.5 w-3.5 rounded-full bg-[rgb(253_186_116)] [box-shadow:0_0_0_0.5rem_rgb(253_186_116/0.08)]" />
-                {index < reviewProcessSteps.length - 1 && <span class="absolute top-5 bottom-0 w-px bg-[linear-gradient(180deg,rgb(253_186_116/0.6),rgb(255_255_255/0.08))]" />}
+                {index < processSteps.length - 1 && <span class="absolute top-5 bottom-0 w-px bg-[linear-gradient(180deg,rgb(253_186_116/0.6),rgb(255_255_255/0.08))]" />}
               </div>
               <div class="space-y-3 pb-10">
                 <p class="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-300">
-                  Step 0{index + 1}
+                  Phase 0{index + 1}
                 </p>
                 <h3 class="text-2xl font-[720] tracking-[-0.04em] text-white">
                   {step.title}
@@ -219,10 +211,10 @@ const reviewProcessSteps = [
       Who is this for
     </h2>
     <p class="leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8 text-center">
-      Best fit for founders, technical leaders, and companies that need a sharp external
-      diagnostic before making an important technical decision, untangling a costly
-      bottleneck, or defining the right architecture for the next stage of growth.<br />
-      Designed for teams that need Big Tech rigor without the overhead of a full-time executive hire.
+      Best fit for traditional mid-size companies, roughly 50 to 500 employees, in sectors like
+      logistics, finance, legal, or manufacturing, that are losing time and money to manual,
+      repetitive work and lack the internal tech talent to fix it.<br />
+      Designed for operational leaders who want a concrete, measurable AI plan, not another bet placed blindly on the hype.
     </p>
   </section>
 
@@ -232,18 +224,18 @@ const reviewProcessSteps = [
   <section id="apply" class="motion-enter">
     <div class="motion-enter" style="--motion-step: 0;">
       <h2 class="text-3xl font-[760] tracking-tight text-balance text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)">
-        If the decision is material, start with the context
+        If the bottleneck is costing you, start with the context
       </h2>
       <p class="mt-4 leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8">
-        The application covers the business stakes, current technical reality, and the decision you need to validate before this review is considered.
+        The application covers your operational reality, the repetitive work that's slowing you down, and the systems involved, so I can assess whether automation can deliver a real return before any session is scheduled.
       </p>
       <div class="flex flex-col gap-5 pt-8 md:flex-row">
         <a
-          href="/strategic-technical-review/apply"
-          data-strategic-review-cta="apply_page"
+          href="/ai-automation-consulting/apply"
+          data-ai-automation-cta="apply_page"
           class="interactive-chip mt-6 inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
         >
-          Apply for review
+          Apply for a diagnosis
         </a>
       </div>
     </div>
@@ -251,8 +243,8 @@ const reviewProcessSteps = [
 </ConsultancyLayout>
 
 <script>
-  const trackStrategicReviewLanding = () => {
-    const landingRoot = document.querySelector("[data-strategic-review-landing]");
+  const trackAIAutomationLanding = () => {
+    const landingRoot = document.querySelector("[data-ai-automation-landing]");
 
     if (!(landingRoot instanceof HTMLElement) || landingRoot.dataset.analyticsInitialized === "true") {
       return;
@@ -269,12 +261,12 @@ const reviewProcessSteps = [
       window.gtag("event", eventName, eventParams);
     };
 
-    sendGtagEvent("strategic_review_landing_view", {
+    sendGtagEvent("ai_automation_landing_view", {
       page_path: window.location.pathname,
       page_type: "landing",
     });
 
-    const ctaLinks = document.querySelectorAll("[data-strategic-review-cta]");
+    const ctaLinks = document.querySelectorAll("[data-ai-automation-cta]");
 
     ctaLinks.forEach((ctaLink) => {
       if (!(ctaLink instanceof HTMLAnchorElement)) {
@@ -282,8 +274,8 @@ const reviewProcessSteps = [
       }
 
       ctaLink.addEventListener("click", () => {
-        sendGtagEvent("strategic_review_apply_cta_click", {
-          cta_location: ctaLink.dataset.strategicReviewCta,
+        sendGtagEvent("ai_automation_apply_cta_click", {
+          cta_location: ctaLink.dataset.aiAutomationCta,
           destination_path: ctaLink.getAttribute("href") || "",
           page_path: window.location.pathname,
         });
@@ -291,6 +283,6 @@ const reviewProcessSteps = [
     });
   };
 
-  trackStrategicReviewLanding();
-  document.addEventListener("astro:page-load", trackStrategicReviewLanding);
+  trackAIAutomationLanding();
+  document.addEventListener("astro:page-load", trackAIAutomationLanding);
 </script>
