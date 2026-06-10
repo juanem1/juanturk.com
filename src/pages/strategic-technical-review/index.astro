@@ -1,8 +1,9 @@
 ---
 import { Font, getImage } from "astro:assets";
-import { TrendingUp, Gauge, CloudUpload, RefreshCcw, ShieldAlert, GitBranchPlus } from '@lucide/astro';
+import { TrendingUp, Gauge, CloudUpload, RefreshCcw, ShieldAlert, GitBranchPlus, ArrowRight } from '@lucide/astro';
 import ConsultancyLayout from "../../layouts/ConsultancyLayout.astro";
 import Divider from "../../components/Divider.astro"
+import WhoAmI from "../../components/WhoAmI.astro";
 import profilePicture from "../../assets/images/new_profile_picture.png";
 
 const optimizedBg = await getImage({ src: profilePicture });
@@ -13,49 +14,37 @@ const description =
 const architectureAssessmentItems = [
   {
     icon: TrendingUp,
-    title: "SCALING YOUR BUSINESS OPERATIONS",
-    step: "--motion-step: 4",
-    cls: "lg:pr-6 lg:pt-5",
+    title: "Scaling your business operations",
     body:
       "Preparing for significant growth or handling an increase in user demand. A diagnostic ensures your architecture can support the expansion without performance dips.",
   },
   {
     icon: GitBranchPlus,
-    title: "PLANNING FOR MAJOR UPDATES",
-    step: "--motion-step: 5",
-    cls: "lg:px-6 lg:pt-5",
+    title: "Planning for major updates",
     body:
       "Adding new features, transitioning to microservices, or integrating with third-party tools? Ensure your architecture is ready to handle the changes seamlessly.",
   },
   {
     icon: Gauge,
-    title: "SYSTEM PERFORMANCE ISSUES",
-    step: "--motion-step: 4",
-    cls: "lg:pl-6 lg:pt-5",
+    title: "System performance issues",
     body:
       "Facing slow response times, system outages, or unexplained inefficiencies? Identify the root cause of growth-stifling bottlenecks before they impact your LTV.",
   },
   {
     icon: CloudUpload,
-    title: "EXPLORING CLOUD MIGRATION",
-    step: "--motion-step: 4",
-    cls: "lg:pr-6",
+    title: "Exploring cloud migration",
     body:
       "Moving to the cloud or optimizing your current cloud setup? An architecture review can ensure the transition is smooth and efficient.",
   },
   {
     icon: RefreshCcw,
-    title: "MODERNIZING LEGACY SYSTEMS",
-    step: "--motion-step: 5",
-    cls: "lg:px-6",
+    title: "Modernizing legacy systems",
     body:
       "Struggling with outdated technology? Get a clear technical direction on whether to refactor, migrate, or rebuild.",
   },
   {
     icon: ShieldAlert,
-    title: "ADDRESSING SECURITY CONCERNS",
-    step: "--motion-step: 5",
-    cls: "lg:pl-6",
+    title: "Addressing security concerns",
     body:
       "Concerned about vulnerabilities or compliance? An architecture review can identify risks and provide a roadmap to fortify your defenses.",
   },
@@ -96,7 +85,7 @@ const reviewProcessSteps = [
         </p>
 
         <div class="space-y-5">
-          <h1 class="motion-enter max-w-4xl text-5xl font-bold tracking-tight text-balance text-white lg:text-8xl font-(family-name:--font-editorial-new)" style="--motion-step: 1;">
+          <h1 class="motion-enter max-w-4xl text-5xl font-bold tracking-tight text-white lg:text-8xl font-(family-name:--font-editorial-new)" style="--motion-step: 1;">
             Strategic Technical Review
           </h1>
           <p class="motion-enter max-w-2xl text-lg leading-8 text-pretty text-zinc-200 sm:text-[1.35rem] sm:leading-9" style="--motion-step: 2;">
@@ -106,17 +95,11 @@ const reviewProcessSteps = [
 
         <div class="motion-enter flex flex-col gap-3 pt-2 sm:flex-row" style="--motion-step: 3;">
           <a
-            href="#apply"
-            data-strategic-review-cta="hero_apply_section"
-            class="interactive-chip inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
-          >
-            Apply for review
-          </a>
-          <a
             href="#process"
-            class="interactive-chip inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
+            class="interactive-chip cta-with-rotate inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
           >
             See the process
+            <ArrowRight class="cta-arrow" size={16} stroke-width={2.5} aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -126,62 +109,52 @@ const reviewProcessSteps = [
   <Divider />
 
   <!-- Who am I -->
-  <section aria-labelledby="who-am-i-heading" class="motion-enter">
-    <div class="relative overflow-hidden rounded-tr-xl rounded-br-xl">
-      <div
-        aria-hidden="true"
-        class="pointer-events-none absolute right-0 -top-5 -bottom-5 hidden w-85 bg-cover bg-center bg-no-repeat lg:block mask-l-from-15% mask-l-to-100%"
-        style={`background-image: url('${optimizedBg.src}');`}
-      />
-      <div class="relative z-10 lg:max-w-3xl lg:py-8">
-        <h2 id="who-am-i-heading" class="mb-5 text-3xl font-[720] tracking-tight text-white md:text-4xl lg:text-6xl text-center lg:text-left font-(family-name:--font-editorial-new)">
-          Who am I
-        </h2>
-        <div class="space-y-4 text-center lg:space-y-5 lg:text-left">
-          <p class="leading-7 text-zinc-300 sm:text-lg sm:leading-8 lg:text-[1.14rem] lg:leading-8">
-            Software engineer with 15+ years of experience working with companies across Silicon Valley and the rest of the world on complex software systems, architecture decisions, and high-stakes technical challenges.
-          </p>
-          <p class="leading-7 text-zinc-300 sm:text-lg sm:leading-8 lg:text-[1.14rem] lg:leading-8">
-            This review is shaped by years of hands-on engineering work in demanding product environments where technical judgment has direct business impact.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <WhoAmI optimizedBg={optimizedBg} />
 
   <Divider />
 
   <!-- When your system needs a technical diagnosis -->
-  <section class="motion-enter">
-    <h2 class="mb-14 text-3xl font-[720] tracking-tight text-balance text-white md:text-4xl lg:text-6xl text-center font-(family-name:--font-editorial-new)">
-      When your system <em>needs</em> a technical diagnosis
-    </h2>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-5 gap-y-15">
-      {architectureAssessmentItems.map((item) => {
+  <section aria-labelledby="diagnosis-heading">
+    <div class="mb-12 text-center space-y-5 lg:mb-16">
+      <h2 id="diagnosis-heading" class="motion-enter text-3xl font-[720] tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)" style="--motion-step: 0;">
+        When your system <em class="text-orange-300">needs</em> a technical diagnosis
+      </h2>
+      <p class="motion-enter leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8" style="--motion-step: 1;">
+        Not every system needs an outside read. But when the wrong call gets expensive, a sharp diagnostic pays for itself. These are the six moments where it matters most.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-x-12 gap-y-9 sm:grid-cols-2 lg:gap-x-16">
+      {architectureAssessmentItems.map((item, index) => {
         const Icon = item.icon;
         return (
-          <div class={`mx-auto w-4/5 lg:w-full ${item.cls}`} style={item.step}>
-            <div class="justify-center flex items-center mb-5">
-              <Icon class="text-orange-300 mr-5 hidden sm:block" />
-              <h3 class="text-center lg:text-left text-base font-semibold uppercase tracking-widest text-orange-300">
+          <article
+            class="motion-enter group relative flex gap-5 border-t border-white/10 pt-7"
+            style={`--motion-step: ${index + 2};`}
+          >
+            <span class="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-300/10 text-orange-300 ring-1 ring-inset ring-orange-300/20 transition duration-300 group-hover:bg-orange-300/20 group-hover:ring-orange-300/40">
+              <Icon size={22} stroke-width={1.75} aria-hidden="true" />
+            </span>
+            <div class="space-y-2.5">
+              <h3 class="text-xl font-[620] tracking-tight text-white transition-colors duration-300 group-hover:text-orange-200 font-(family-name:--font-editorial-new)">
                 {item.title}
               </h3>
+              <p class="leading-7 text-zinc-400">{item.body}</p>
             </div>
-            <p class="text-center lg:text-left">{item.body}</p>
-          </div>
+          </article>
         );
       })}
     </div>
   </section>
 
-  <Divider />
+  <Divider id="process" />
 
   <!-- Process -->
-  <section id="process" class="motion-enter">
+  <section class="motion-enter">
     <div class="mx-auto w-full">
       <div class="space-y-5">
         <div class="motion-enter" style="--motion-step: 1;">
-          <h2 class="text-3xl font-bold tracking-tight text-balance text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new) mb-8">
+          <h2 class="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new) mb-8">
             A focused process for better technical decisions.
           </h2>
         </div>
@@ -190,7 +163,10 @@ const reviewProcessSteps = [
           {reviewProcessSteps.map((step, index) => (
             <li class="motion-enter grid gap-4 grid-cols-[2rem_minmax(0,1fr)]" style={`--motion-step: ${index + 2};`}>
               <div class="relative flex justify-center pt-[0.35rem]" aria-hidden="true">
-                <span class="relative z-1 h-3.5 w-3.5 rounded-full bg-[rgb(253_186_116)] [box-shadow:0_0_0_0.5rem_rgb(253_186_116/0.08)]" />
+                <span class="relative z-1 flex h-3.5 w-3.5">
+                  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[rgb(253_186_116)] opacity-75" />
+                  <span class="relative inline-flex h-3.5 w-3.5 rounded-full bg-[rgb(253_186_116)] [box-shadow:0_0_0_0.5rem_rgb(253_186_116/0.08)]" />
+                </span>
                 {index < reviewProcessSteps.length - 1 && <span class="absolute top-5 bottom-0 w-px bg-[linear-gradient(180deg,rgb(253_186_116/0.6),rgb(255_255_255/0.08))]" />}
               </div>
               <div class="space-y-3 pb-10">
@@ -231,7 +207,7 @@ const reviewProcessSteps = [
   <!-- Apply -->
   <section id="apply" class="motion-enter">
     <div class="motion-enter" style="--motion-step: 0;">
-      <h2 class="text-3xl font-[760] tracking-tight text-balance text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)">
+      <h2 class="text-3xl font-[760] tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)">
         If the decision is material, start with the context
       </h2>
       <p class="mt-4 leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8">
@@ -241,9 +217,10 @@ const reviewProcessSteps = [
         <a
           href="/strategic-technical-review/apply"
           data-strategic-review-cta="apply_page"
-          class="interactive-chip mt-6 inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
+          class="interactive-chip cta-with-arrow mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
         >
           Apply for review
+          <ArrowRight class="cta-arrow" size={16} stroke-width={2.5} aria-hidden="true" />
         </a>
       </div>
     </div>

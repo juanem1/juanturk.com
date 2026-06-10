@@ -1,8 +1,9 @@
 ---
 import { Font, getImage } from "astro:assets";
-import { ClipboardList, Workflow, UserMinus, Sparkles, TrendingUp, AlertTriangle } from '@lucide/astro';
+import { ClipboardList, Workflow, UserMinus, Sparkles, TrendingUp, TriangleAlert, ArrowRight } from '@lucide/astro';
 import ConsultancyLayout from "../../layouts/ConsultancyLayout.astro";
 import Divider from "../../components/Divider.astro"
+import WhoAmI from "../../components/WhoAmI.astro";
 import profilePicture from "../../assets/images/new_profile_picture.png";
 
 const optimizedBg = await getImage({ src: profilePicture });
@@ -13,49 +14,37 @@ const description =
 const bottleneckItems = [
   {
     icon: ClipboardList,
-    title: "MANUAL, REPETITIVE TASKS",
-    step: "--motion-step: 4",
-    cls: "lg:pr-6 lg:pt-5",
+    title: "Manual, repetitive tasks",
     body:
       "Your team re-types data between systems, copies records by hand, and runs the same routine every day. That time is the first thing a well-designed automation gives back.",
   },
   {
     icon: Workflow,
-    title: "OPERATIONAL BOTTLENECKS",
-    step: "--motion-step: 5",
-    cls: "lg:px-6 lg:pt-5",
+    title: "Operational bottlenecks",
     body:
       "Critical processes stall because they depend on a few people manually moving work between disconnected tools. We map the flow of value and find where time and money leak.",
   },
   {
     icon: UserMinus,
-    title: "NO INTERNAL TECH TALENT",
-    step: "--motion-step: 4",
-    cls: "lg:pl-6 lg:pt-5",
+    title: "No internal tech talent",
     body:
       "You don't have the in-house engineering to design and connect AI into your systems safely. You need an independent architect, not another full-time hire.",
   },
   {
     icon: Sparkles,
-    title: "AI WITHOUT A REAL PLAN",
-    step: "--motion-step: 4",
-    cls: "lg:pr-6",
+    title: "AI without a real plan",
     body:
       "Adopting AI out of FOMO, with no concrete, measurable plan, is how most companies see zero return. The goal here is operational impact, not a tech demo.",
   },
   {
     icon: TrendingUp,
-    title: "GROWTH CHAINED TO HEADCOUNT",
-    step: "--motion-step: 5",
-    cls: "lg:px-6",
+    title: "Growth chained to headcount",
     body:
       "Every increase in volume means hiring more people to run the same manual work. Automating the bottleneck breaks the link between growth and payroll.",
   },
   {
-    icon: AlertTriangle,
-    title: "COSTLY HUMAN ERRORS",
-    step: "--motion-step: 5",
-    cls: "lg:pl-6",
+    icon: TriangleAlert,
+    title: "Costly human errors",
     body:
       "Routine manual work produces mistakes that require rework, create compliance risk, and erode trust. Reliable, agentic workflows reduce that error surface.",
   },
@@ -88,7 +77,7 @@ const processSteps = [
         </p>
 
         <div class="space-y-5">
-          <h1 class="motion-enter max-w-4xl text-5xl font-bold tracking-tight text-balance text-white lg:text-8xl font-(family-name:--font-editorial-new)" style="--motion-step: 1;">
+          <h1 class="motion-enter max-w-4xl text-5xl font-bold tracking-tight text-white lg:text-8xl font-(family-name:--font-editorial-new)" style="--motion-step: 1;">
             AI &amp; Automation Consulting
           </h1>
           <p class="motion-enter max-w-2xl text-lg leading-8 text-pretty text-zinc-200 sm:text-[1.35rem] sm:leading-9" style="--motion-step: 2;">
@@ -98,17 +87,11 @@ const processSteps = [
 
         <div class="motion-enter flex flex-col gap-3 pt-2 sm:flex-row" style="--motion-step: 3;">
           <a
-            href="#apply"
-            data-ai-automation-cta="hero_apply_section"
-            class="interactive-chip inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
-          >
-            Apply for a diagnosis
-          </a>
-          <a
             href="#process"
-            class="interactive-chip inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
+            class="interactive-chip cta-with-rotate inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
           >
             See the process
+            <ArrowRight class="cta-arrow" size={16} stroke-width={2.5} aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -118,62 +101,52 @@ const processSteps = [
   <Divider />
 
   <!-- Who am I -->
-  <section aria-labelledby="who-am-i-heading" class="motion-enter">
-    <div class="relative overflow-hidden rounded-tr-xl rounded-br-xl">
-      <div
-        aria-hidden="true"
-        class="pointer-events-none absolute right-0 -top-5 -bottom-5 hidden w-85 bg-cover bg-center bg-no-repeat lg:block mask-l-from-15% mask-l-to-100%"
-        style={`background-image: url('${optimizedBg.src}');`}
-      />
-      <div class="relative z-10 lg:max-w-3xl lg:py-8">
-        <h2 id="who-am-i-heading" class="mb-5 text-3xl font-[720] tracking-tight text-white md:text-4xl lg:text-6xl text-center lg:text-left font-(family-name:--font-editorial-new)">
-          Who am I
-        </h2>
-        <div class="space-y-4 text-center lg:space-y-5 lg:text-left">
-          <p class="leading-7 text-zinc-300 sm:text-lg sm:leading-8 lg:text-[1.14rem] lg:leading-8">
-            Software engineer with 15+ years of experience building and integrating complex systems for companies across Silicon Valley and the rest of the world. I act as your independent systems architect, focused on operational reality over hype.
-          </p>
-          <p class="leading-7 text-zinc-300 sm:text-lg sm:leading-8 lg:text-[1.14rem] lg:leading-8">
-            I design AI and automation the same way I design any production system: reliable, fail-safe, secure, and built only where there is a true reason for it to exist and a return to justify it.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <WhoAmI optimizedBg={optimizedBg} />
 
   <Divider />
 
   <!-- When AI actually delivers ROI -->
-  <section class="motion-enter">
-    <h2 class="mb-14 text-3xl font-[720] tracking-tight text-balance text-white md:text-4xl lg:text-6xl text-center font-(family-name:--font-editorial-new)">
-      When AI actually <em>delivers</em> a return
-    </h2>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-5 gap-y-15">
-      {bottleneckItems.map((item) => {
+  <section aria-labelledby="roi-heading">
+    <div class="mb-12 space-y-5 text-center lg:mb-16">
+      <h2 id="roi-heading" class="motion-enter text-3xl font-[720] tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)" style="--motion-step: 0;">
+        When AI actually <em class="text-orange-300">delivers</em> a return
+      </h2>
+      <p class="motion-enter leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8" style="--motion-step: 1;">
+        AI is not a universal win. It earns its keep in specific, unglamorous places, the kind of operational drag most companies have quietly learned to live with. These are the six I look for.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-x-12 gap-y-9 sm:grid-cols-2 lg:gap-x-16">
+      {bottleneckItems.map((item, index) => {
         const Icon = item.icon;
         return (
-          <div class={`mx-auto w-4/5 lg:w-full ${item.cls}`} style={item.step}>
-            <div class="justify-center flex items-center mb-5">
-              <Icon class="text-orange-300 mr-5 hidden sm:block" />
-              <h3 class="text-center lg:text-left text-base font-semibold uppercase tracking-widest text-orange-300">
+          <article
+            class="motion-enter group relative flex gap-5 border-t border-white/10 pt-7"
+            style={`--motion-step: ${index + 2};`}
+          >
+            <span class="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-300/10 text-orange-300 ring-1 ring-inset ring-orange-300/20 transition duration-300 group-hover:bg-orange-300/20 group-hover:ring-orange-300/40">
+              <Icon size={22} stroke-width={1.75} aria-hidden="true" />
+            </span>
+            <div class="space-y-2.5">
+              <h3 class="text-xl font-[620] tracking-tight text-white transition-colors duration-300 group-hover:text-orange-200 font-(family-name:--font-editorial-new)">
                 {item.title}
               </h3>
+              <p class="leading-7 text-zinc-400">{item.body}</p>
             </div>
-            <p class="text-center lg:text-left">{item.body}</p>
-          </div>
+          </article>
         );
       })}
     </div>
   </section>
 
-  <Divider />
+  <Divider id="process" />
 
   <!-- Process -->
-  <section id="process" class="motion-enter">
+  <section class="motion-enter">
     <div class="mx-auto w-full">
       <div class="space-y-5">
         <div class="motion-enter" style="--motion-step: 1;">
-          <h2 class="text-3xl font-bold tracking-tight text-balance text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new) mb-8">
+          <h2 class="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new) mb-8">
             From operational pain to a delegable blueprint.
           </h2>
         </div>
@@ -182,7 +155,10 @@ const processSteps = [
           {processSteps.map((step, index) => (
             <li class="motion-enter grid gap-4 grid-cols-[2rem_minmax(0,1fr)]" style={`--motion-step: ${index + 2};`}>
               <div class="relative flex justify-center pt-[0.35rem]" aria-hidden="true">
-                <span class="relative z-1 h-3.5 w-3.5 rounded-full bg-[rgb(253_186_116)] [box-shadow:0_0_0_0.5rem_rgb(253_186_116/0.08)]" />
+                <span class="relative z-1 flex h-3.5 w-3.5">
+                  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[rgb(253_186_116)] opacity-75" />
+                  <span class="relative inline-flex h-3.5 w-3.5 rounded-full bg-[rgb(253_186_116)] [box-shadow:0_0_0_0.5rem_rgb(253_186_116/0.08)]" />
+                </span>
                 {index < processSteps.length - 1 && <span class="absolute top-5 bottom-0 w-px bg-[linear-gradient(180deg,rgb(253_186_116/0.6),rgb(255_255_255/0.08))]" />}
               </div>
               <div class="space-y-3 pb-10">
@@ -223,7 +199,7 @@ const processSteps = [
   <!-- Apply -->
   <section id="apply" class="motion-enter">
     <div class="motion-enter" style="--motion-step: 0;">
-      <h2 class="text-3xl font-[760] tracking-tight text-balance text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)">
+      <h2 class="text-3xl font-[760] tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)">
         If the bottleneck is costing you, start with the context
       </h2>
       <p class="mt-4 leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8">
@@ -233,9 +209,10 @@ const processSteps = [
         <a
           href="/ai-automation-consulting/apply"
           data-ai-automation-cta="apply_page"
-          class="interactive-chip mt-6 inline-flex items-center justify-center rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
+          class="interactive-chip cta-with-arrow mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
         >
           Apply for a diagnosis
+          <ArrowRight class="cta-arrow" size={16} stroke-width={2.5} aria-hidden="true" />
         </a>
       </div>
     </div>
