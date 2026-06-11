@@ -1,10 +1,10 @@
 ---
 import { Font, getImage } from "astro:assets";
 import { ClipboardList, Workflow, UserMinus, Sparkles, TrendingUp, TriangleAlert, ArrowRight } from '@lucide/astro';
-import ConsultancyLayout from "../../layouts/ConsultancyLayout.astro";
-import Divider from "../../components/Divider.astro"
-import WhoAmI from "../../components/WhoAmI.astro";
-import profilePicture from "../../assets/images/new_profile_picture.png";
+import ConsultancyLayout from "../../../layouts/ConsultancyLayout.astro";
+import Divider from "../../../components/Divider.astro"
+import WhoAmI from "../../../components/WhoAmI.astro";
+import profilePicture from "../../../assets/images/new_profile_picture.png";
 
 const optimizedBg = await getImage({ src: profilePicture });
 const title = "AI & Automation Consulting";
@@ -207,7 +207,7 @@ const processSteps = [
       </p>
       <div class="flex flex-col gap-5 pt-8 md:flex-row">
         <a
-          href="/ai-automation-consulting/apply"
+          href="/services/ai-automation-consulting/apply"
           data-ai-automation-cta="apply_page"
           class="interactive-chip cta-with-arrow mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
         >

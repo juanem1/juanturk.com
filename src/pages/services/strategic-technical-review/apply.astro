@@ -1,12 +1,12 @@
 ---
 import { Font } from "astro:assets";
-import StrategicReviewForm from "../../components/StrategicReviewForm.astro";
-import ConsultancyLayout from "../../layouts/ConsultancyLayout.astro";
+import StrategicReviewForm from "../../../components/StrategicReviewForm.astro";
+import ConsultancyLayout from "../../../layouts/ConsultancyLayout.astro";
 
 const title = "Apply for Strategic Technical Review";
 const description =
   "Submit your application for a Strategic Technical Review and share the decision, business stakes, and technical context behind it.";
-const sourcePath = "/strategic-technical-review/apply";
+const sourcePath = "/services/strategic-technical-review/apply";
 const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
 
 ---
