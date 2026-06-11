@@ -1,7 +1,7 @@
 ---
 import { Font, getImage } from "astro:assets";
 import { TrendingUp, Gauge, CloudUpload, RefreshCcw, ShieldAlert, GitBranchPlus, ArrowRight } from '@lucide/astro';
-import ConsultancyLayout from "../../../layouts/ConsultancyLayout.astro";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
 import Divider from "../../../components/Divider.astro"
 import WhoAmI from "../../../components/WhoAmI.astro";
 import profilePicture from "../../../assets/images/new_profile_picture.png";
@@ -75,7 +75,7 @@ const reviewProcessSteps = [
 ---
 
 <Font cssVariable="--font-editorial-new" preload />
-<ConsultancyLayout title={title} description={description} headerTransparent={true}>
+<SiteLayout title={title} description={description}>
   
   <section class="motion-enter h-[calc(100dvh - 73px)] pt-18.25" data-strategic-review-landing>
     <div class="mx-auto flex lg:min-h-[clamp(800px,78svh,800px)] w-full items-center">
@@ -225,7 +225,7 @@ const reviewProcessSteps = [
       </div>
     </div>
   </section>
-</ConsultancyLayout>
+</SiteLayout>
 
 <script>
   const trackStrategicReviewLanding = () => {

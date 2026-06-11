@@ -1,7 +1,7 @@
 ---
 import { Font } from "astro:assets";
 import StrategicReviewForm from "../../../components/StrategicReviewForm.astro";
-import ConsultancyLayout from "../../../layouts/ConsultancyLayout.astro";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
 
 const title = "Apply for Strategic Technical Review";
 const description =
@@ -12,7 +12,7 @@ const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
 ---
 
 <Font cssVariable="--font-editorial-new" preload />
-<ConsultancyLayout title={title} description={description} headerTransparent={true}>
+<SiteLayout title={title} description={description}>
 
   <section class="motion-enter" data-strategic-review-apply-page>
     <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-28 sm:pb-20 sm:pt-32">
@@ -32,7 +32,7 @@ const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
       <StrategicReviewForm sourcePath={sourcePath} webhookUrl={webhookUrl} />
     </div>
   </section>
-</ConsultancyLayout>
+</SiteLayout>
 
 <script>
   const trackStrategicReviewApplyPage = () => {

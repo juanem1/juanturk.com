@@ -1,7 +1,7 @@
 ---
 import { Font } from "astro:assets";
 import AIAutomationForm from "../../../components/AIAutomationForm.astro";
-import ConsultancyLayout from "../../../layouts/ConsultancyLayout.astro";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
 
 const title = "Apply for AI & Automation Consulting";
 const description =
@@ -12,7 +12,7 @@ const webhookUrl = import.meta.env.PUBLIC_AI_AUTOMATION_WEBHOOK_URL;
 ---
 
 <Font cssVariable="--font-editorial-new" preload />
-<ConsultancyLayout title={title} description={description} headerTransparent={true}>
+<SiteLayout title={title} description={description}>
 
   <section class="motion-enter" data-ai-automation-apply-page>
     <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-28 sm:pb-20 sm:pt-32">
@@ -32,7 +32,7 @@ const webhookUrl = import.meta.env.PUBLIC_AI_AUTOMATION_WEBHOOK_URL;
       <AIAutomationForm sourcePath={sourcePath} webhookUrl={webhookUrl} />
     </div>
   </section>
-</ConsultancyLayout>
+</SiteLayout>
 
 <script>
   const trackAIAutomationApplyPage = () => {
