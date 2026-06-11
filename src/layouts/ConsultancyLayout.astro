@@ -15,8 +15,13 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
 
 <BaseLayout title={title} description={description} ogType={ogType} ogImage={ogImage}>
   <SiteHeader slot="header" transparent={headerTransparent} />
-  <div class="backdrop" aria-hidden="true" />
-  <div class="mx-auto w-full max-w-6xl pb-10 px-5 sm:px-8 lg:px-10">
+  <div class="backdrop" aria-hidden="true">
+    <div class="orb orb-1" />
+    <div class="orb orb-2" />
+    <div class="orb orb-3" />
+  </div>
+  <canvas class="dot-canvas" aria-hidden="true" />
+  <div class="content-wrap mx-auto w-full max-w-6xl pb-10 px-5 sm:px-8 lg:px-10">
     <slot />
   </div>
   <style>
@@ -26,11 +31,182 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
       left: 0;
       width: 100dvw;
       height: 100dvh;
-      background:
-        radial-gradient(circle at top right, rgb(253 186 116 / 0.24), transparent 24rem),
-        radial-gradient(circle at 70% 40%, rgb(255 255 255 / 0.07), transparent 22rem),
-        radial-gradient(circle at 10% 70%, rgb(253 180 120 / 0.07), transparent 18rem),
-        linear-gradient(180deg, rgb(13 17 23), rgb(17 21 29) 42%, rgb(13 17 23));
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      background: linear-gradient(180deg, rgb(13 17 23), rgb(17 21 29) 42%, rgb(13 17 23));
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    /* Main orange corona — top right */
+    .orb-1 {
+      width: 52rem;
+      height: 40rem;
+      top: -12rem;
+      right: -10rem;
+      background: radial-gradient(circle, rgb(253 186 116 / 0.28) 0%, transparent 70%);
+      animation: drift-1 28s ease-in-out infinite;
+    }
+
+    /* Soft warm center-right glow */
+    .orb-2 {
+      width: 38rem;
+      height: 38rem;
+      top: 18%;
+      left: 52%;
+      background: radial-gradient(circle, rgb(255 200 150 / 0.07) 0%, transparent 70%);
+      animation: drift-2 36s ease-in-out infinite;
+    }
+
+    /* Bottom-left warm accent */
+    .orb-3 {
+      width: 34rem;
+      height: 30rem;
+      bottom: 0;
+      left: -8rem;
+      background: radial-gradient(circle, rgb(253 180 120 / 0.10) 0%, transparent 70%);
+      animation: drift-3 32s ease-in-out infinite;
+    }
+
+    @keyframes drift-1 {
+      0%,  100% { transform: translate(0,     0)     scale(1);    }
+      30%        { transform: translate(-3rem,  4rem)  scale(1.06); }
+      65%        { transform: translate( 4rem, -2rem)  scale(0.96); }
+    }
+
+    @keyframes drift-2 {
+      0%,  100% { transform: translate(0,     0)     scale(1);    }
+      40%        { transform: translate( 5rem,  5rem)  scale(1.08); }
+      72%        { transform: translate(-4rem, -3rem)  scale(0.94); }
+    }
+
+    @keyframes drift-3 {
+      0%,  100% { transform: translate(0,     0)     scale(1);    }
+      35%        { transform: translate( 5rem, -4rem)  scale(1.07); }
+      68%        { transform: translate(-3rem,  5rem)  scale(0.97); }
+    }
+
+    .dot-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .content-wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .orb { animation: none; }
     }
   </style>
+  <script>
+    let cleanup: (() => void) | null = null;
+
+    function initDotField(): void {
+      if (cleanup) { cleanup(); cleanup = null; }
+
+      const canvas = document.querySelector<HTMLCanvasElement>('.dot-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const SPACING  = 15;
+      const DOT_R    = 1.2;
+      const CURSOR_R = 160;
+      const BULGE    = 24;
+      const GLOW_R   = 150;
+
+      let mx = -9999, my = -9999;
+      let raf = 0;
+
+      const onResize = (): void => {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+      const onMove  = (e: MouseEvent): void => { mx = e.clientX; my = e.clientY; };
+      const onLeave = (): void => { mx = -9999; my = -9999; };
+
+      function drawFrame(): void {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Orange glow that follows the cursor
+        if (mx > -9000) {
+          const g = ctx.createRadialGradient(mx, my, 0, mx, my, GLOW_R);
+          g.addColorStop(0, 'rgba(253,186,116,0.10)');
+          g.addColorStop(1, 'transparent');
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Dot grid
+        const cols = Math.ceil(canvas.width  / SPACING) + 1;
+        const rows = Math.ceil(canvas.height / SPACING) + 1;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            let x = c * SPACING;
+            let y = r * SPACING;
+
+            const dx = x - mx;
+            const dy = y - my;
+            const d  = Math.sqrt(dx * dx + dy * dy);
+
+            // Repel dots near cursor
+            if (d < CURSOR_R && d > 0) {
+              const f = (1 - d / CURSOR_R) * BULGE;
+              x += (dx / d) * f;
+              y += (dy / d) * f;
+            }
+
+            // Dots near cursor get brighter
+            const boost = (d < CURSOR_R && mx > -9000) ? (1 - d / CURSOR_R) * 0.15 : 0;
+            ctx.beginPath();
+            ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${(0.04 + boost).toFixed(3)})`;
+            ctx.fill();
+          }
+        }
+      }
+
+      function loop(): void {
+        drawFrame();
+        raf = requestAnimationFrame(loop);
+      }
+
+      onResize();
+      window.addEventListener('resize', onResize);
+
+      const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (noMotion) {
+        drawFrame(); // single static draw
+      } else {
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseleave', onLeave);
+        loop();
+      }
+
+      cleanup = (): void => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener('resize', onResize);
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseleave', onLeave);
+      };
+    }
+
+    document.addEventListener('astro:page-load', initDotField);
+    document.addEventListener('astro:before-swap', () => {
+      if (cleanup) { cleanup(); cleanup = null; }
+    });
+  </script>
 </BaseLayout>
