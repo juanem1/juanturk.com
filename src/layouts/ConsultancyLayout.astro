@@ -117,9 +117,16 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
       if (cleanup) { cleanup(); cleanup = null; }
 
       const canvas = document.querySelector<HTMLCanvasElement>('.dot-canvas');
-      if (!canvas) return;
+      if (!canvas) {
+        return;
+      }
+      const dotCanvas: HTMLCanvasElement = canvas;
+
       const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+      if (!ctx) {
+        return;
+      }
+      const dotContext: CanvasRenderingContext2D = ctx;
 
       const SPACING  = 15;
       const DOT_R    = 1.2;
@@ -131,13 +138,16 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
       let raf = 0;
 
       const onResize = (): void => {
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
+        dotCanvas.width  = window.innerWidth;
+        dotCanvas.height = window.innerHeight;
       };
       const onMove  = (e: MouseEvent): void => { mx = e.clientX; my = e.clientY; };
       const onLeave = (): void => { mx = -9999; my = -9999; };
 
-      function drawFrame(): void {
+      function drawFrame(
+        canvas: HTMLCanvasElement,
+        ctx: CanvasRenderingContext2D,
+      ): void {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Orange glow that follows the cursor
@@ -180,7 +190,7 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
       }
 
       function loop(): void {
-        drawFrame();
+        drawFrame(dotCanvas, dotContext);
         raf = requestAnimationFrame(loop);
       }
 
@@ -189,7 +199,7 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
 
       const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (noMotion) {
-        drawFrame(); // single static draw
+        drawFrame(dotCanvas, dotContext);
       } else {
         window.addEventListener('mousemove', onMove);
         window.addEventListener('mouseleave', onLeave);
