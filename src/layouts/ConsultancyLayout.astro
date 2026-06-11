@@ -131,8 +131,8 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
       const SPACING  = 15;
       const DOT_R    = 1.2;
       const CURSOR_R = 160;
-      const BULGE    = 24;
-      const GLOW_R   = 150;
+      const BULGE    = 15;
+      const GLOW_R   = 300;
 
       let mx = -9999, my = -9999;
       let raf = 0;
@@ -153,7 +153,8 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
         // Orange glow that follows the cursor
         if (mx > -9000) {
           const g = ctx.createRadialGradient(mx, my, 0, mx, my, GLOW_R);
-          g.addColorStop(0, 'rgba(253,186,116,0.10)');
+          g.addColorStop(0, 'rgba(253,186,116,0.06)');
+          g.addColorStop(0.45, 'rgba(253,186,116,0.025)');
           g.addColorStop(1, 'transparent');
           ctx.fillStyle = g;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -180,10 +181,10 @@ const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
             }
 
             // Dots near cursor get brighter
-            const boost = (d < CURSOR_R && mx > -9000) ? (1 - d / CURSOR_R) * 0.15 : 0;
+            const boost = (d < CURSOR_R && mx > -9000) ? (1 - d / CURSOR_R) * 0.12 : 0;
             ctx.beginPath();
             ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${(0.04 + boost).toFixed(3)})`;
+            ctx.fillStyle = `rgba(255,255,255,${(0.055 + boost).toFixed(3)})`;
             ctx.fill();
           }
         }
