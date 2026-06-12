@@ -1,0 +1,204 @@
+---
+import { ChevronDown } from "@lucide/astro";
+
+interface ServiceMenuLink {
+  readonly href: string;
+  readonly text: string;
+}
+
+const serviceMenuId = "services-menu-panel";
+const serviceMenuLinks: ReadonlyArray<ServiceMenuLink> = [
+  {
+    href: "/services/strategic-technical-consulting/",
+    text: "Architectural consultancy",
+  },
+  {
+    href: "/services/ai-automation-consulting/",
+    text: "AI consultancy",
+  },
+];
+---
+
+<div class="relative" data-service-menu-root data-open="false">
+  <button
+    type="button"
+    class="interactive-chip inline-flex items-center gap-2 rounded-full border border-transparent bg-transparent px-3 py-2 text-sm font-semibold text-zinc-100 transition hover:bg-white/10 hover:text-white sm:px-4"
+    data-service-menu-trigger
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-controls={serviceMenuId}
+  >
+    <span>Services</span>
+    <ChevronDown
+      class="h-4 w-4 transition-transform duration-200"
+      data-service-menu-icon
+      stroke-width={2.25}
+      aria-hidden="true"
+    />
+  </button>
+
+  <div
+    class="pointer-events-none invisible absolute right-0 top-full z-60 w-65 pt-3"
+    data-service-menu-container
+  >
+    <div
+      id={serviceMenuId}
+      class="flex w-full flex-col gap-1 rounded-lg border border-white/10 bg-[rgb(20_24_29/0.96)] p-2.5 shadow-[0_32px_80px_-40px_rgba(0,0,0,0.95)] ring-1 ring-white/6 backdrop-blur-xl"
+      data-service-menu-panel
+      role="menu"
+      aria-label="Services"
+      hidden
+    >
+      {serviceMenuLinks.map((link) => (
+        <a
+          href={link.href}
+          role="menuitem"
+          tabindex="-1"
+          class="block rounded-lg border border-transparent p-3.5 text-zinc-400 transition-colors hover:bg-white/8 hover:text-white focus-visible:bg-white/8 focus-visible:text-white focus-visible:outline-none"
+          data-service-menu-link
+        >
+          <span class="block leading-6 text-inherit">
+            {link.text}
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  interface ServiceMenuElements {
+    readonly container: HTMLDivElement;
+    readonly icon: SVGElement;
+    readonly links: ReadonlyArray<HTMLAnchorElement>;
+    readonly panel: HTMLDivElement;
+    readonly root: HTMLDivElement;
+    readonly trigger: HTMLButtonElement;
+  }
+
+  const serviceMenuRootSelector = "[data-service-menu-root]";
+
+  const isDesktopPointer = (): boolean =>
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  const getServiceMenuElements = (root: HTMLDivElement): ServiceMenuElements | null => {
+    const trigger = root.querySelector<HTMLButtonElement>("[data-service-menu-trigger]");
+    const icon = root.querySelector<SVGElement>("[data-service-menu-icon]");
+    const container = root.querySelector<HTMLDivElement>("[data-service-menu-container]");
+    const panel = root.querySelector<HTMLDivElement>("[data-service-menu-panel]");
+    const links = Array.from(root.querySelectorAll<HTMLAnchorElement>("[data-service-menu-link]"));
+
+    if (!trigger || !icon || !container || !panel || links.length === 0) {
+      return null;
+    }
+
+    return { container, icon, links, panel, root, trigger };
+  };
+
+  const setServiceMenuOpen = (elements: ServiceMenuElements, isOpen: boolean): void => {
+    elements.root.dataset.open = String(isOpen);
+    elements.trigger.setAttribute("aria-expanded", String(isOpen));
+    elements.icon.classList.toggle("rotate-180", isOpen);
+    elements.trigger.classList.toggle("bg-white/[0.08]", isOpen);
+    elements.trigger.classList.toggle("border-white/[0.08]", isOpen);
+    elements.trigger.classList.toggle("shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]", isOpen);
+    elements.container.classList.toggle("invisible", !isOpen);
+    elements.container.classList.toggle("pointer-events-none", !isOpen);
+    elements.panel.hidden = !isOpen;
+
+    elements.links.forEach((link) => {
+      link.tabIndex = isOpen ? 0 : -1;
+    });
+  };
+
+  const bindServiceMenu = (root: HTMLDivElement): void => {
+    if (root.dataset.bound === "true") {
+      return;
+    }
+
+    const elements = getServiceMenuElements(root);
+    if (!elements) {
+      return;
+    }
+
+    root.dataset.bound = "true";
+    setServiceMenuOpen(elements, false);
+
+
+    elements.trigger.addEventListener("pointerdown", (event: PointerEvent) => {
+      elements.root.dataset.lastPointerType = event.pointerType;
+    });
+
+    elements.trigger.addEventListener("click", () => {
+      const isOpen = elements.root.dataset.open === "true";
+      const lastPointerType = elements.root.dataset.lastPointerType;
+
+      if (lastPointerType === "touch" || !isDesktopPointer()) {
+        setServiceMenuOpen(elements, !isOpen);
+        return;
+      }
+
+      setServiceMenuOpen(elements, true);
+    });
+
+    root.addEventListener("focusin", () => {
+      if (elements.root.dataset.lastPointerType === "touch") {
+        return;
+      }
+
+      setServiceMenuOpen(elements, true);
+    });
+
+    root.addEventListener("focusout", (event: FocusEvent) => {
+      const nextFocusedNode = event.relatedTarget;
+      if (nextFocusedNode instanceof Node && elements.root.contains(nextFocusedNode)) {
+        return;
+      }
+
+      setServiceMenuOpen(elements, false);
+    });
+
+    root.addEventListener("keydown", (event: KeyboardEvent) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      setServiceMenuOpen(elements, false);
+      elements.trigger.focus();
+    });
+
+    root.addEventListener("pointerenter", (event: PointerEvent) => {
+      if (!isDesktopPointer() || event.pointerType === "touch") {
+        return;
+      }
+
+      setServiceMenuOpen(elements, true);
+    });
+
+    root.addEventListener("pointerleave", (event: PointerEvent) => {
+      if (!isDesktopPointer() || event.pointerType === "touch") {
+        return;
+      }
+
+      setServiceMenuOpen(elements, false);
+    });
+
+    document.addEventListener("pointerdown", (event: PointerEvent) => {
+      if (elements.root.contains(event.target as Node)) {
+        return;
+      }
+
+      setServiceMenuOpen(elements, false);
+    });
+  };
+
+  const initServiceMenus = (): void => {
+    const menuRoots = document.querySelectorAll<HTMLDivElement>(serviceMenuRootSelector);
+    menuRoots.forEach((root) => {
+      bindServiceMenu(root);
+    });
+  };
+
+  initServiceMenus();
+  document.addEventListener("astro:page-load", initServiceMenus);
+</script>
