@@ -88,8 +88,8 @@ const reviewProcessSteps = [
           <h1 class="motion-enter max-w-4xl text-5xl font-bold tracking-tight text-white lg:text-8xl font-(family-name:--font-editorial-new)" style="--motion-step: 1;">
             Strategic Technical Review
           </h1>
-          <p class="motion-enter max-w-2xl text-lg leading-8 text-pretty text-zinc-200 sm:text-[1.35rem] sm:leading-9" style="--motion-step: 2;">
-            One sharp diagnostic call for founders and technical leaders facing high-stakes decisions, scaling pressure, or stubborn engineering bottlenecks
+          <p class="motion-enter text-emphasis max-w-2xl text-lg leading-8 text-pretty text-zinc-400 sm:text-[1.35rem] sm:leading-9" style="--motion-step: 2;">
+            One sharp diagnostic call for founders and technical leaders facing <strong><em>high-stakes decisions</em></strong>, scaling pressure, or stubborn engineering <strong><em>bottlenecks.</em></strong>
           </p>
         </div>
 
@@ -205,7 +205,7 @@ const reviewProcessSteps = [
   <Divider />
 
   <!-- Apply -->
-  <section id="apply" class="motion-enter">
+  <section id="apply" class="motion-enter mb-10">
     <div class="motion-enter" style="--motion-step: 0;">
       <h2 class="text-3xl font-[760] tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)">
         If the decision is material, <em class="text-orange-300">start</em> with the context
@@ -213,11 +213,11 @@ const reviewProcessSteps = [
       <p class="mt-4 leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8">
         The application covers the business stakes, current technical reality, and the decision you need to validate before this review is considered.
       </p>
-      <div class="flex flex-col gap-5 pt-8 md:flex-row">
+      <div class="text-center pt-8">
         <a
           href="/services/strategic-technical-consulting/apply"
           data-strategic-review-cta="apply_page"
-          class="interactive-chip cta-with-arrow mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
+          class="interactive-chip w-full cta-with-arrow mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition md:w-88 hover:bg-orange-200"
         >
           Apply for review
           <ArrowRight class="cta-arrow" size={16} stroke-width={2.5} aria-hidden="true" />
