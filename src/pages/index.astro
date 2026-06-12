@@ -11,7 +11,8 @@ const posts = (await getCollection("posts"))
   .sort((a, b) => b.date.getTime() - a.date.getTime());
 const latestPosts = posts.slice(0, 3);
 
-const description = "Recent posts by Juan Turk.";
+const description =
+  "Software engineer writing about AI, automation, software engineering, and the operational reality behind building reliable products and developer tools.";
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString("en-US", {
@@ -22,7 +23,10 @@ const formatDate = (date: Date) =>
 ---
 
 <Font cssVariable="--font-editorial-new" preload />
-<SiteLayout title="Juan Turk" description={description}>
+<SiteLayout
+  title="Juan Turk | Software Engineering, AI, and Automation"
+  description={description}
+>
   <section aria-labelledby="about-me" class="mt-25 mb-5 lg:mt-45 lg:mb-40">
     <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,28rem)] lg:gap-12">
       <div class="space-y-6">

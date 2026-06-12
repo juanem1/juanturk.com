@@ -2,12 +2,26 @@
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import globalStylesHref from "../styles/global.css?url";
+import defaultOgImage from "../assets/images/og_image.png";
+
+type JsonLdValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonLdObject
+  | JsonLdValue[];
+
+interface JsonLdObject {
+  [key: string]: JsonLdValue;
+}
 
 interface Props {
   title: string;
   description?: string;
-  ogType?: "website" | "article";
+  ogType?: "website" | "article" | "profile";
   ogImage?: string;
+  pageType?: "personal" | "blog";
   bodyClass?: string;
   htmlClass?: string;
   mainClass?: string;
@@ -15,15 +29,54 @@ interface Props {
 
 const {
   title,
-  description = "Juan Turk's personal website",
+  description = "Software engineer writing about AI, automation, and the operational reality behind building reliable software.",
   ogType = "website",
   ogImage,
+  pageType,
   bodyClass = "min-h-screen text-zinc-100 antialiased",
   htmlClass = "bg-fixed bg-[linear-gradient(180deg,#1c2128,#22272e,#0d1117)]",
   mainClass = "", //mx-auto w-full max-w-6xl pb-10
 } = Astro.props;
 // const currentYear = new Date().getFullYear();
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const siteUrl = Astro.site ?? Astro.url;
+const siteName = "Juan Turk";
+const siteLocale = "en_US";
+const siteLanguage = "en-US";
+const themeColor = "#0d1117";
+const twitterHandle = "@juanem1";
+const siteRootUrl = new URL("/", siteUrl).href;
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const resolvedOgImage = new URL(ogImage ?? defaultOgImage.src, siteUrl).href;
+const structuredDataType =
+  ogType === "article" ? "Article" : pageType === "personal" ? "ProfilePage" : "WebPage";
+const structuredData: JsonLdObject = {
+  "@context": "https://schema.org",
+  "@type": structuredDataType,
+  name: title,
+  description,
+  url: canonicalUrl,
+  image: resolvedOgImage,
+  inLanguage: siteLanguage,
+  author: {
+    "@type": "Person",
+    name: siteName,
+    url: siteRootUrl,
+    sameAs: [
+      "https://github.com/juanem1",
+      "https://www.linkedin.com/in/juanemilioturk/",
+    ],
+  },
+  publisher: {
+    "@type": "Person",
+    name: siteName,
+    url: siteRootUrl,
+  },
+  isPartOf: {
+    "@type": "WebSite",
+    name: siteName,
+    url: siteRootUrl,
+  },
+};
 ---
 
 <html
@@ -40,16 +93,24 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta name="theme-color" content={themeColor} />
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={siteLocale} />
+    {pageType && <meta name="page-type" content={pageType} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={twitterHandle} />
+    <meta name="twitter:creator" content={twitterHandle} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LSXP9WJT42"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];

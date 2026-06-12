@@ -5,14 +5,27 @@ import BaseLayout from "./BaseLayout.astro";
 interface Props {
   title: string;
   description?: string;
-  ogType?: "website" | "article";
+  ogType?: "website" | "article" | "profile";
   ogImage?: string;
+  pageType?: "personal" | "blog";
 }
 
-const { title, description, ogType, ogImage } = Astro.props;
+const {
+  title,
+  description,
+  ogType = "website",
+  ogImage,
+  pageType = "blog",
+} = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} ogType={ogType} ogImage={ogImage}>
+<BaseLayout
+  title={title}
+  description={description}
+  ogType={ogType}
+  ogImage={ogImage}
+  pageType={pageType}
+>
   <SiteHeader slot="header" />
   <div class="mx-auto w-full max-w-6xl pb-10">
     <slot />
