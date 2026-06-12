@@ -2,7 +2,6 @@
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import globalStylesHref from "../styles/global.css?url";
-import defaultOgImage from "../assets/images/og_image.png";
 
 type JsonLdValue =
   | string
@@ -44,9 +43,10 @@ const siteLocale = "en_US";
 const siteLanguage = "en-US";
 const themeColor = "#0d1117";
 const twitterHandle = "@juanem1";
+const defaultOgImagePath = "/og-image.png";
 const siteRootUrl = new URL("/", siteUrl).href;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-const resolvedOgImage = new URL(ogImage ?? defaultOgImage.src, siteUrl).href;
+const resolvedOgImage = new URL(ogImage ?? defaultOgImagePath, siteUrl).href;
 const structuredDataType =
   ogType === "article" ? "Article" : pageType === "personal" ? "ProfilePage" : "WebPage";
 const structuredData: JsonLdObject = {
