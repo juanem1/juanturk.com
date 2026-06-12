@@ -1,3 +1,7 @@
-<div class="relative w-full max-w-305 px-20 py-0 mx-auto my-15 lg:my-30">
+---
+const { class: className, ...rest } = Astro.props;
+---
+
+<div class:list={["relative w-full max-w-305 px-20 py-0 mx-auto my-15 lg:my-30", className]} {...rest}>
   <div class="w-full h-px bg-[radial-gradient(50%_1.352e+07%_at_50%_-1450.53%,rgba(255,255,171,0.24)_0%,rgba(255,255,171,0)_100%)]"></div>
 </div>

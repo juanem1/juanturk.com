@@ -1,0 +1,260 @@
+---
+import { Font, getImage } from "astro:assets";
+import { ClipboardList, Workflow, UserMinus, Sparkles, TrendingUp, TriangleAlert, ArrowRight } from '@lucide/astro';
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import Divider from "../../../components/Divider.astro"
+import WhoAmI from "../../../components/WhoAmI.astro";
+import profilePicture from "../../../assets/images/new_profile_picture.png";
+
+const optimizedBg = await getImage({ src: profilePicture });
+const title = "AI & Automation Consulting";
+const description =
+  "An independent systems architect helping traditional mid-size companies eliminate operational bottlenecks with reliable, agentic AI workflows and a measurable ROI.";
+
+const bottleneckItems = [
+  {
+    icon: ClipboardList,
+    title: "Manual, repetitive data entry",
+    body: "Your team re-types data between systems, copies records by hand, and runs the same routine every day. Reclaiming that time is the first thing a well-designed automation delivers.",
+  },
+  {
+    icon: Workflow,
+    title: "Operational bottlenecks",
+    body: "Critical processes stall because they depend on a few people manually moving work between disconnected tools. I map the flow of value and fix where time and money leak.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Growth chained to headcount",
+    body: "Every increase in volume means hiring more people to run the same manual work. Automating the bottleneck breaks the link between business growth and payroll.",
+  },
+  {
+    icon: TriangleAlert,
+    title: "Costly human errors",
+    body: "Routine manual work produces mistakes that require rework, create compliance risks, and erode client trust. Reliable, automated workflows drastically reduce that error surface.",
+  },
+  {
+    icon: UserMinus,
+    title: "Lack of internal tech talent",
+    body: "You don't have the in-house engineering to design and connect AI into your systems safely. You need an independent architect to guide you, not another full-time hire.",
+  },
+  {
+    icon: Sparkles,
+    title: "AI adoption without a roadmap",
+    body: "Adopting AI based on pure hype, with no concrete plan, is how most companies see zero return. The goal here is real operational impact, not just a flashy tech demo.",
+  },
+];
+
+const processSteps = [
+  {
+    title: "Application & Context",
+    body: "You submit a short application outlining your business context, team structure, and the main operational bottlenecks slowing you down. This allows me to assess if automation can deliver a real return before we even schedule a call.",
+  },
+  {
+    title: "Operational diagnosis",
+    body: "Focused strategy sessions with your leadership, centered on the business, not the tech. Through one or more targeted calls, I map your most painful processes, measure the volume of repetitive tasks, and accurately quantify the true cost of your critical bottlenecks.",
+  },
+  {
+    title: "Architecture and feasibility",
+    body: "Behind the scenes, I match your operational problems with the proven capabilities of current AI and automation. I design exactly how your existing systems should integrate, calculating realistic time savings and technical viability.",
+  },
+  {
+    title: "Action plan presentation",
+    body: "An executive session to deliver the results. I present the diagnosis, reveal the quantified cost of inaction, and hand over a structured action plan so you can move toward a safe, delegable implementation.",
+  },
+];
+---
+
+<Font cssVariable="--font-editorial-new" preload />
+<SiteLayout title={title} description={description}>
+
+  <section class="motion-enter h-[calc(100dvh - 73px)] pt-18.25" data-ai-automation-landing>
+    <div class="mx-auto flex lg:min-h-[clamp(800px,78svh,800px)] w-full items-center">
+      <div class="max-w-4xl space-y-7">
+        <p class="motion-enter text-sm font-semibold uppercase tracking-widest text-orange-300" style="--motion-step: 0;">
+          AI &amp; automation advisory
+        </p>
+
+        <div class="space-y-5">
+          <h1 class="motion-enter max-w-4xl text-5xl font-bold tracking-tight text-white lg:text-8xl font-(family-name:--font-editorial-new)" style="--motion-step: 1;">
+            Operational <span class="text-orange-300">AI</span> That Actually <em>Pays Off</em>
+          </h1>
+          <p class="motion-enter text-emphasis max-w-2xl text-lg leading-8 text-pretty text-zinc-400 sm:text-[1.35rem] sm:leading-9" style="--motion-step: 2;">
+            I help traditional businesses turn manual <strong><em>bottlenecks</em></strong> into smart, reliable workflows. Cut the busywork, eliminate <strong><em>costly errors,</em></strong> and see a real return on your AI investment.
+          </p>
+        </div>
+
+        <div class="motion-enter flex flex-col gap-3 pt-2 sm:flex-row" style="--motion-step: 3;">
+          <a
+            href="#process"
+            class="interactive-chip cta-with-rotate inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
+          >
+            See the process
+            <ArrowRight class="cta-arrow" size={16} stroke-width={2.5} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Divider />
+
+  <!-- Who am I -->
+  <WhoAmI optimizedBg={optimizedBg} />
+
+  <Divider />
+
+  <!-- When AI actually delivers ROI -->
+  <section aria-labelledby="roi-heading">
+    <div class="mb-12 space-y-5 text-center lg:mb-16">
+      <h2 id="roi-heading" class="motion-enter text-3xl font-[720] tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)" style="--motion-step: 0;">
+        When AI actually <em class="text-orange-300">delivers</em> a return
+      </h2>
+      <p class="motion-enter leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8" style="--motion-step: 1;">
+        AI is not a universal win. It earns its keep in specific, unglamorous places, the kind of operational drag most companies have quietly learned to live with. These are the six signs I look for:
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-x-12 gap-y-9 sm:grid-cols-2 lg:gap-x-16">
+      {bottleneckItems.map((item, index) => {
+        const Icon = item.icon;
+        return (
+          <article
+            class="motion-enter group relative flex gap-5 border-t border-white/10 pt-7"
+            style={`--motion-step: ${index + 2};`}
+          >
+            <span class="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-300/10 text-orange-300 ring-1 ring-inset ring-orange-300/20 transition duration-300 group-hover:bg-orange-300/20 group-hover:ring-orange-300/40">
+              <Icon size={22} stroke-width={1.75} aria-hidden="true" />
+            </span>
+            <div class="space-y-2.5">
+              <h3 class="text-xl font-[620] tracking-tight text-white transition-colors duration-300 group-hover:text-orange-200 font-(family-name:--font-editorial-new)">
+                {item.title}
+              </h3>
+              <p class="leading-7 text-zinc-400">{item.body}</p>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <Divider id="process" />
+
+  <!-- Process -->
+  <section class="motion-enter">
+    <div class="mx-auto w-full">
+      <div class="space-y-5">
+        <div class="motion-enter" style="--motion-step: 1;">
+          <h2 class="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new) mb-8">
+            From operational pain to a delegable <em class="text-orange-300">action plan.</em>
+          </h2>
+        </div>
+
+        <ol class="m-0 p-0 list-none">
+          {processSteps.map((step, index) => (
+            <li class="motion-enter grid gap-4 grid-cols-[2rem_minmax(0,1fr)]" style={`--motion-step: ${index + 2};`}>
+              <div class="relative flex justify-center pt-[0.35rem]" aria-hidden="true">
+                <span class="relative z-1 flex h-3.5 w-3.5">
+                  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[rgb(253_186_116)] opacity-75" />
+                  <span class="relative inline-flex h-3.5 w-3.5 rounded-full bg-[rgb(253_186_116)] [box-shadow:0_0_0_0.5rem_rgb(253_186_116/0.08)]" />
+                </span>
+                {index < processSteps.length - 1 && <span class="absolute top-5 bottom-0 w-px bg-[linear-gradient(180deg,rgb(253_186_116/0.6),rgb(255_255_255/0.08))]" />}
+              </div>
+              <div class="space-y-3 pb-10">
+                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-300">
+                  Phase 0{index + 1}
+                </p>
+                <h3 class="text-2xl font-[720] tracking-[-0.04em] text-white">
+                  {step.title}
+                </h3>
+                <p class="leading-6 text-zinc-400 sm:text-lg sm:leading-8">
+                  {step.body}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <Divider />
+
+  <!-- Who is this for -->
+  <section aria-labelledby="fit-heading" class="motion-enter">
+    <h2 id="fit-heading" class="mb-5 text-3xl font-[720] tracking-tight text-white md:text-4xl lg:text-6xl text-center font-(family-name:--font-editorial-new)">
+      Who is this for
+    </h2>
+    <p class="leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8 text-center">
+      Best fit for traditional mid-size companies in sectors like logistics, finance, legal, manufacturing, and similar industries. Designed for operational leaders who want a concrete, measurable execution plan, not another bet placed blindly on the AI hype.
+    </p>
+  </section>
+
+  <Divider />
+
+  <!-- Apply -->
+  <section id="apply" class="motion-enter mb-10">
+    <div class="motion-enter" style="--motion-step: 0;">
+      <h2 class="text-3xl font-[760] tracking-tight text-white md:text-4xl lg:text-6xl font-(family-name:--font-editorial-new)">
+        If a bottleneck is costing you <em class="text-orange-300">money</em>, let's start with the context.
+      </h2>
+      <p class="mt-4 leading-7 text-pretty text-zinc-300 sm:text-lg sm:leading-8">
+        The short application covers your operational reality: the repetitive work slowing you down and the systems currently involved. This allows me to assess if automation can actually deliver a real return before we schedule our first session.
+      </p>
+      <div class="pt-8 text-center hidden">
+        <a
+          href="/services/ai-automation-consulting/apply"
+          data-ai-automation-cta="apply_page"
+          class="interactive-chip w-full md:w-88 cta-with-arrow mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-orange-200"
+        >
+          Apply for a diagnosis
+          <ArrowRight class="cta-arrow" size={16} stroke-width={2.5} aria-hidden="true" />
+        </a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
+
+<script>
+  const trackAIAutomationLanding = () => {
+    const landingRoot = document.querySelector("[data-ai-automation-landing]");
+
+    if (!(landingRoot instanceof HTMLElement) || landingRoot.dataset.analyticsInitialized === "true") {
+      return;
+    }
+
+    landingRoot.dataset.analyticsInitialized = "true";
+    // @ts-expect-error
+    const sendGtagEvent = (eventName, eventParams) => {
+      // @ts-expect-error
+      if (typeof window.gtag !== "function") {
+        return;
+      }
+      // @ts-expect-error
+      window.gtag("event", eventName, eventParams);
+    };
+
+    sendGtagEvent("ai_automation_landing_view", {
+      page_path: window.location.pathname,
+      page_type: "landing",
+    });
+
+    const ctaLinks = document.querySelectorAll("[data-ai-automation-cta]");
+
+    ctaLinks.forEach((ctaLink) => {
+      if (!(ctaLink instanceof HTMLAnchorElement)) {
+        return;
+      }
+
+      ctaLink.addEventListener("click", () => {
+        sendGtagEvent("ai_automation_apply_cta_click", {
+          cta_location: ctaLink.dataset.aiAutomationCta,
+          destination_path: ctaLink.getAttribute("href") || "",
+          page_path: window.location.pathname,
+        });
+      });
+    });
+  };
+
+  trackAIAutomationLanding();
+  document.addEventListener("astro:page-load", trackAIAutomationLanding);
+</script>

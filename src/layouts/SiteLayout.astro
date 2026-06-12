@@ -7,15 +7,251 @@ interface Props {
   description?: string;
   ogType?: "website" | "article";
   ogImage?: string;
-  headerTransparent?: boolean;
 }
 
-const { title, description, ogType, ogImage, headerTransparent } = Astro.props;
+const { title, description, ogType, ogImage } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} ogType={ogType} ogImage={ogImage}>
-  <SiteHeader slot="header" transparent={headerTransparent} />
-  <div class="mx-auto w-full max-w-6xl pb-10">
+  <SiteHeader slot="header" transparent={true} />
+  <div class="backdrop" aria-hidden="true">
+    <div class="orb orb-1" />
+    <div class="orb orb-2" />
+    <div class="orb orb-3" />
+  </div>
+  <canvas class="dot-canvas" aria-hidden="true" />
+  <div class="content-wrap mx-auto w-full max-w-6xl px-5 pb-10 sm:px-8 lg:px-10">
     <slot />
   </div>
+  <style>
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100dvw;
+      height: 100dvh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      background: linear-gradient(180deg, rgb(13 17 23), rgb(17 21 29) 42%, rgb(13 17 23));
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .orb-1 {
+      width: 52rem;
+      height: 40rem;
+      top: -12rem;
+      right: -10rem;
+      background: radial-gradient(circle, rgb(253 186 116 / 0.28) 0%, transparent 70%);
+      animation: drift-1 28s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 38rem;
+      height: 38rem;
+      top: 18%;
+      left: 52%;
+      background: radial-gradient(circle, rgb(255 200 150 / 0.07) 0%, transparent 70%);
+      animation: drift-2 36s ease-in-out infinite;
+    }
+
+    .orb-3 {
+      width: 34rem;
+      height: 30rem;
+      bottom: 0;
+      left: -8rem;
+      background: radial-gradient(circle, rgb(253 180 120 / 0.10) 0%, transparent 70%);
+      animation: drift-3 32s ease-in-out infinite;
+    }
+
+    @keyframes drift-1 {
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+      30% {
+        transform: translate(-3rem, 4rem) scale(1.06);
+      }
+      65% {
+        transform: translate(4rem, -2rem) scale(0.96);
+      }
+    }
+
+    @keyframes drift-2 {
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+      40% {
+        transform: translate(5rem, 5rem) scale(1.08);
+      }
+      72% {
+        transform: translate(-4rem, -3rem) scale(0.94);
+      }
+    }
+
+    @keyframes drift-3 {
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+      35% {
+        transform: translate(5rem, -4rem) scale(1.07);
+      }
+      68% {
+        transform: translate(-3rem, 5rem) scale(0.97);
+      }
+    }
+
+    .dot-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .content-wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    :global(footer) {
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .orb {
+        animation: none;
+      }
+    }
+  </style>
+  <script>
+    let cleanup: (() => void) | null = null;
+
+    function initDotField(): void {
+      if (cleanup) {
+        cleanup();
+        cleanup = null;
+      }
+
+      const canvas = document.querySelector<HTMLCanvasElement>(".dot-canvas");
+      if (!canvas) {
+        return;
+      }
+
+      const dotCanvas: HTMLCanvasElement = canvas;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        return;
+      }
+
+      const dotContext: CanvasRenderingContext2D = ctx;
+      const spacing = 15;
+      const dotRadius = 1.2;
+      const cursorRadius = 160;
+      const bulge = 15;
+      const glowRadius = 300;
+
+      let mouseX = -9999;
+      let mouseY = -9999;
+      let animationFrameId = 0;
+
+      const onResize = (): void => {
+        dotCanvas.width = window.innerWidth;
+        dotCanvas.height = window.innerHeight;
+      };
+
+      const onMouseMove = (event: MouseEvent): void => {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+      };
+
+      const onMouseLeave = (): void => {
+        mouseX = -9999;
+        mouseY = -9999;
+      };
+
+      function drawFrame(canvasElement: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
+        context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+        if (mouseX > -9000) {
+          const glow = context.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, glowRadius);
+          glow.addColorStop(0, "rgba(253,186,116,0.06)");
+          glow.addColorStop(0.45, "rgba(253,186,116,0.025)");
+          glow.addColorStop(1, "transparent");
+          context.fillStyle = glow;
+          context.fillRect(0, 0, canvasElement.width, canvasElement.height);
+        }
+
+        const columns = Math.ceil(canvasElement.width / spacing) + 1;
+        const rows = Math.ceil(canvasElement.height / spacing) + 1;
+
+        for (let row = 0; row < rows; row += 1) {
+          for (let column = 0; column < columns; column += 1) {
+            let x = column * spacing;
+            let y = row * spacing;
+
+            const deltaX = x - mouseX;
+            const deltaY = y - mouseY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            if (distance < cursorRadius && distance > 0) {
+              const force = (1 - distance / cursorRadius) * bulge;
+              x += (deltaX / distance) * force;
+              y += (deltaY / distance) * force;
+            }
+
+            const boost =
+              distance < cursorRadius && mouseX > -9000 ? (1 - distance / cursorRadius) * 0.12 : 0;
+
+            context.beginPath();
+            context.arc(x, y, dotRadius, 0, Math.PI * 2);
+            context.fillStyle = `rgba(255,255,255,${(0.055 + boost).toFixed(3)})`;
+            context.fill();
+          }
+        }
+      }
+
+      function loop(): void {
+        drawFrame(dotCanvas, dotContext);
+        animationFrameId = window.requestAnimationFrame(loop);
+      }
+
+      onResize();
+      window.addEventListener("resize", onResize);
+
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) {
+        drawFrame(dotCanvas, dotContext);
+      } else {
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("mouseleave", onMouseLeave);
+        loop();
+      }
+
+      cleanup = (): void => {
+        window.cancelAnimationFrame(animationFrameId);
+        window.removeEventListener("resize", onResize);
+        window.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("mouseleave", onMouseLeave);
+      };
+    }
+
+    document.addEventListener("astro:page-load", initDotField);
+    document.addEventListener("astro:before-swap", () => {
+      if (cleanup) {
+        cleanup();
+        cleanup = null;
+      }
+    });
+  </script>
 </BaseLayout>
