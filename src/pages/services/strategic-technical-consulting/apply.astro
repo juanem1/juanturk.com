@@ -35,22 +35,12 @@ const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
 </SiteLayout>
 
 <script>
-  const trackStrategicReviewApplyPage = () => {
-    const applyRoot = document.querySelector("[data-strategic-review-apply-page]");
+  import { trackApplyPageView } from "../../../scripts/trackApplyPageView";
 
-    if (!(applyRoot instanceof HTMLElement) || applyRoot.dataset.analyticsInitialized === "true") {
-      return;
-    }
-
-    applyRoot.dataset.analyticsInitialized = "true";
-
-    if (typeof window.gtag !== "function") {
-      return;
-    }
-
-    window.gtag("event", "strategic_review_apply_form", {
-      page_path: window.location.pathname,
-      page_type: "apply",
+  const trackStrategicReviewApplyPage = (): void => {
+    trackApplyPageView({
+      rootSelector: "[data-strategic-review-apply-page]",
+      eventName: "strategic_review_apply_form",
     });
   };
 

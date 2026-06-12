@@ -35,22 +35,12 @@ const webhookUrl = import.meta.env.PUBLIC_AI_AUTOMATION_WEBHOOK_URL;
 </SiteLayout>
 
 <script>
-  const trackAIAutomationApplyPage = () => {
-    const applyRoot = document.querySelector("[data-ai-automation-apply-page]");
+  import { trackApplyPageView } from "../../../scripts/trackApplyPageView";
 
-    if (!(applyRoot instanceof HTMLElement) || applyRoot.dataset.analyticsInitialized === "true") {
-      return;
-    }
-
-    applyRoot.dataset.analyticsInitialized = "true";
-
-    if (typeof window.gtag !== "function") {
-      return;
-    }
-
-    window.gtag("event", "ai_automation_apply_form", {
-      page_path: window.location.pathname,
-      page_type: "apply",
+  const trackAIAutomationApplyPage = (): void => {
+    trackApplyPageView({
+      rootSelector: "[data-ai-automation-apply-page]",
+      eventName: "ai_automation_apply_form",
     });
   };
 
