@@ -43,6 +43,18 @@ const {
       left: 0;
       width: 100dvw;
       height: 100dvh;
+      --orb-blur: clamp(56px, 7vw, 90px);
+      --orb-1-width: clamp(26rem, 58vw, 52rem);
+      --orb-1-height: clamp(20rem, 44vw, 40rem);
+      --orb-1-top: clamp(-12rem, -10vw, -8rem);
+      --orb-1-right: clamp(-10rem, -8vw, -4rem);
+      --orb-2-size: clamp(20rem, 42vw, 38rem);
+      --orb-2-top: clamp(5rem, 18vh, 11rem);
+      --orb-2-left: calc(50% + clamp(0rem, 2vw, 2rem));
+      --orb-3-width: clamp(18rem, 38vw, 34rem);
+      --orb-3-height: clamp(16rem, 34vw, 30rem);
+      --orb-3-bottom: clamp(-2rem, -1vw, 0rem);
+      --orb-3-left: clamp(-8rem, -6vw, -3rem);
       overflow: hidden;
       pointer-events: none;
       z-index: 0;
@@ -52,34 +64,34 @@ const {
     .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(90px);
+      filter: blur(var(--orb-blur));
       pointer-events: none;
       will-change: transform;
     }
 
     .orb-1 {
-      width: 52rem;
-      height: 40rem;
-      top: -12rem;
-      right: -10rem;
+      width: var(--orb-1-width);
+      height: var(--orb-1-height);
+      top: var(--orb-1-top);
+      right: var(--orb-1-right);
       background: radial-gradient(circle, rgb(253 186 116 / 0.28) 0%, transparent 70%);
       animation: drift-1 28s ease-in-out infinite;
     }
 
     .orb-2 {
-      width: 38rem;
-      height: 38rem;
-      top: 18%;
-      left: 52%;
+      width: var(--orb-2-size);
+      height: var(--orb-2-size);
+      top: var(--orb-2-top);
+      left: var(--orb-2-left);
       background: radial-gradient(circle, rgb(255 200 150 / 0.07) 0%, transparent 70%);
       animation: drift-2 36s ease-in-out infinite;
     }
 
     .orb-3 {
-      width: 34rem;
-      height: 30rem;
-      bottom: 0;
-      left: -8rem;
+      width: var(--orb-3-width);
+      height: var(--orb-3-height);
+      bottom: var(--orb-3-bottom);
+      left: var(--orb-3-left);
       background: radial-gradient(circle, rgb(253 180 120 / 0.10) 0%, transparent 70%);
       animation: drift-3 32s ease-in-out infinite;
     }
