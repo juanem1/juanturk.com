@@ -11,75 +11,80 @@ const { transparent }: Props = Astro.props;
 const mobileMenuId = "mobile-site-menu-panel";
 ---
 
-<header
+<div
   transition:persist
   data-mobile-menu-root
   data-open="false"
-  class:list={[
-    "relative top-0 z-50",
-    transparent
-      ? "absolute inset-x-0 border-b border-transparent bg-transparent backdrop-blur-none"
-      : "sticky border-b border-white/15 bg-[linear-gradient(to_bottom,#0d1117fa,#161b22f7,#1c2128f2)] backdrop-blur-md",
-  ]}
+  class="relative z-50"
 >
-  <nav
-    aria-label="Principal"
-    data-mobile-menu-bar
-    class="relative z-60 mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 transition-[background-color,border-color,backdrop-filter] duration-260 ease-out sm:px-8 lg:px-10"
+  <header
+    data-mobile-menu-shell
+    class:list={[
+      "z-50",
+      transparent
+        ? "relative border-b border-transparent bg-transparent backdrop-blur-none"
+        : "sticky top-0 border-b border-white/15 bg-[linear-gradient(to_bottom,#0d1117fa,#161b22f7,#1c2128f2)] backdrop-blur-md",
+    ]}
   >
-    <a href="/" class="shrink-0 font-[650] tracking-[-0.02em] text-white transition hover:text-zinc-200 sm:text-lg">
-      Juan Turk
-    </a>
+    <nav
+      aria-label="Principal"
+      data-mobile-menu-bar
+      class="relative z-60 mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 transition-[background-color,border-color,backdrop-filter] duration-260 ease-out sm:px-8 lg:px-10"
+    >
+      <a href="/" class="shrink-0 font-[650] tracking-[-0.02em] text-white transition hover:text-zinc-200 sm:text-lg">
+        Juan Turk
+      </a>
 
-    <div class="hidden md:flex items-center gap-1 sm:gap-2">
-      <ServiceMenuItem />
-      <a
-        href="/blog/"
-        class="interactive-chip inline-flex items-center rounded-full bg-transparent px-3 py-2 text-sm font-semibold text-zinc-100 transition hover:bg-white/10 hover:text-white sm:px-4"
-      >
-        Blog
-      </a>
-      <a
-        href="https://github.com/juanem1"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Juan turk GitHub profile"
-        title="GitHub"
-        class="interactive-chip inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/10 hover:text-white"
-      >
-        <Icon name="gh" class="h-5 w-5" />
-      </a>
-      <a
-        href="https://www.linkedin.com/in/juanemilioturk/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Juan turk Linkedin profile"
-        title="Linkedin"
-        class="interactive-chip inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/10 hover:text-white"
-      >
-        <Icon name="in" class="h-5 w-5" />
-      </a>
-    </div>
-    <div class="block md:hidden">
-      <button
-        type="button"
-        data-mobile-menu-trigger
-        aria-expanded="false"
-        aria-controls={mobileMenuId}
-        aria-label="Toggle navigation menu"
-        class="inline-flex h-11 w-11 items-center justify-center text-zinc-100 transition hover:text-white"
-      >
-        <Menu class="h-5 w-5" data-mobile-menu-closed-icon aria-hidden="true" />
-        <X class="h-5 w-5" data-mobile-menu-open-icon aria-hidden="true" />
-      </button>
-    </div>
-  </nav>
+      <div class="hidden md:flex items-center gap-1 sm:gap-2">
+        <ServiceMenuItem />
+        <a
+          href="/blog/"
+          class="interactive-chip inline-flex items-center rounded-full bg-transparent px-3 py-2 text-sm font-semibold text-zinc-100 transition hover:bg-white/10 hover:text-white sm:px-4"
+        >
+          Blog
+        </a>
+        <a
+          href="https://github.com/juanem1"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Juan turk GitHub profile"
+          title="GitHub"
+          class="interactive-chip inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/10 hover:text-white"
+        >
+          <Icon name="gh" class="h-5 w-5" />
+        </a>
+        <a
+          href="https://www.linkedin.com/in/juanemilioturk/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Juan turk Linkedin profile"
+          title="Linkedin"
+          class="interactive-chip inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/10 hover:text-white"
+        >
+          <Icon name="in" class="h-5 w-5" />
+        </a>
+      </div>
+      <div class="block md:hidden">
+        <button
+          type="button"
+          data-mobile-menu-trigger
+          aria-expanded="false"
+          aria-controls={mobileMenuId}
+          aria-label="Toggle navigation menu"
+          class="inline-flex h-11 w-11 items-center justify-center text-zinc-100 transition hover:text-white"
+        >
+          <Menu class="h-5 w-5" data-mobile-menu-closed-icon aria-hidden="true" />
+          <X class="h-5 w-5" data-mobile-menu-open-icon aria-hidden="true" />
+        </button>
+      </div>
+    </nav>
+  </header>
 
   <div
     id={mobileMenuId}
     data-mobile-menu-panel
     aria-hidden="true"
-    class="pointer-events-none absolute inset-x-0 top-0 bottom-0 z-50 md:hidden"
+    class="pointer-events-none fixed inset-0 z-40 md:hidden"
   >
     <div
       data-mobile-menu-curtain
@@ -170,11 +175,14 @@ const mobileMenuId = "mobile-site-menu-panel";
       </div>
     </div>
   </div>
-</header>
+</div>
 
 <style>
   [data-mobile-menu-root] {
     --mobile-menu-bar-height: 4.5rem;
+  }
+
+  [data-mobile-menu-shell] {
     transition: border-color 260ms ease-out;
   }
 
@@ -205,16 +213,13 @@ const mobileMenuId = "mobile-site-menu-panel";
       transform: translate3d(20px, 0, 0);
     }
 
-    [data-mobile-menu-root][data-open="true"] {
-      position: fixed;
-      inset: 0;
-      z-index: 80;
-      border-bottom-color: transparent;
-    }
-
     [data-mobile-menu-root][data-open="true"] [data-mobile-menu-bar] {
       background-color: rgb(20 24 31 / 0.98);
       backdrop-filter: none;
+    }
+
+    [data-mobile-menu-root][data-open="true"] [data-mobile-menu-shell] {
+      border-bottom-color: transparent;
     }
 
     [data-mobile-menu-root][data-open="true"] [data-mobile-menu-panel] {
@@ -229,7 +234,7 @@ const mobileMenuId = "mobile-site-menu-panel";
   }
 
   @media (prefers-reduced-motion: reduce) {
-    [data-mobile-menu-root],
+    [data-mobile-menu-root] [data-mobile-menu-shell],
     [data-mobile-menu-root] [data-mobile-menu-bar],
     [data-mobile-menu-root] [data-mobile-menu-panel],
     [data-mobile-menu-root] [data-mobile-menu-surface] {
