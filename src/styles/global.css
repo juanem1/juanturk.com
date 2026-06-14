@@ -25,6 +25,13 @@
   }
 }
 
+@layer utilities {
+  .italic {
+    font-style: italic;
+    font-variation-settings: 'ital' 1;
+  }
+}
+
 @layer components {
   .motion-enter {
     --enter-y: 18px;
@@ -103,16 +110,6 @@
     @apply border-orange-300 font-medium text-white;
   }
 
-  .text-emphasis strong {
-    @apply font-[650] text-zinc-100;
-  }
-
-  .text-emphasis em {
-    @apply text-zinc-100 italic;
-    font-style: italic;
-    font-variation-settings: 'ital' 1;
-  }
-
   .post-content {
     @apply text-[1.08rem] leading-8 text-zinc-300;
   }
@@ -146,8 +143,6 @@
 
   .post-content em {
     @apply text-zinc-100 italic;
-    font-style: italic;
-    font-variation-settings: 'ital' 1;
   }
 
   .post-content code {

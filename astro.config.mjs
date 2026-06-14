@@ -1,10 +1,21 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 import rehypeExternalLinks from 'rehype-external-links';
 import { remarkReadingTime } from './remark-reading-time.mjs';
 import icon from 'astro-icon';
+
+/** @type {import('astro').RemarkPlugins} */
+const markdownRemarkPlugins = [remarkReadingTime];
+
+/** @type {import('astro').RehypePlugins} */
+const markdownRehypePlugins = [[rehypeExternalLinks, {
+  content: { type: 'text', value: ' ↗' },
+  target: '_blank',
+  rel: ['nofollow', 'noopener', 'noreferrer'],
+}]];
 
 export default defineConfig({
   site: 'https://juanturk.com',
@@ -75,12 +86,10 @@ export default defineConfig({
   ],
 
   markdown: {
-    remarkPlugins: [remarkReadingTime],
-    rehypePlugins: [[rehypeExternalLinks, {
-      content: { type: 'text', value: ' ↗' },
-      target: '_blank',
-      rel: ['nofollow', 'noopener', 'noreferrer'],
-    }]],
+    processor: unified({
+      remarkPlugins: markdownRemarkPlugins,
+      rehypePlugins: markdownRehypePlugins,
+    })
   },
 
   vite: {
@@ -88,7 +97,12 @@ export default defineConfig({
   },
 
   integrations: [
-    mdx(),
+    mdx({
+      processor: unified({
+        remarkPlugins: markdownRemarkPlugins,
+        rehypePlugins: markdownRehypePlugins,
+      })
+    }),
     icon({
       iconDir: './src/assets/icons',
     }),

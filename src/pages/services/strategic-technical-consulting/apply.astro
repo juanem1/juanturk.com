@@ -40,13 +40,13 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
 <Font cssVariable="--font-editorial-new" preload />
 <SiteLayout title={title} description={description}>
   <section class="motion-enter" data-strategic-review-apply-page>
-    <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-28 sm:pb-20 sm:pt-32">
-      <div class="space-y-4">
-        <h1 class="text-5xl font-bold tracking-tight text-white lg:text-8xl font-(family-name:--font-editorial-new)">
+    <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-30 sm:pb-20 sm:pt-32">
+      <div>
+        <h1 class="mb-10 text-4xl font-bold tracking-tight text-white md:text-6xl lg:text-8xl font-(family-name:--font-editorial-new)">
           Apply for a Technical Diagnostic
         </h1>
-        <p class="text-pretty text-zinc-300">This application helps me understand your business context, technical situation, implementation capacity, and the decision you need to make. It allows me to assess whether this review is a good fit before scheduling any session.</p>
-        <p class="text-pretty text-zinc-300">You'll be asked for basic contact details, team and budget readiness, the main technical bottleneck, business impact, current tech stack, and any relevant deadlines or constraints.</p>
+        <p class="mb-3 text-pretty text-zinc-300">This application helps me understand your business context, technical situation, implementation capacity, and the decision you need to make. It allows me to assess whether this review is a good fit before scheduling any session.</p>
+        <p class="mb-3 text-pretty text-zinc-300">You'll be asked for basic contact details, team and budget readiness, the main technical bottleneck, business impact, current tech stack, and any relevant deadlines or constraints.</p>
         <p class="text-zinc-400 italic">Usually takes between 5 to 10 minutes to complete</p>
       </div>
     </div>
@@ -54,7 +54,13 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
 
   <section class="motion-enter pb-20">
     <div class="mx-auto w-full">
-      <div data-strategic-review-form class="review-form-root">
+      <div
+        data-strategic-review-form
+        data-source-path={sourcePath}
+        data-webhook-url={webhookUrl}
+        data-skip-submit-for-testing={skipSubmitForTesting ?? ""}
+        class="review-form-root"
+      >
         <div class="review-form-message" data-form-message role="status" aria-live="polite" hidden />
 
         <form data-review-form class="review-form">
@@ -325,16 +331,40 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
   document.addEventListener("astro:page-load", trackStrategicReviewApplyPage);
 </script>
 
-<script
-  define:vars={{
-    sourcePath,
-    webhookUrl,
-    skipSubmitForTesting,
-  }}
->
+<script>
   import { initThreeStepApplyForm, readString } from "../../../scripts/initThreeStepApplyForm";
 
-  const createStrategicReviewPayload = (formData) => {
+  const getStrategicReviewFormRoot = (): HTMLDivElement => {
+    const root = document.querySelector("[data-strategic-review-form]");
+
+    if (!(root instanceof HTMLDivElement)) {
+      throw new Error("Strategic review form is missing root element.");
+    }
+
+    return root;
+  };
+
+  const readRequiredDatasetValue = (root: HTMLDivElement, key: string, context: string): string => {
+    const value = root.dataset[key];
+
+    if (typeof value !== "string" || value.length === 0) {
+      throw new Error(`Strategic review form is missing required dataset value: ${context}.`);
+    }
+
+    return value;
+  };
+
+  const readOptionalDatasetValue = (root: HTMLDivElement, key: string): string | undefined => {
+    const value = root.dataset[key];
+
+    if (typeof value !== "string" || value.length === 0) {
+      return undefined;
+    }
+
+    return value;
+  };
+
+  const createStrategicReviewPayload = (formData: FormData): Record<string, string> => {
     return {
       companyWebsite: readString(formData, "companyWebsite"),
       currentTechStack: readString(formData, "currentTechStack"),
@@ -351,7 +381,12 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
     };
   };
 
-  const initStrategicReviewForm = () => {
+  const initStrategicReviewForm = (): void => {
+    const root = getStrategicReviewFormRoot();
+    const sourcePathValue = readRequiredDatasetValue(root, "sourcePath", "sourcePath");
+    const webhookUrlValue = readRequiredDatasetValue(root, "webhookUrl", "webhookUrl");
+    const skipSubmitForTestingValue = readOptionalDatasetValue(root, "skipSubmitForTesting");
+
     initThreeStepApplyForm({
       createPayload: createStrategicReviewPayload,
       eventPrefix: "strategic_review_form",
@@ -359,11 +394,11 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       missingElementContext: "Strategic review form",
       rootSelector: "[data-strategic-review-form]",
       sentDatasetKey: "strategicReviewFormSent",
-      skipSubmitForTesting,
-      sourcePath,
+      skipSubmitForTesting: skipSubmitForTestingValue,
+      sourcePath: sourcePathValue,
       submissionFailureLabel: "Strategic review submission",
       userFacingSubmitErrorMessage: "Unable to submit your application right now. Please try again in a few minutes.",
-      webhookUrl,
+      webhookUrl: webhookUrlValue,
     });
   };
 

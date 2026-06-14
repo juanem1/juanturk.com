@@ -38,7 +38,7 @@ const serviceMenuLinks: ReadonlyArray<ServiceMenuLink> = [
   </button>
 
   <div
-    class="pointer-events-none invisible absolute right-0 top-full z-60 w-65 pt-3"
+    class="pointer-events-none invisible absolute -right-20 top-full z-60 w-65 pt-3"
     data-service-menu-container
   >
     <div
@@ -124,6 +124,12 @@ const serviceMenuLinks: ReadonlyArray<ServiceMenuLink> = [
     root.dataset.bound = "true";
     setServiceMenuOpen(elements, false);
 
+    // force menu open
+    // const forceMenuOpen = true;
+    // if (forceMenuOpen) {
+    //   setServiceMenuOpen(elements, true);
+    //   return;
+    // }
 
     elements.trigger.addEventListener("pointerdown", (event: PointerEvent) => {
       elements.root.dataset.lastPointerType = event.pointerType;

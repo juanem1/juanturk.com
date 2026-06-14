@@ -55,13 +55,13 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
 <Font cssVariable="--font-editorial-new" preload />
 <SiteLayout title={title} description={description}>
   <section class="motion-enter" data-ai-automation-apply-page>
-    <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-28 sm:pb-20 sm:pt-32">
-      <div class="space-y-4">
-        <h1 class="text-5xl font-bold tracking-tight text-white lg:text-8xl font-(family-name:--font-editorial-new)">
-          Apply for an Operational Diagnosis
+    <div class="mx-auto flex w-full flex-col gap-8 pb-14 pt-30 sm:pb-20 sm:pt-32">
+      <div>
+        <h1 class="mb-10 text-4xl font-bold tracking-tight text-white md:text-6xl lg:text-8xl font-(family-name:--font-editorial-new)">
+          AI & Automation Audit Application
         </h1>
-        <p class="text-pretty text-zinc-300">This application helps me understand your business context, your operational reality, the repetitive work slowing you down, and the systems involved. It allows me to assess whether automation can deliver a measurable return before scheduling any session.</p>
-        <p class="text-pretty text-zinc-300">You'll be asked for basic contact details, company and industry context, the main operational bottleneck, task volume, current systems, business impact, and any relevant deadlines or constraints.</p>
+        <p class="mb-3 text-pretty text-zinc-300">This application helps me understand your business context, your operational reality, the repetitive work slowing you down, and the systems involved. It allows me to assess whether automation can deliver a measurable return before scheduling any session.</p>
+        <p class="mb-3 text-pretty text-zinc-300">You'll be asked for basic contact details, company and industry context, the main operational bottleneck, task volume, current systems, business impact, and any relevant deadlines or constraints.</p>
         <p class="text-zinc-400 italic">Usually takes between 5 to 10 minutes to complete</p>
       </div>
     </div>
@@ -69,7 +69,13 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
 
   <section class="motion-enter pb-20">
     <div class="mx-auto w-full">
-      <div data-ai-automation-form class="review-form-root">
+      <div
+        data-ai-automation-form
+        data-source-path={sourcePath}
+        data-webhook-url={webhookUrl}
+        data-skip-submit-for-testing={skipSubmitForTesting ?? ""}
+        class="review-form-root"
+      >
         <div class="review-form-message" data-form-message role="status" aria-live="polite" hidden />
 
         <form data-review-form class="review-form">
@@ -370,16 +376,40 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
   document.addEventListener("astro:page-load", trackAIAutomationApplyPage);
 </script>
 
-<script
-  define:vars={{
-    sourcePath,
-    webhookUrl,
-    skipSubmitForTesting,
-  }}
->
+<script>
   import { initThreeStepApplyForm, readString } from "../../../scripts/initThreeStepApplyForm";
 
-  const createAIAutomationPayload = (formData) => {
+  const getAIAutomationFormRoot = (): HTMLDivElement => {
+    const root = document.querySelector("[data-ai-automation-form]");
+
+    if (!(root instanceof HTMLDivElement)) {
+      throw new Error("AI automation form is missing root element.");
+    }
+
+    return root;
+  };
+
+  const readRequiredDatasetValue = (root: HTMLDivElement, key: string, context: string): string => {
+    const value = root.dataset[key];
+
+    if (typeof value !== "string" || value.length === 0) {
+      throw new Error(`AI automation form is missing required dataset value: ${context}.`);
+    }
+
+    return value;
+  };
+
+  const readOptionalDatasetValue = (root: HTMLDivElement, key: string): string | undefined => {
+    const value = root.dataset[key];
+
+    if (typeof value !== "string" || value.length === 0) {
+      return undefined;
+    }
+
+    return value;
+  };
+
+  const createAIAutomationPayload = (formData: FormData): Record<string, string> => {
     return {
       companySize: readString(formData, "companySize"),
       companyWebsite: readString(formData, "companyWebsite"),
@@ -398,7 +428,12 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
     };
   };
 
-  const initAIAutomationForm = () => {
+  const initAIAutomationForm = (): void => {
+    const root = getAIAutomationFormRoot();
+    const sourcePathValue = readRequiredDatasetValue(root, "sourcePath", "sourcePath");
+    const webhookUrlValue = readRequiredDatasetValue(root, "webhookUrl", "webhookUrl");
+    const skipSubmitForTestingValue = readOptionalDatasetValue(root, "skipSubmitForTesting");
+
     initThreeStepApplyForm({
       createPayload: createAIAutomationPayload,
       eventPrefix: "ai_automation_form",
@@ -406,11 +441,11 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
       missingElementContext: "AI automation form",
       rootSelector: "[data-ai-automation-form]",
       sentDatasetKey: "aiAutomationFormSent",
-      skipSubmitForTesting,
-      sourcePath,
+      skipSubmitForTesting: skipSubmitForTestingValue,
+      sourcePath: sourcePathValue,
       submissionFailureLabel: "AI automation submission",
       userFacingSubmitErrorMessage: "Unable to submit your application right now. Please try again in a few minutes.",
-      webhookUrl,
+      webhookUrl: webhookUrlValue,
     });
   };
 

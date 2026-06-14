@@ -370,19 +370,20 @@ export const initThreeStepApplyForm = <TPayload extends Record<string, string>>(
     });
 
     try {
+      const payload = config.createPayload(new FormData(form));
       if (shouldSubmit(config.skipSubmitForTesting)) {
-        const payload = config.createPayload(new FormData(form));
         await submitPayload(config.webhookUrl, payload, config.submissionFailureLabel);
+        sendGtagEvent("step_complete", {
+          page_path: window.location.pathname,
+          step_name: "diagnostic",
+          step_number: stepNumbers.diagnostic,
+        });
+        sendGtagEvent("submit_success", {
+          page_path: window.location.pathname,
+        });
+      } else {
+        console.log(payload);
       }
-
-      sendGtagEvent("step_complete", {
-        page_path: window.location.pathname,
-        step_name: "diagnostic",
-        step_number: stepNumbers.diagnostic,
-      });
-      sendGtagEvent("submit_success", {
-        page_path: window.location.pathname,
-      });
       showQualifiedTerminal();
     } catch (error) {
       sendGtagEvent("submit_error", {
