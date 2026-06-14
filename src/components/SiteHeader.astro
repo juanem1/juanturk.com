@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import { BookOpen, Menu, X } from "@lucide/astro";
 import ServiceMenuItem from "./ServiceMenuItem.astro";
 
 interface Props {
@@ -7,12 +8,15 @@ interface Props {
 }
 
 const { transparent }: Props = Astro.props;
+const mobileMenuId = "mobile-site-menu-panel";
 ---
 
 <header
   transition:persist
+  data-mobile-menu-root
+  data-open="false"
   class:list={[
-    "top-0 z-50",
+    "relative top-0 z-50",
     transparent
       ? "absolute inset-x-0 border-b border-transparent bg-transparent backdrop-blur-none"
       : "sticky border-b border-white/15 bg-[linear-gradient(to_bottom,#0d1117fa,#161b22f7,#1c2128f2)] backdrop-blur-md",
@@ -20,13 +24,14 @@ const { transparent }: Props = Astro.props;
 >
   <nav
     aria-label="Principal"
-    class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10"
+    data-mobile-menu-bar
+    class="relative z-60 mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 transition-[background-color,border-color,backdrop-filter] duration-260 ease-out sm:px-8 lg:px-10"
   >
     <a href="/" class="shrink-0 font-[650] tracking-[-0.02em] text-white transition hover:text-zinc-200 sm:text-lg">
       Juan Turk
     </a>
 
-    <div class="flex items-center gap-1 sm:gap-2">
+    <div class="hidden md:flex items-center gap-1 sm:gap-2">
       <ServiceMenuItem />
       <a
         href="/blog/"
@@ -38,7 +43,7 @@ const { transparent }: Props = Astro.props;
         href="https://github.com/juanem1"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="GitHub profile"
+        aria-label="Juan turk GitHub profile"
         title="GitHub"
         class="interactive-chip inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/10 hover:text-white"
       >
@@ -48,12 +53,305 @@ const { transparent }: Props = Astro.props;
         href="https://www.linkedin.com/in/juanemilioturk/"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="LinkedIn profile"
-        title="LinkedIn"
+        aria-label="Juan turk Linkedin profile"
+        title="Linkedin"
         class="interactive-chip inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/10 hover:text-white"
       >
         <Icon name="in" class="h-5 w-5" />
       </a>
     </div>
+    <div class="block md:hidden">
+      <button
+        type="button"
+        data-mobile-menu-trigger
+        aria-expanded="false"
+        aria-controls={mobileMenuId}
+        aria-label="Toggle navigation menu"
+        class="inline-flex h-11 w-11 items-center justify-center text-zinc-100 transition hover:text-white"
+      >
+        <Menu class="h-5 w-5" data-mobile-menu-closed-icon aria-hidden="true" />
+        <X class="h-5 w-5" data-mobile-menu-open-icon aria-hidden="true" />
+      </button>
+    </div>
   </nav>
+
+  <div
+    id={mobileMenuId}
+    data-mobile-menu-panel
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 bottom-0 z-50 md:hidden"
+  >
+    <div
+      data-mobile-menu-curtain
+      class="flex h-full flex-col pt-(--mobile-menu-bar-height,4.5rem)"
+    >
+      <div class="min-h-0 flex-1 overflow-hidden">
+        <div
+          data-mobile-menu-surface
+          class="h-full overflow-y-auto rounded-t-xl bg-white px-6 pb-8 pt-7 opacity-0 shadow-[0_34px_70px_-26px_rgba(0,0,0,0.34),0_12px_28px_-18px_rgba(8,10,14,0.22)] transition-[opacity,transform] duration-[220ms] ease-out"
+        >
+          <div class="mx-auto flex h-full max-w-6xl flex-col">
+            <nav aria-label="Mobile secondary links">
+              <p class="text-zinc-700 text-xl tracking-tight">
+                <strong>Services</strong>
+              </p>
+              <ul class="flex flex-col gap-8">
+                <li>
+                  <ul>
+                    <li class="border-b border-zinc-200/80">
+                      <a
+                        href="/services/strategic-technical-consulting/"
+                        data-mobile-menu-link
+                        tabindex="-1"
+                        class="flex items-center gap-3 py-4 text-[1rem] font-medium text-zinc-700 transition-colors hover:text-zinc-950 focus-visible:text-zinc-950 focus-visible:outline-none"
+                      >
+                        <span>Architectural Consultancy</span>
+                      </a>
+                    </li>
+                    <li class="border-b border-zinc-200/80">
+                      <a
+                        href="/services/ai-automation-consulting/"
+                        data-mobile-menu-link
+                        tabindex="-1"
+                        class="flex items-center gap-3 py-4 text-[1rem] font-medium text-zinc-700 transition-colors hover:text-zinc-950 focus-visible:text-zinc-950 focus-visible:outline-none"
+                      >
+                        <span>AI Consultancy</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul>
+                    <li class="border-b border-zinc-200/80">
+                      <a
+                        href="/blog/"
+                        data-mobile-menu-link
+                        tabindex="-1"
+                        class="flex items-center gap-3 py-4 text-[1rem] font-medium text-zinc-700 transition-colors hover:text-zinc-950 focus-visible:text-zinc-950 focus-visible:outline-none"
+                      >
+                        <BookOpen class="h-5 w-5 shrink-0 text-zinc-500" aria-hidden="true" />
+                        <span>Blog</span>
+                      </a>
+                    </li>
+                    <li class="border-b border-zinc-200/80 last:border-b-0">
+                      <a
+                        href="https://github.com/juanem1"
+                        aria-label="Juan turk GitHub profile"
+                        target="_blank"
+                        title="GitHub"
+                        rel="noopener noreferrer"
+                        data-mobile-menu-link
+                        tabindex="-1"
+                        class="flex items-center gap-3 py-4 text-[1rem] font-medium text-zinc-700 transition-colors hover:text-zinc-950 focus-visible:text-zinc-950 focus-visible:outline-none"
+                      >
+                        <Icon name="gh" class="h-5 w-5 shrink-0 text-zinc-500" />
+                        <span>GitHub</span>
+                      </a>
+                    </li>
+                    <li class="border-b border-zinc-200/80 last:border-b-0">
+                      <a
+                        href="https://www.linkedin.com/in/juanemilioturk/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-mobile-menu-link
+                        tabindex="-1"
+                        class="flex items-center gap-3 py-4 text-[1rem] font-medium text-zinc-700 transition-colors hover:text-zinc-950 focus-visible:text-zinc-950 focus-visible:outline-none"
+                      >
+                        <Icon name="in" class="h-5 w-5 shrink-0 text-zinc-500" />
+                        <span>LinkedIn</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>
+
+<style>
+  [data-mobile-menu-root] {
+    --mobile-menu-bar-height: 4.5rem;
+    transition: border-color 260ms ease-out;
+  }
+
+  [data-mobile-menu-root][data-open="false"] [data-mobile-menu-open-icon] {
+    display: none;
+  }
+
+  [data-mobile-menu-root][data-open="true"] [data-mobile-menu-closed-icon] {
+    display: none;
+  }
+
+  [data-mobile-menu-root][data-open="true"] [data-mobile-menu-open-icon] {
+    display: block;
+  }
+
+  @media (max-width: 767px) {
+    [data-mobile-menu-root][data-open="false"] [data-mobile-menu-bar] {
+      background: transparent;
+      backdrop-filter: none;
+    }
+
+    [data-mobile-menu-root][data-open="false"] [data-mobile-menu-panel] {
+      visibility: hidden;
+    }
+
+    [data-mobile-menu-root][data-open="false"] [data-mobile-menu-surface] {
+      opacity: 0;
+      transform: translate3d(20px, 0, 0);
+    }
+
+    [data-mobile-menu-root][data-open="true"] {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      border-bottom-color: transparent;
+    }
+
+    [data-mobile-menu-root][data-open="true"] [data-mobile-menu-bar] {
+      background-color: rgb(20 24 31 / 0.98);
+      backdrop-filter: none;
+    }
+
+    [data-mobile-menu-root][data-open="true"] [data-mobile-menu-panel] {
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    [data-mobile-menu-root][data-open="true"] [data-mobile-menu-surface] {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-mobile-menu-root],
+    [data-mobile-menu-root] [data-mobile-menu-bar],
+    [data-mobile-menu-root] [data-mobile-menu-panel],
+    [data-mobile-menu-root] [data-mobile-menu-surface] {
+      transition-duration: 0ms;
+    }
+  }
+</style>
+
+<script>
+  interface MobileMenuElements {
+    readonly bar: HTMLElement;
+    readonly links: ReadonlyArray<HTMLAnchorElement>;
+    readonly panel: HTMLDivElement;
+    readonly root: HTMLElement;
+    readonly trigger: HTMLButtonElement;
+  }
+
+  const mobileMenuRootSelector = "[data-mobile-menu-root]";
+
+  const getMobileMenuElements = (root: HTMLElement): MobileMenuElements | null => {
+    const barNode = root.querySelector("[data-mobile-menu-bar]");
+    const triggerNode = root.querySelector("[data-mobile-menu-trigger]");
+    const panelNode = root.querySelector("[data-mobile-menu-panel]");
+    const linkNodes = Array.from(root.querySelectorAll("[data-mobile-menu-link]"));
+
+    if (!(barNode instanceof HTMLElement)) {
+      return null;
+    }
+
+    if (!(triggerNode instanceof HTMLButtonElement)) {
+      return null;
+    }
+
+    if (!(panelNode instanceof HTMLDivElement)) {
+      return null;
+    }
+
+    const links = linkNodes.filter((linkNode): linkNode is HTMLAnchorElement => {
+      return linkNode instanceof HTMLAnchorElement;
+    });
+
+    if (links.length !== linkNodes.length) {
+      return null;
+    }
+
+    return {
+      bar: barNode,
+      links,
+      panel: panelNode,
+      root,
+      trigger: triggerNode,
+    };
+  };
+
+  const syncMobileMenuBarHeight = (elements: MobileMenuElements): void => {
+    elements.root.style.setProperty("--mobile-menu-bar-height", `${elements.bar.offsetHeight}px`);
+  };
+
+  const setMobileMenuOpen = (elements: MobileMenuElements, isOpen: boolean): void => {
+    syncMobileMenuBarHeight(elements);
+    elements.root.dataset.open = String(isOpen);
+    elements.trigger.setAttribute("aria-expanded", String(isOpen));
+    elements.panel.setAttribute("aria-hidden", String(!isOpen));
+    document.body.style.overflow = isOpen ? "hidden" : "";
+
+    elements.links.forEach((link) => {
+      link.tabIndex = isOpen ? 0 : -1;
+    });
+  };
+
+  const bindMobileMenu = (root: HTMLElement): void => {
+    if (root.dataset.mobileMenuBound === "true") {
+      return;
+    }
+
+    const elements = getMobileMenuElements(root);
+    if (!elements) {
+      return;
+    }
+
+    root.dataset.mobileMenuBound = "true";
+    setMobileMenuOpen(elements, false);
+
+    elements.trigger.addEventListener("click", () => {
+      const isOpen = elements.root.dataset.open === "true";
+      setMobileMenuOpen(elements, !isOpen);
+    });
+
+    elements.links.forEach((link) => {
+      link.addEventListener("click", () => {
+        setMobileMenuOpen(elements, false);
+      });
+    });
+
+    root.addEventListener("keydown", (event: KeyboardEvent) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      setMobileMenuOpen(elements, false);
+      elements.trigger.focus();
+    });
+
+    window.addEventListener("resize", () => {
+      syncMobileMenuBarHeight(elements);
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(elements, false);
+      }
+    });
+  };
+
+  const initMobileMenus = (): void => {
+    const menuRoots = document.querySelectorAll(mobileMenuRootSelector);
+    menuRoots.forEach((rootNode) => {
+      if (!(rootNode instanceof HTMLElement)) {
+        return;
+      }
+
+      bindMobileMenu(rootNode);
+    });
+  };
+
+  initMobileMenus();
+  document.addEventListener("astro:page-load", initMobileMenus);
+</script>

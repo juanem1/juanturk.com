@@ -1,22 +1,7 @@
 ---
 import { ChevronDown } from "@lucide/astro";
 
-interface ServiceMenuLink {
-  readonly href: string;
-  readonly text: string;
-}
-
 const serviceMenuId = "services-menu-panel";
-const serviceMenuLinks: ReadonlyArray<ServiceMenuLink> = [
-  {
-    href: "/services/strategic-technical-consulting/",
-    text: "Architectural consultancy",
-  },
-  {
-    href: "/services/ai-automation-consulting/",
-    text: "AI consultancy",
-  },
-];
 ---
 
 <div class="relative" data-service-menu-root data-open="false">
@@ -49,19 +34,28 @@ const serviceMenuLinks: ReadonlyArray<ServiceMenuLink> = [
       aria-label="Services"
       hidden
     >
-      {serviceMenuLinks.map((link) => (
-        <a
-          href={link.href}
-          role="menuitem"
-          tabindex="-1"
-          class="block rounded-lg border border-transparent p-3.5 text-zinc-400 transition-colors hover:bg-white/8 hover:text-white focus-visible:bg-white/8 focus-visible:text-white focus-visible:outline-none"
-          data-service-menu-link
-        >
-          <span class="block leading-6 text-inherit">
-            {link.text}
-          </span>
-        </a>
-      ))}
+      <a
+        href="/services/strategic-technical-consulting/"
+        role="menuitem"
+        tabindex="-1"
+        class="block rounded-lg border border-transparent p-3.5 text-zinc-400 transition-colors hover:bg-white/8 hover:text-white focus-visible:bg-white/8 focus-visible:text-white focus-visible:outline-none"
+        data-service-menu-link
+      >
+        <span class="block leading-6 text-inherit">
+          Architectural consultancy
+        </span>
+      </a>
+      <a
+        href="/services/ai-automation-consulting/"
+        role="menuitem"
+        tabindex="-1"
+        class="block rounded-lg border border-transparent p-3.5 text-zinc-400 transition-colors hover:bg-white/8 hover:text-white focus-visible:bg-white/8 focus-visible:text-white focus-visible:outline-none"
+        data-service-menu-link
+      >
+        <span class="block leading-6 text-inherit">
+          AI consultancy
+        </span>
+      </a>
     </div>
   </div>
 </div>
