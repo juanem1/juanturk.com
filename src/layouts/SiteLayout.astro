@@ -168,20 +168,18 @@ const {
       }
 
       const dotContext: CanvasRenderingContext2D = ctx;
+      const desktopPointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+      const prefersReducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
       const spacing = 15;
       const dotRadius = 1.2;
       const cursorRadius = 160;
       const bulge = 15;
       const glowRadius = 300;
+      const shouldAnimate = desktopPointerQuery.matches && !prefersReducedMotionQuery.matches;
 
       let mouseX = -9999;
       let mouseY = -9999;
       let animationFrameId = 0;
-
-      const onResize = (): void => {
-        dotCanvas.width = window.innerWidth;
-        dotCanvas.height = window.innerHeight;
-      };
 
       const onMouseMove = (event: MouseEvent): void => {
         mouseX = event.clientX;
@@ -196,7 +194,7 @@ const {
       function drawFrame(canvasElement: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
         context.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
-        if (mouseX > -9000) {
+        if (shouldAnimate && mouseX > -9000) {
           const glow = context.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, glowRadius);
           glow.addColorStop(0, "rgba(253,186,116,0.06)");
           glow.addColorStop(0.45, "rgba(253,186,116,0.025)");
@@ -217,7 +215,7 @@ const {
             const deltaY = y - mouseY;
             const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            if (distance < cursorRadius && distance > 0) {
+            if (shouldAnimate && distance < cursorRadius && distance > 0) {
               const force = (1 - distance / cursorRadius) * bulge;
               x += (deltaX / distance) * force;
               y += (deltaY / distance) * force;
@@ -239,16 +237,29 @@ const {
         animationFrameId = window.requestAnimationFrame(loop);
       }
 
+      const onResize = (): void => {
+        dotCanvas.width = window.innerWidth;
+        dotCanvas.height = window.innerHeight;
+
+        if (!shouldAnimate) {
+          drawFrame(dotCanvas, dotContext);
+        }
+      };
+
+      const onDesktopPointerChange = (): void => {
+        initDotField();
+      };
+
       onResize();
       window.addEventListener("resize", onResize);
+      desktopPointerQuery.addEventListener("change", onDesktopPointerChange);
 
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (prefersReducedMotion) {
-        drawFrame(dotCanvas, dotContext);
-      } else {
+      if (shouldAnimate) {
         window.addEventListener("mousemove", onMouseMove);
         window.addEventListener("mouseleave", onMouseLeave);
         loop();
+      } else {
+        drawFrame(dotCanvas, dotContext);
       }
 
       cleanup = (): void => {
@@ -256,6 +267,7 @@ const {
         window.removeEventListener("resize", onResize);
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("mouseleave", onMouseLeave);
+        desktopPointerQuery.removeEventListener("change", onDesktopPointerChange);
       };
     }
 
