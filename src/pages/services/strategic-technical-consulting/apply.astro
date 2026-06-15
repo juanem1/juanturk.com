@@ -12,8 +12,14 @@ const title = "Apply for Strategic Technical Review";
 const description =
   "Submit your application for a Strategic Technical Review and share the decision, business stakes, and technical context behind it.";
 const sourcePath = "/services/strategic-technical-consulting/apply";
-const webhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
+const iaWebhookUrl = import.meta.env.PUBLIC_WORKER_URL;
 const skipSubmitForTesting = import.meta.env.PUBLIC_SKIP_SUBMIT_FOR_TESTING;
+
+if (typeof iaWebhookUrl !== "string" || iaWebhookUrl.length === 0) {
+  throw new Error("Missing PUBLIC_WORKER_URL for Strategic technical review apply form.");
+}
+
+const webhookUrl = new URL("/architectural-consulting", iaWebhookUrl).toString();
 
 const roleOptions: readonly ChoiceOption[] = [
   { label: "Founder / CEO", value: "Founder / CEO" },
@@ -203,7 +209,7 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
             </div>
 
             <div class="review-field-group">
-              <label class="review-field" for="primaryTechnicalBottleneck">
+              <label class="review-field" for="primaryBottleneck">
                 <span class="review-label">
                   What is the primary technical bottleneck you need to solve? <span class="review-required">*</span>
                 </span>
@@ -213,8 +219,8 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
                 </span>
                 <textarea
                   class="review-input review-textarea"
-                  id="primaryTechnicalBottleneck"
-                  name="primaryTechnicalBottleneck"
+                  id="primaryBottleneck"
+                  name="primaryBottleneck"
                   placeholder="Provide a brief summary of the symptoms and what you've tried so far to fix it"
                   required
                   rows="5"
@@ -253,15 +259,15 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
                 />
               </label>
 
-              <label class="review-field" for="specificDeadlinesOrConstraints">
+              <label class="review-field" for="constraints">
                 <span class="review-label">Specific deadlines or constraints</span>
                 <span class="review-step-copy review-compact-copy">
                   Please note I work asynchronously on a specific schedule.
                 </span>
                 <textarea
                   class="review-input review-textarea"
-                  id="specificDeadlinesOrConstraints"
-                  name="specificDeadlinesOrConstraints"
+                  id="constraints"
+                  name="constraints"
                   placeholder="I work asynchronously. If you have a critical emergency today, I might not be the right fit."
                   rows="4"
                 />
@@ -373,9 +379,9 @@ const implementationCapacityOptions: readonly ChoiceOption[] = [
       fullName: readString(formData, "fullName"),
       implementationCapacity: readString(formData, "implementationCapacity"),
       linkedinProfile: readString(formData, "linkedinProfile"),
-      primaryTechnicalBottleneck: readString(formData, "primaryTechnicalBottleneck"),
+      primaryBottleneck: readString(formData, "primaryBottleneck"),
       role: readString(formData, "role"),
-      specificDeadlinesOrConstraints: readString(formData, "specificDeadlinesOrConstraints"),
+      constraints: readString(formData, "constraints"),
       submittedAt: new Date().toISOString(),
       workEmail: readString(formData, "workEmail"),
     };

@@ -12,11 +12,11 @@ const title = "Apply for AI & Automation Consulting";
 const description =
   "Submit your application for an AI & Automation operational diagnosis and share the bottleneck, task volume, systems, and business impact behind it.";
 const sourcePath = "/services/ai-automation-consulting/apply";
-const strategicReviewWebhookUrl = import.meta.env.PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL;
+const strategicReviewWebhookUrl = import.meta.env.PUBLIC_WORKER_URL;
 const skipSubmitForTesting = import.meta.env.PUBLIC_SKIP_SUBMIT_FOR_TESTING;
 
 if (typeof strategicReviewWebhookUrl !== "string" || strategicReviewWebhookUrl.length === 0) {
-  throw new Error("Missing PUBLIC_STRATEGIC_REVIEW_WEBHOOK_URL for AI automation apply form.");
+  throw new Error("Missing PUBLIC_WORKER_URL for AI automation apply form.");
 }
 
 const webhookUrl = new URL("/ia-consulting", strategicReviewWebhookUrl).toString();
@@ -196,15 +196,15 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
                 </select>
               </label>
 
-              <label class="review-field" for="internalTechCapacity">
+              <label class="review-field" for="implementationCapacity">
                 <span class="review-label">Internal tech capacity <span class="review-required">*</span></span>
                 <span class="review-step-copy review-compact-copy">
                   Do you have internal technical talent to build and maintain automations today?
                 </span>
                 <select
                   class="review-input review-select"
-                  id="internalTechCapacity"
-                  name="internalTechCapacity"
+                  id="implementationCapacity"
+                  name="implementationCapacity"
                   required
                 >
                   <option value="">Select your internal tech capacity</option>
@@ -233,7 +233,7 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
             </div>
 
             <div class="review-field-group">
-              <label class="review-field" for="primaryOperationalBottleneck">
+              <label class="review-field" for="primaryBottleneck">
                 <span class="review-label">
                   What is the primary operational bottleneck you need to solve? <span class="review-required">*</span>
                 </span>
@@ -243,8 +243,8 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
                 </span>
                 <textarea
                   class="review-input review-textarea"
-                  id="primaryOperationalBottleneck"
-                  name="primaryOperationalBottleneck"
+                  id="primaryBottleneck"
+                  name="primaryBottleneck"
                   placeholder="Describe the process, who runs it, and where the friction is"
                   required
                   rows="5"
@@ -267,15 +267,15 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
                 />
               </label>
 
-              <label class="review-field" for="currentSystemsAndTools">
+              <label class="review-field" for="currentTechStack">
                 <span class="review-label">Current systems & tools <span class="review-required">*</span></span>
                 <span class="review-step-copy review-compact-copy">
                   List the core software and systems involved in this process so I can map the integration.
                 </span>
                 <textarea
                   class="review-input review-textarea"
-                  id="currentSystemsAndTools"
-                  name="currentSystemsAndTools"
+                  id="currentTechStack"
+                  name="currentTechStack"
                   placeholder="ERP, CRM, spreadsheets, email, internal databases, etc."
                   required
                   rows="4"
@@ -298,15 +298,15 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
                 />
               </label>
 
-              <label class="review-field" for="timelineOrConstraints">
+              <label class="review-field" for="constraints">
                 <span class="review-label">Timeline or constraints</span>
                 <span class="review-step-copy review-compact-copy">
                   Any deadlines, compliance requirements, or constraints I should be aware of.
                 </span>
                 <textarea
                   class="review-input review-textarea"
-                  id="timelineOrConstraints"
-                  name="timelineOrConstraints"
+                  id="constraints"
+                  name="constraints"
                   placeholder="e.g. We need this addressed before our Q4 peak season, data cannot leave the EU"
                   rows="4"
                 />
@@ -413,17 +413,17 @@ const internalTechCapacityOptions: readonly ChoiceOption[] = [
     return {
       companySize: readString(formData, "companySize"),
       companyWebsite: readString(formData, "companyWebsite"),
-      currentSystemsAndTools: readString(formData, "currentSystemsAndTools"),
+      currentTechStack: readString(formData, "currentTechStack"),
       estimatedBusinessImpact: readString(formData, "estimatedBusinessImpact"),
       fullName: readString(formData, "fullName"),
       industry: readString(formData, "industry"),
-      internalTechCapacity: readString(formData, "internalTechCapacity"),
+      implementationCapacity: readString(formData, "implementationCapacity"),
       linkedinProfile: readString(formData, "linkedinProfile"),
-      primaryOperationalBottleneck: readString(formData, "primaryOperationalBottleneck"),
+      primaryBottleneck: readString(formData, "primaryBottleneck"),
       repetitiveTaskVolume: readString(formData, "repetitiveTaskVolume"),
       role: readString(formData, "role"),
       submittedAt: new Date().toISOString(),
-      timelineOrConstraints: readString(formData, "timelineOrConstraints"),
+      constraints: readString(formData, "constraints"),
       workEmail: readString(formData, "workEmail"),
     };
   };
