@@ -1,0 +1,30 @@
+# Juan Turk
+
+> Personal website of Juan Turk, a software engineer writing about AI, software engineering, remote work, and the operational realities behind technology. The site also describes an AI and automation consulting service for operational teams.
+
+Use the blog articles for Juan's published viewpoints and practical technical guidance. The consulting pages describe a separate professional service and its application flow. URLs below are canonical public pages; articles are rendered from the site's MDX content and do not currently have separate Markdown endpoints.
+
+## Site and services
+
+- [Home](https://juanturk.com/): Overview of Juan Turk, recent writing, and links to the blog and services.
+- [Services](https://juanturk.com/services/): Available consulting services and their intended audiences.
+- [AI & Automation Consulting](https://juanturk.com/services/ai-automation-consulting/): An operational diagnosis and implementation blueprint for reducing manual work with reliable AI workflows.
+- [Consulting application](https://juanturk.com/services/ai-automation-consulting/apply/): Application flow for the AI and automation consulting service.
+
+## Blog
+
+- [AI Won't Take Your Job. But a Developer Using It Will.](https://juanturk.com/blog/ai-wont-take-your-job/): A perspective on the real impact of AI tools on day-to-day engineering work and the continuing value of human judgment.
+- [The End of Manual Review: Why Frontier Models are Shattering Our Security Metrics](https://juanturk.com/blog/frontier-models-shattering-security/): Why adversarial code analysis by frontier models changes the limits of manual security review.
+- [Ditching Grammarly: How to Run a Privacy-First Spellchecker Locally](https://juanturk.com/blog/how-to-run-a-privacy-first-spellchecker-locally/): A practical guide to running LanguageTool locally on macOS.
+- [How We Built an AI-Powered Vulnerability Fixer](https://juanturk.com/blog/how-we-built-an-ai-powered-vulnerability-fixer/): An account of automating vulnerability remediation across repositories with constrained AI patches.
+- [Buying AI is easy. Making it pay the bills is another story.](https://juanturk.com/blog/making-ai-pay-the-bills/): Why operational redesign, rather than buying more AI tools, determines whether AI investment pays off.
+- [Scrum: When "Agile" Became Our Biggest Bureaucracy](https://juanturk.com/blog/scrum-when-agile-became-our-biggest-bureaucracy/): A view from engineering teams on how Scrum can drift from agility into process overhead.
+- [Surviving the Remote Grind: 4 Unspoken Rules for Asynchronous Work](https://juanturk.com/blog/surviving-the-remote-grind/): Practical rules for async communication, focus, and sustainable remote work.
+- [The Battle for AI Dominance: The Resurgence of OpenAI and a Stumbling Anthropic](https://juanturk.com/blog/the-battle-for-ai-dominance-openai-and-anthropic/): An industry opinion piece about computation, delivery, and operations in AI competition.
+- [The end of all-you-can-eat buffet: Why AI is becoming a luxury](https://juanturk.com/blog/the-end-unlimited-ai/): An analysis of inference costs, subscription limits, and the end of broadly unlimited AI access.
+- [What Communicating at GitHub Actually Feels Like](https://juanturk.com/blog/what-communicating-at-github-actually-feels-like/): A firsthand view of text-first, hyper-async communication practices at GitHub.
+- [Your Pull Requests Are Documentation (You Just Don't Know It Yet)](https://juanturk.com/blog/your-pull-requests-are-documentation/): Why well-written pull requests preserve engineering context and make future maintenance easier.
+
+## Optional
+
+- [Blog archive](https://juanturk.com/blog/archive/): Chronological index of all published articles.
