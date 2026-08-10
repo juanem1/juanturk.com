@@ -30,7 +30,9 @@ Every issue managed by this workflow must have exactly one `agent:` state label.
 
 The scheduled agent must evaluate open issues by their `agent:` state.
 
-- For `agent:ready`, start work only after changing the label to `agent:in-progress`.
+- Before starting work on any issue, check whether it has an associated open pull request. An open pull request always takes precedence over the issue label.
+- If an issue has an associated open pull request, do not start a new task, create a specification, or open another pull request for it. If the issue is not labeled `agent:pr-open`, report the label mismatch for maintainer resolution.
+- For `agent:ready` without an associated open pull request, start work only after changing the label to `agent:in-progress`.
 - For `agent:in-progress`, do not start a second task for the same issue.
 - For `agent:pr-open`, do not start implementation work. Report the linked pull request when relevant.
 - For `agent:needs-context` and `agent:blocked`, do not start work. Report the issue only when a maintainer needs to act.
