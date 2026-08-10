@@ -10,11 +10,11 @@ Every issue managed by this workflow must have exactly one `agent:` state label.
 
 | Label | Meaning |
 | --- | --- |
-| `agent:ready` | The issue has enough context and is ready for an agent to start work. |
+| `agent:ready` | The issue has enough context and is ready for an agent to start work. Follow [Agent Ready Execution](agent-ready-execution.md). |
 | `agent:in-progress` | An agent is actively working on the issue. |
-| `agent:pr-open` | The issue has an associated open pull request. |
-| `agent:needs-context` | The agent needs an answer or more context before it can continue. |
-| `agent:blocked` | The issue cannot move forward because of an external dependency or decision. |
+| `agent:pr-open` | The issue has an associated open pull request. Follow [Agent Pull Request Open](agent-pr-open.md). |
+| `agent:needs-context` | The agent needs an answer or more context before it can continue. Follow [Agent Needs Context](agent-needs-context.md). |
+| `agent:blocked` | The issue cannot move forward because of an external dependency or decision. Follow [Agent Blocked](agent-blocked.md). |
 
 ## State Transitions
 
