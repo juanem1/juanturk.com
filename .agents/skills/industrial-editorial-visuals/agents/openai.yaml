@@ -1,0 +1,4 @@
+interface:
+  display_name: "Industrial Editorial Visuals"
+  short_description: "Create dark industrial editorial hero visuals"
+  default_prompt: "Use $industrial-editorial-visuals to create a hero image for this post concept."
