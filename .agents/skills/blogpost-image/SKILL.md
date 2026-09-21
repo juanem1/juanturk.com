@@ -1,9 +1,9 @@
 ---
-name: industrial-editorial-visuals
+name: blogpost-image
 description: "Create dark industrial editorial illustrations for technical or AI posts when a symbolic hero image is needed, not branded product art or diagrams."
 ---
 
-# Industrial Editorial Visuals
+# Blogpost Image
 
 Create a single, polished hero illustration that expresses the post's central tension as a physical industrial system. This visual language is suited to technical, AI, security, engineering-culture, and business-operations posts whose imagery should feel serious and authored rather than stock-like.
 
