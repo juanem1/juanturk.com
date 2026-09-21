@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write New Blogpost"
+  short_description: "Draft posts in the blog’s real engineering voice"
+  default_prompt: "Use $write-new-blogpost to draft a new MDX post for juanturk.com from my supplied topic and evidence."
