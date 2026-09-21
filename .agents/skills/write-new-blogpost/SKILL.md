@@ -21,7 +21,9 @@ Do not invent an employer, incident, result, date, metric, team practice, or fir
 
 ## Ground the draft in this repository
 
-1. Read the active `AGENTS.md` and `src/content.config.ts` before writing.
+Treat this skill and its house-style reference as the editorial source of truth for new blog posts.
+
+1. Read `src/content.config.ts` before writing.
 2. Inspect three relevant posts in `src/content/posts`: one close in topic, one close in format, and the most recent comparable post. Use them for voice and structure, never as evidence for a new claim.
 3. Read [references/house-style.md](references/house-style.md) for the corpus-derived patterns and choose the closest post shape.
 4. Recheck any current product, market, pricing, model, company, or industry claim against primary or otherwise authoritative sources. Put links beside the claims they support.

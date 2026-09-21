@@ -2,6 +2,19 @@
 
 This reference summarizes patterns observed across the posts in `src/content/posts`. Use it to make decisions, not as a phrase bank. The current post and the author's supplied material outrank any recurring pattern.
 
+## Editorial identity and scope
+
+This is a personal engineering blog, not a corporate content machine, neutral newsroom, SEO farm, or generic tutorial site. The author writes as a software engineer with experience across multiple companies. Authority should come from direct exposure, lived friction, practical judgment, or clearly attributed research.
+
+The core content pillars are:
+
+- AI and tooling, framed through constraints, trust, compute, delivery, operations, and real usage;
+- engineering culture and process, framed through incentives, communication, ownership, workflow, and failure modes;
+- industry opinion, tied to observable shifts, infrastructure, incentives, execution, or market behavior; and
+- practical technical guides, starting from real pain and ending in a useful, verifiable setup.
+
+Career and work-style posts should favor hard-earned heuristics over inspirational advice. Every post should leave the reader with a sharper model of operational reality, not merely information about a topic.
+
 ## Corpus profile
 
 - The published corpus is in English and uses American spelling and punctuation conventions.
@@ -40,6 +53,8 @@ Strong posts in the corpus tend to move through this chain:
 Use the chain as an argumentative test, not as five mandatory sections.
 
 Paragraphs are usually short and visually open. The best transitions name a real relationship: `because`, `but`, `when`, `if`, `so`, or an equally clear causal link. Avoid stacking polished observations that could be reordered without changing the piece.
+
+Most argument-driven posts need three to six distinct main sections. Use fewer or more when the substance requires it; section count is not a target by itself.
 
 ## Opening patterns
 
@@ -90,6 +105,8 @@ Titles in this blog usually use one of four forms:
 
 Prefer a concise title over a comprehensive one. The subtitle should not paraphrase it; it should add a consequence, constraint, or second layer of intrigue. The description should be calmer and suitable for previews. A `tldr` is a substantial compact paragraph that states the thesis and why it matters, not a slogan.
 
+Treat title and subtitle as a shareable pair: the title should earn attention through a real claim, tension, contrast, reveal, or practical promise, while the subtitle rewards that attention with context or consequence. Avoid clickbait that the body cannot support.
+
 ## Sentence and formatting habits
 
 - Favor concrete actors: engineers, teams, reviewers, models, systems, or companies.
@@ -97,15 +114,20 @@ Prefer a concise title over a comprehensive one. The subtitle should not paraphr
 - Use italics for a brief internal thought, quoted attitude, or subtle emphasis.
 - Use bullets when they improve retrieval or enumerate real steps, constraints, or examples.
 - Keep blockquotes rare and purposeful.
-- Avoid decorative emoji; the existing corpus uses them exceptionally, not as a house signature.
+- Avoid decorative emoji; prefer none and never use more than one in a lighter post.
 - Use contextual link text. Never write `click here`.
+- Attach internal links to a sentence that already carries the same idea instead of inserting them as unrelated promotion.
+- Keep reference sections editorial rather than academic. Use them only when several explicit sources materially support the post.
 
 ## Failure modes to remove
 
 - Corporate optimism, neutral newsroom voice, guru certainty, or generic productivity advice.
+- Condescending language, empty motivation, SEO framing, or generic tutorial-factory prose.
 - Claims of importance without a mechanism or consequence.
 - A made-up personal story added only to make the post feel authored.
 - Repeated `not X but Y` contrasts, three-item cadences, or one-line punchlines doing the work of missing reasoning.
+- Meta narration such as `Let's dive in`, `Without further ado`, `It's important to note`, or `In this blog post`.
+- Decorative overuse of em dashes or phrases copied from the corpus as a voice costume.
 - Sections with identical size and internal rhythm.
 - Over-explaining basic engineering ideas to an experienced reader.
 - A conclusion labeled only to repeat the thesis.
