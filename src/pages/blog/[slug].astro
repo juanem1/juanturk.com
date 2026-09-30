@@ -5,6 +5,7 @@ import PostMeta from "../../components/PostMeta.astro";
 import PostNavigation from "../../components/PostNavigation.astro";
 import PostTags from "../../components/PostTags.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
+import PostAudio from "../../components/PostAudio.astro";
 import PostTldr from "../../components/PostTldr.astro";
 import BlogLayout from "../../layouts/BlogLayout.astro";
 import { getAdjacentPosts } from "../../utils/getAdjacentPosts";
@@ -83,6 +84,7 @@ const ogImage = post.data.heroImage
       postTitle={post.data.title}
       postUrl={postUrl}
     />
+    <PostAudio slug={post.id} />
     <PostTags tags={post.data.tags} className="-mt-2 mb-8" />
 
     <div class="grid gap-12 pb-10 lg:grid-cols-[minmax(0,1fr)_16rem] lg:pb-14">
