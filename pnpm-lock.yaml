@@ -17,6 +17,9 @@ importers:
       '@lucide/astro':
         specifier: ^1.18.0
         version: 1.18.0(astro@6.4.6(@types/node@25.5.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.59.0))
+      '@openrouter/sdk':
+        specifier: ^1.3.11
+        version: 1.3.11
       '@tailwindcss/vite':
         specifier: ^4.3.1
         version: 4.3.1(vite@7.3.2(@types/node@25.5.0)(jiti@2.7.0)(lightningcss@1.32.0))
@@ -619,6 +622,9 @@ packages:
 
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
+
+  '@openrouter/sdk@1.3.11':
+    resolution: {integrity: sha512-6IM4kp/vSuA7a4Z62BzSSpFMinID4cfMjB+3VxRsaym5tURmNYKdZM/PWGimkZBigC1KdEjNvlaP1HOZ0EGYNA==}
 
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
@@ -2716,6 +2722,10 @@ snapshots:
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
+
+  '@openrouter/sdk@1.3.11':
+    dependencies:
+      zod: 4.3.6
 
   '@oslojs/encoding@1.1.0': {}
 
