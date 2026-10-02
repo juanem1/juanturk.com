@@ -1,0 +1,315 @@
+---
+import { Pause, Play } from "@lucide/astro";
+import { getPostAudioSrc } from "../utils/getPostAudioSrc";
+import { getPostAudioWaveform } from "../utils/getPostAudioWaveform";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const audioSrc = getPostAudioSrc(slug);
+// The waveform is only required when the post has audio.
+const waveformHeightPercents =
+  audioSrc === undefined ? [] : getPostAudioWaveform(slug).map((value) => Math.round(value * 100));
+---
+
+{
+  audioSrc && (
+    <div
+      data-post-audio-root
+      class="mb-8 flex items-center justify-center gap-4 rounded-md border border-white/10 bg-white/4 px-4 py-3 text-zinc-400"
+    >
+      <audio data-post-audio-element src={audioSrc} preload="metadata"></audio>
+      <span data-post-audio-time class="shrink-0 text-sm font-medium tabular-nums">0:00 / 0:00</span>
+      <div
+        data-post-audio-seek
+        role="slider"
+        tabindex="0"
+        aria-label="Seek audio"
+        aria-valuemin="0"
+        aria-valuemax="0"
+        aria-valuenow="0"
+        aria-valuetext="0:00 of 0:00"
+        class="post-audio-waveform relative h-10 min-w-0 flex-1 cursor-pointer touch-pan-y select-none rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300"
+      >
+        <div class="post-audio-bars" aria-hidden="true">
+          {waveformHeightPercents.map((heightPercent) => (
+            <span
+              class="post-audio-bar bg-zinc-400"
+              style={`height: ${heightPercent}%;`}
+            />
+          ))}
+        </div>
+        <div class="post-audio-bars post-audio-bars-played" aria-hidden="true">
+          {waveformHeightPercents.map((heightPercent) => (
+            <span
+              class="post-audio-bar bg-zinc-600"
+              style={`height: ${heightPercent}%;`}
+            />
+          ))}
+        </div>
+        <div class="post-audio-playhead pointer-events-none absolute inset-y-0 w-[3px] -translate-x-1/2 bg-orange-300 rounded-full" aria-hidden="true">
+          <span class="absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-300 ring-2 ring-zinc-800/85"></span>
+        </div>
+      </div>
+      <button
+        type="button"
+        data-post-audio-toggle
+        aria-label="Play audio version"
+        class="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/10 text-white transition hover:border-white/20 hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300"
+      >
+        <Play data-post-audio-play-icon class="h-4 w-4" />
+        <Pause data-post-audio-pause-icon class="hidden h-4 w-4" />
+      </button>
+    </div>
+  )
+}
+
+<style>
+  .post-audio-waveform {
+    --post-audio-progress: 0%;
+  }
+
+  .post-audio-bars {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* The played layer is a darker copy of the bars revealed up to the current progress. */
+  .post-audio-bars-played {
+    clip-path: inset(0 calc(100% - var(--post-audio-progress)) 0 0);
+  }
+
+  .post-audio-playhead {
+    left: var(--post-audio-progress);
+  }
+
+  .post-audio-bar {
+    width: 3px;
+    min-height: 4px;
+    border-radius: 9999px;
+  }
+
+  /* Keep one of every five bars on mobile and every other bar on tablets, preserving the full shape. */
+  @media (width < 40rem) {
+    .post-audio-bar:not(:nth-child(5n + 1)) {
+      display: none;
+    }
+  }
+
+  @media (40rem <= width < 64rem) {
+    .post-audio-bar:nth-child(even) {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  interface PostAudioElements {
+    readonly audio: HTMLAudioElement;
+    readonly pauseIcon: SVGElement;
+    readonly playIcon: SVGElement;
+    readonly root: HTMLElement;
+    readonly seek: HTMLDivElement;
+    readonly time: HTMLSpanElement;
+    readonly toggle: HTMLButtonElement;
+  }
+
+  interface ElementConstructor<T extends Element> {
+    new (): T;
+  }
+
+  const postAudioRootSelector = "[data-post-audio-root]";
+  const keyboardSeekStepSeconds = 5;
+
+  const getRequiredElement = <T extends Element>(
+    root: HTMLElement,
+    selector: string,
+    elementType: ElementConstructor<T>,
+  ): T => {
+    const element = root.querySelector(selector);
+
+    if (!(element instanceof elementType)) {
+      throw new Error(`Post audio player is missing required element: ${selector}`);
+    }
+
+    return element;
+  };
+
+  const getPostAudioElements = (root: HTMLElement): PostAudioElements => {
+    return {
+      audio: getRequiredElement(root, "[data-post-audio-element]", HTMLAudioElement),
+      pauseIcon: getRequiredElement(root, "[data-post-audio-pause-icon]", SVGElement),
+      playIcon: getRequiredElement(root, "[data-post-audio-play-icon]", SVGElement),
+      root,
+      seek: getRequiredElement(root, "[data-post-audio-seek]", HTMLDivElement),
+      time: getRequiredElement(root, "[data-post-audio-time]", HTMLSpanElement),
+      toggle: getRequiredElement(root, "[data-post-audio-toggle]", HTMLButtonElement),
+    };
+  };
+
+  const getDuration = (audio: HTMLAudioElement): number => {
+    return Number.isFinite(audio.duration) ? audio.duration : 0;
+  };
+
+  const clampTime = (time: number, duration: number): number => {
+    return Math.min(Math.max(time, 0), duration);
+  };
+
+  const formatTime = (totalSeconds: number): string => {
+    const wholeSeconds = Math.floor(totalSeconds);
+    const minutes = Math.floor(wholeSeconds / 60);
+    const seconds = wholeSeconds % 60;
+    return `${minutes}:${String(seconds).padStart(2, "0")}`;
+  };
+
+  /**
+   * Renders the given playback time in the waveform, the time label, and the slider ARIA state.
+   */
+  const renderProgress = (elements: PostAudioElements, time: number): void => {
+    const duration = getDuration(elements.audio);
+    const progressPercent = duration > 0 ? (time / duration) * 100 : 0;
+    const formattedTime = formatTime(time);
+    const formattedDuration = formatTime(duration);
+
+    elements.seek.style.setProperty("--post-audio-progress", `${progressPercent}%`);
+    elements.seek.setAttribute("aria-valuemax", String(Math.floor(duration)));
+    elements.seek.setAttribute("aria-valuenow", String(Math.floor(time)));
+    elements.seek.setAttribute("aria-valuetext", `${formattedTime} of ${formattedDuration}`);
+    elements.time.textContent = `${formattedTime} / ${formattedDuration}`;
+  };
+
+  const getTimeFromPointer = (elements: PostAudioElements, clientX: number): number => {
+    const rect = elements.seek.getBoundingClientRect();
+    const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+    return ratio * getDuration(elements.audio);
+  };
+
+  const seekTo = (elements: PostAudioElements, time: number): void => {
+    const clampedTime = clampTime(time, getDuration(elements.audio));
+    elements.audio.currentTime = clampedTime;
+    renderProgress(elements, clampedTime);
+  };
+
+  const syncPlayingState = (elements: PostAudioElements): void => {
+    const isPlaying = !elements.audio.paused;
+    elements.playIcon.classList.toggle("hidden", isPlaying);
+    elements.pauseIcon.classList.toggle("hidden", !isPlaying);
+    elements.toggle.setAttribute("aria-label", isPlaying ? "Pause audio version" : "Play audio version");
+  };
+
+  const getKeyboardSeekTime = (key: string, currentTime: number, duration: number): number | undefined => {
+    switch (key) {
+      case "ArrowRight":
+      case "ArrowUp":
+        return currentTime + keyboardSeekStepSeconds;
+      case "ArrowLeft":
+      case "ArrowDown":
+        return currentTime - keyboardSeekStepSeconds;
+      case "Home":
+        return 0;
+      case "End":
+        return duration;
+      default:
+        return undefined;
+    }
+  };
+
+  const bindPostAudio = (root: HTMLElement): void => {
+    if (root.dataset.postAudioBound === "true") {
+      return;
+    }
+
+    const elements = getPostAudioElements(root);
+    root.dataset.postAudioBound = "true";
+    // While dragging, only the waveform preview moves; the audio seeks once on release.
+    let isDragging = false;
+
+    elements.toggle.addEventListener("click", () => {
+      if (!elements.audio.paused) {
+        elements.audio.pause();
+        return;
+      }
+
+      elements.audio.play().catch((error: unknown) => {
+        throw new Error(`Post audio playback failed (src=${elements.audio.src})`, { cause: error });
+      });
+    });
+
+    elements.seek.addEventListener("pointerdown", (event: PointerEvent) => {
+      isDragging = true;
+      elements.seek.setPointerCapture(event.pointerId);
+      renderProgress(elements, getTimeFromPointer(elements, event.clientX));
+    });
+
+    elements.seek.addEventListener("pointermove", (event: PointerEvent) => {
+      if (!isDragging) {
+        return;
+      }
+
+      renderProgress(elements, getTimeFromPointer(elements, event.clientX));
+    });
+
+    elements.seek.addEventListener("pointerup", (event: PointerEvent) => {
+      if (!isDragging) {
+        return;
+      }
+
+      isDragging = false;
+      seekTo(elements, getTimeFromPointer(elements, event.clientX));
+    });
+
+    elements.seek.addEventListener("pointercancel", () => {
+      isDragging = false;
+      renderProgress(elements, elements.audio.currentTime);
+    });
+
+    elements.seek.addEventListener("keydown", (event: KeyboardEvent) => {
+      const time = getKeyboardSeekTime(event.key, elements.audio.currentTime, getDuration(elements.audio));
+
+      if (time === undefined) {
+        return;
+      }
+
+      event.preventDefault();
+      seekTo(elements, time);
+    });
+
+    elements.audio.addEventListener("loadedmetadata", () => renderProgress(elements, elements.audio.currentTime));
+    elements.audio.addEventListener("timeupdate", () => {
+      if (isDragging) {
+        return;
+      }
+
+      renderProgress(elements, elements.audio.currentTime);
+    });
+    elements.audio.addEventListener("play", () => syncPlayingState(elements));
+    elements.audio.addEventListener("pause", () => syncPlayingState(elements));
+    elements.audio.addEventListener("ended", () => syncPlayingState(elements));
+    elements.audio.addEventListener("error", () => {
+      throw new Error(
+        `Post audio failed to load (src=${elements.audio.src}, code=${elements.audio.error?.code ?? "unknown"})`,
+      );
+    });
+
+    renderProgress(elements, elements.audio.currentTime);
+  };
+
+  const initPostAudioPlayers = (): void => {
+    const roots = document.querySelectorAll(postAudioRootSelector);
+    roots.forEach((rootNode) => {
+      if (!(rootNode instanceof HTMLElement)) {
+        throw new Error(`Post audio root is not an HTMLElement: ${postAudioRootSelector}`);
+      }
+
+      bindPostAudio(rootNode);
+    });
+  };
+
+  initPostAudioPlayers();
+  document.addEventListener("astro:page-load", initPostAudioPlayers);
+</script>

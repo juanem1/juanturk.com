@@ -25,11 +25,9 @@
   }
 }
 
-@layer utilities {
-  .italic {
-    font-style: italic;
-    font-variation-settings: 'ital' 1;
-  }
+@utility italic {
+  font-style: italic;
+  font-variation-settings: 'ital' 1;
 }
 
 @layer components {
