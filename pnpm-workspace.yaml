@@ -2,3 +2,5 @@ allowBuilds:
   '@openrouter/sdk': false
   esbuild: true
   sharp: false
+patchedDependencies:
+  astro@7.3.5: patches/astro@7.3.5.patch
