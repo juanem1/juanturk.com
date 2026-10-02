@@ -17,7 +17,7 @@ In all my years working as a software engineer, I always thought that by properl
 
 This belief seemed reasonable for quite some time. It was us, humans, who wrote the code, designed the architecture, and verified that our implementation truly reflected our initial idea.
 
-But recently we started to see that frontier models are already capable of analyzing huge codebases and revealing logical gaps that have been alive for years inside some widely used software. For example, it is reported that Mozilla Firefox [1] found hundreds of vulnerabilities during its automated code analysis. A vulnerability in Linux [2] that is estimated to be present for almost 10 years, a vulnerability in OpenBSD [3] that was there for almost 27 years, projects as FFmpeg [4], and the list goes on and on.
+But recently we started to see that frontier models are already capable of analyzing huge codebases and revealing logical gaps that have been alive for years inside some widely used software. For example, it is reported that Mozilla Firefox <sup>[1]</sup> found hundreds of vulnerabilities during its automated code analysis. A vulnerability in Linux <sup>[2]</sup> that is estimated to be present for almost 10 years, a vulnerability in OpenBSD <sup>[3]</sup> that was there for almost 27 years, projects as FFmpeg <sup>[4]</sup>, and the list goes on and on.
 
 These were not some hobby projects, this is one of the most reviewed and used pieces of software out there.
 
@@ -27,7 +27,7 @@ Newest models already start to read code in a way that is not natural for a huma
 
 And this is the main thesis of the current post. The future of software security will be based not on reading every line manually, but rather on building systems clear enough for machines to attack, validate, and protect them continuously.
 
-## 1. Machines do not read code politely.
+## Machines do not read code politely.
 
 Let's face it, when a person is reviewing code, he is reading it with an intention.
 
@@ -38,23 +38,23 @@ The difference is quite obvious, but it has a lot of implications.
 
 Whereas a human reviewer may comprehend the idea of the feature, approve its implementation and overlook some strange edge case three layers deeper inside the code, a machine does not care whether the code looks good or not. It can go deep into combinations that would take ages for a human to check manually.
 
-This is why some logical gaps in the code survive inside highly reviewed and tested software. Not because noone cared, but because the current method of auditing had some limitations.
+This is why some logical gaps in the code survive inside highly reviewed and tested software. Not because no one cared, but because the current method of auditing had some limitations.
 
 I am not saying that people are bad engineers. I'm saying that software has become too complex, too interconnected, and too stateful for a person to validate everything manually.
 
-## 2. Zero-days are becoming easier to find.
+## Zero-days are becoming easier to find.
 
 A few years ago finding a vulnerability in a piece of software was an activity requiring some special skills and a lot of time and patience.
 
 It is still true for the most difficult bugs. However, the floor level is moving.
 
-Today's IA agents are capable of scanning huge repositories of code, reasoning about suspicious logic, generating test cases and suggesting patches much faster than any human team. This does not mean that all reports are correct. What it means is that the price of finding a vulnerability is falling dramatically.
+Today's AI agents are capable of scanning huge repositories of code, reasoning about suspicious logic, generating test cases and suggesting patches much faster than any human team. This does not mean that all reports are correct. What it means is that the price of finding a vulnerability is falling dramatically.
 
 This creates a whole new paradigm in security.
 
 If defenders can use AI to audit the code, attackers can use AI to discover it. It means that it does not matter anymore who has the most experienced developer anymore. What really matters is who runs more automated analysis faster against more targets.
 
-## 3. Support ticketing workflow is not enough anymore.
+## Support ticketing workflow is not enough anymore.
 
 Security work in companies today typically follows the standard support ticketing workflow.
 
@@ -64,7 +64,7 @@ This process was slow. Now it is getting ridiculous.
 
 While automated systems start to discover and exploit vulnerabilities in hours, a remediation cycle taking weeks or months is not a process. It is exposure.
 
-### What I'm doing right now?
+## What am I doing right now?
 
 Today, in my team, after a vulnerability has been discovered, we already use [automated systems](/blog/how-we-built-an-ai-powered-vulnerability-fixer) to analyze it, validate the impact, generate pull requests that are close to be merged.
 
@@ -72,7 +72,7 @@ Difference in speed is huge.
 
 What used to take weeks of coordination between several teams and releases, now takes hours. Manual processes are still required, but our focus shifted from checking every single step to monitoring, validating and defining the scope of automation itself.
 
-## 4. Old messy code becomes a security problem.
+## Old messy code becomes a security problem.
 
 This is the point that I believe will be underestimated by many teams.
 
@@ -86,7 +86,7 @@ There is no need to describe the security threat such an application poses to th
 
 The real question here was no longer whether to update package managers, but whether to refactor the whole application or rewrite it completely.
 
-## 5. Engineers move up one level.
+## Engineers move up one level.
 
 I do not think the future senior engineer will spend most of his day reviewing pull requests line by line. This work will still exist, but it will not be the core of his duties anymore.
 
@@ -96,7 +96,7 @@ Or in other words, the senior engineer becomes an architect.
 
 It may sound abstract, but in fact, it is very practical. Someone has to define what the agent is allowed to change without any approval. Which tests are mandatory. Which files are too sensitive to be modified automatically. How to cross-check the models. When a human engineer has to stop the whole process.
 
-## 6. Who audits the auditor?
+## Who audits the auditor?
 
 Obviously, there is one big drawback in all of this. AI models can hallucinate. They can miss some context. They can suggest a patch that seems correct but changes the behavior in a wrong way. They can also create a false sense of security which might be even worse than no automation.
 
@@ -110,7 +110,7 @@ The question is not which actor you should trust. The question is how to create 
 
 Including AI.
 
-## 7. The attacker also has AI.
+## The attacker also has AI.
 
 This transition is not happening in some laboratory. It is happening right now in production systems.
 
@@ -120,7 +120,7 @@ It does not mean that tomorrow every application becomes vulnerable. But it defi
 
 Security is moving away from occasional audits and towards continuous defense.
 
-## 8. What happens to Bug Bounty programs?
+## What happens to Bug Bounty programs?
 
 I do not think that bug bounty programs will be gone anytime soon, but there are [clear signs](https://daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/) that the model is starting to wear down.
 

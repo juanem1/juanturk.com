@@ -11,6 +11,8 @@ tldr: "Sending every keystroke to a third-party server is a massive security ris
 heroImage: ../../assets/images/spellchecker.png
 ---
 
+import Say from "../../components/Say.astro";
+
 One morning, I noticed my Grammarly extension had silently stopped working. It turns out, our security team had blocked it because it was reading a bit more than it should. 
 
 Honestly? It makes perfect sense. From a privacy and security standpoint, sending every single line of code, internal document, and private Slack message to a third-party tool is a nightmare.
@@ -21,7 +23,7 @@ Enter **LanguageTool**. It's a free, open-source tool that does exactly that. Yo
 
 Here is my straightforward guide to getting the local server up and running on macOS.
 
-### 1. Set up the local server
+## Set up the local server.
 First, we need to install the server, which is a Java application. In my experience, the cleanest way to do this on a Mac is to let Homebrew handle the heavy lifting. Run these commands in your terminal:
 
 ```bash
@@ -37,12 +39,12 @@ To verify that the service is actually running, fire this test command into your
 curl --data "language=en-US&text=a simple test" http://localhost:8081/v2/check
 ```
 
-### 2. Configure the browser extension
+## Configure the browser extension.
 Install the [LanguageTool browser extension](https://chromewebstore.google.com/detail/ai-grammar-checker-paraph/oldceeleldhonbafppcapldpdifcinji) from the Chrome Web Store.
 
 Once installed, open the extension's settings, navigate to "Advanced settings," and under the LanguageTool server section, select the Local server option. Boom. Your browser is now checking your grammar locally.
 
-### 3. LanguageTool in Slack, Mail, and VS Code
+## LanguageTool in Slack, Mail, and VS Code.
 LanguageTool also has a macOS-native frontend that provides system-wide support for desktop apps like Slack, Apple Mail, and Microsoft Word. To install it:
 
 ```bash
@@ -50,13 +52,13 @@ brew install --cask languagetool
 ```
 
 - Launch the app from your Applications folder.
-- Open the settings via the menubar icon (LT icon > Gear icon > Settings).
+- Open the settings via the menubar icon (LT icon <Say text="then">></Say> Gear icon <Say text="then">></Say> Settings).
 - Under the "Advanced" tab, set the "API Server URL" to Local server (if you skip this, it will default back to the public cloud server).
 - Under "Active apps," enable it for Slack or whichever apps you use daily.
 
 **What about VS Code?** Just install the LanguageTool extension from the marketplace. It automatically detects your local setup and just works.
 
-### 4. Supercharging it with N-grams (Advanced)
+## Supercharging it with N-grams (Advanced).
 As a bonus, you can download n-grams to drastically improve LanguageTool's ability to detect context-specific errors, like commonly confused words. It is a massive download, but if you have the disk space, it is absolutely worth it.
 
 - [Download the n-gram dataset](http://languagetool.org/download/ngram-data/) for your preferred language and unzip it. I recommend keeping it tidy in a local directory like `~/ngrams/en`.
@@ -64,8 +66,8 @@ As a bonus, you can download n-grams to drastically improve LanguageTool's abili
 - Add the following line, replacing YOUR_USERNAME with your actual Mac username: `languageModel=/Users/YOUR_USERNAME/ngrams`
 - Restart the service to apply the changes: `brew services restart languagetool`
 
-### 5. For the privacy paranoid
+## For the privacy paranoid.
 If you want absolute certainty that none of your keystrokes are leaking to the internet, you can edit your `/etc/hosts` file or use a network firewall (like Little Snitch) to explicitly block the public server (api.languagetool.org).
 
-### 6. Enjoy 🖋️
+## Enjoy!
 And that's it! You now have a powerful, privacy-respecting grammar checker running locally. You get to keep your spelling sharp without failing any corporate security audits.
