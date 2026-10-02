@@ -1,52 +1,17 @@
 ---
 import { Pause, Play } from "@lucide/astro";
 import { getPostAudioSrc } from "../utils/getPostAudioSrc";
+import { getPostAudioWaveform } from "../utils/getPostAudioWaveform";
 
 interface Props {
   slug: string;
 }
 
-interface WaveformBar {
-  readonly heightPercent: number;
-}
-
-// Desktop bar count; the <style> block thins the bars out on narrower screens.
-const waveformBarCount = 150;
-
-/**
- * Converts a string into a stable numeric seed.
- */
-function hashSeed(value: string): number {
-  let hash = 0;
-
-  for (const character of value) {
-    hash = (hash * 31 + character.charCodeAt(0)) | 0;
-  }
-
-  return hash;
-}
-
-/**
- * Builds deterministic decorative bars from a seed. The bars do not represent real audio peaks.
- * Height range follows the ElevenLabs UI waveform:
- * https://github.com/elevenlabs/ui/blob/main/apps/www/registry/elevenlabs-ui/ui/waveform.tsx
- */
-function createWaveformBars(seed: string, barCount: number): WaveformBar[] {
-  const numericSeed = hashSeed(seed);
-
-  return Array.from({ length: barCount }, (_, index) => {
-    const noise = Math.sin(numericSeed + index) * 10000;
-    const value = 0.2 + (noise - Math.floor(noise)) * 0.6;
-
-    return {
-      heightPercent: Math.round(value * 100),
-    };
-  });
-}
-
 const { slug } = Astro.props;
 const audioSrc = getPostAudioSrc(slug);
-const waveformBars = createWaveformBars(slug, waveformBarCount);
+// The waveform is only required when the post has audio.
+const waveformHeightPercents =
+  audioSrc === undefined ? [] : getPostAudioWaveform(slug).map((value) => Math.round(value * 100));
 ---
 
 {
@@ -69,23 +34,23 @@ const waveformBars = createWaveformBars(slug, waveformBarCount);
         class="post-audio-waveform relative h-10 min-w-0 flex-1 cursor-pointer touch-pan-y select-none rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300"
       >
         <div class="post-audio-bars" aria-hidden="true">
-          {waveformBars.map((bar) => (
+          {waveformHeightPercents.map((heightPercent) => (
             <span
               class="post-audio-bar bg-zinc-400"
-              style={`height: ${bar.heightPercent}%;`}
+              style={`height: ${heightPercent}%;`}
             />
           ))}
         </div>
         <div class="post-audio-bars post-audio-bars-played" aria-hidden="true">
-          {waveformBars.map((bar) => (
+          {waveformHeightPercents.map((heightPercent) => (
             <span
               class="post-audio-bar bg-zinc-600"
-              style={`height: ${bar.heightPercent}%;`}
+              style={`height: ${heightPercent}%;`}
             />
           ))}
         </div>
-        <div class="post-audio-playhead pointer-events-none absolute inset-y-0 w-0.5 -translate-x-1/2 bg-orange-300 rounded-full" aria-hidden="true">
-          <span class="absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-300 ring-2 ring-transparent"></span>
+        <div class="post-audio-playhead pointer-events-none absolute inset-y-0 w-[3px] -translate-x-1/2 bg-orange-300 rounded-full" aria-hidden="true">
+          <span class="absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-300 ring-2 ring-zinc-800/85"></span>
         </div>
       </div>
       <button
