@@ -1,0 +1,56 @@
+---
+date: 2026-10-07
+title: "AI Is Killing Open Source"
+subtitle: "When building your own app takes a weekend, nobody contributes to the projects that already exist."
+description: "How AI-assisted development is replacing open-source contributions with hundreds of near-identical single-person apps, and why searching and contributing first still matters."
+tags:
+  - AI
+  - GitHub
+  - Open Source
+tldr: "AI made building your own version of a tool cheaper than contributing to an existing project. The result is hundreds of near-identical micro-apps, many built by people who can't maintain them, while mature projects close their doors to a flood of undescribed AI pull requests. Before shipping another app, check whether a project already fits your needs and contribute to it responsibly. Your own version should be the last resort, not the first."
+heroImage: ../../assets/images/ai-is-killing-open-source.png
+---
+
+import Say from "../../components/Say.astro";
+
+Last week I tried to find a tool to fit the way I work with AI in the development process. I expected to find a couple of good projects with an active community: open issues, discussions of approaches, pull requests.
+
+I didn't find any of those. <Say text="[breath]" />
+
+What shocked me is how low the contribution level is. Not a couple of well-developed projects with many contributors, but dozens of single-person apps, solving the same problem in almost identical way.
+
+I've started to think that AI is silently killing open-source community. I understand, it is now easier to say "I'll just build my own thing" than to make a contribution to an existing project.
+
+## Building something became cheaper than making contributions
+
+Contributing to some project always has its cost. You have to read someone else's code, learn conventions, open issues, discuss the approach, get it reviewed and accept that it might be either rejected or refactored in some way.
+
+And, building something used to cost even more than that.
+
+AI changed the balance. With a decent prompt and a free weekend, you can get a working solution to your problem. No discussion, no review, nothing to wait for. For an individual, it's the logical solution. For a community, it's a slow leak.
+
+## Hundreds of apps with no differentiator
+
+The consequence is hundreds of micro-apps which differ little or nothing from each other. Same functionality, same slop frontend, same <Say text="readme file">README.md</Say>, and many times even same automatically generated texts. Very few of them have any differentiation and many were developed just because the developer needed <Say text="his or her">his/her</Say> own one.
+
+Moreover, most of these apps were built by people who have never programmed before. That matters, because if you can't read the code you shipped, you can't maintain it, review contributions, or fix it when it breaks. Many of these projects go stale as soon as their creator's itch is scratched, so instead of comparing three mature options, you end up digging through dozens of near-identical apps, guessing which one will still be maintained in six months.
+
+## Maintainers are overwhelmed
+
+In addition, many mature projects have stopped accepting <Say text="pull requests">PRs</Say> made with AI because of the enormous number of requests they were receiving, many without even a description. It makes sense. Reviewing a pull request takes time, and when a maintainer has to go through a massive diff with no explanation and no sign that the author even knows what they're doing, well, closing the door is the only viable path.
+
+That way, though, we have another challenge. The process of contribution becomes more difficult just when the process of building your own gets much easier. Both processes push the person in the same direction: *away from the open-source community*.
+
+## Contribute before you clone
+
+Building with AI is great and fun, and I'm not suggesting you stop. But before shipping another *slop* app, check whether a project that already fits your needs exists.
+
+If it does, use it. If you need a new feature, contribute: open an issue, describe the use case, and submit a patch the maintainers can actually review. Use AI if you like, but do it responsibly: write a clear description, understand the diff, and answer the review comments.
+
+**Your own custom version should be your last resort, not your first.**
+
+## One project or a thousand apps?
+
+If we all build our own versions of the same software, we'll end up with countless stale projects. That's bad for everyone: developers, mature projects that already exist, and above all, the users looking for a solution.
+
+What do you think? Do we keep contributing to open source, or does everyone build their own app?
