@@ -105,7 +105,7 @@ const formatDate = (date: Date) =>
               index > 0 ? "border-t border-white/10 pt-8 lg:border-t-0 lg:pt-4" : "",
             ]}
           >
-            <p class="text-sm text-zinc-500 transition-colors duration-300 group-hover:text-zinc-400">
+            <p class="text-sm text-zinc-400 transition-colors duration-300">
               <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
             </p>
             <h3 class="mt-4 text-xl font-[720] leading-tight tracking-[-0.04em] text-white transition-colors duration-300 group-hover:text-zinc-200 sm:text-2xl">
@@ -115,7 +115,7 @@ const formatDate = (date: Date) =>
               {post.description}
             </p>
             <div class="mt-auto pt-6">
-              <span class="inline-flex items-center gap-2 text-sm font-semibold text-orange-300 transition duration-300 group-hover:text-orange-200">
+              <span class="inline-flex items-center gap-2 text-sm font-semibold text-orange-300 transition duration-300">
                 Read post
                 <ArrowRight size={16} stroke-width={2.5} aria-hidden="true" />
               </span>

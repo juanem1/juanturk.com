@@ -83,7 +83,7 @@ const postsByYear = groupedPosts.map(([year, yearPosts]) => {
                 ]}
               >
                 <article class="grid items-start gap-1 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-2">
-                  <p class="text-zinc-500 transition-colors duration-300 group-hover:text-zinc-400">
+                  <p class="text-zinc-400 transition-colors duration-300 group-hover:text-zinc-300">
                     <time datetime={post.date.toISOString()}>
                       {post.date.toLocaleDateString("en-US", {
                         day: "numeric",
