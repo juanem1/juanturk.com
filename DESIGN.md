@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Ember Night
-description: Dark editorial system for juanturk.com, a personal site, blog, and consulting storefront for a software engineer writing about AI and automation.
+description: Dark editorial design system for a personal site, long-form blog, and services storefront. Framework-agnostic; every value is plain CSS.
 colors:
   primary: "#fdba74"
   primary-hover: "#fed7aa"
@@ -288,166 +288,180 @@ components:
     backgroundColor: "{colors.surface-high}"
 ---
 
-# juanturk.com Design System
+# Ember Night Design System
 
 ## Overview
 
-**Ember Night** is a dark, editorial interface for a senior engineer's personal site, blog, and AI consulting offer. It should feel like a calm, late-night engineering notebook: serious, authored, and confident, with no corporate polish or startup gloss. The audience is technical leaders, engineers, and operations-minded business owners who read long-form content and evaluate whether to hire the author.
+**Ember Night** is a dark, editorial interface for a senior engineer's personal site, blog, and consulting offer. It should feel like a calm, late-night engineering notebook: serious, authored, and confident, with no corporate polish or startup gloss. The audience is technical leaders, engineers, and operations-minded business owners who read long-form content and evaluate whether to hire the author.
 
 The look rests on three ideas:
 
 - **GitHub-dark foundation.** Backgrounds borrow the near-black blue-grays of GitHub's dark theme (`#0d1117` → `#22272e`), so the site feels native to developers.
-- **One warm signal.** A single soft orange (Ember, Tailwind `orange-300`) is the only chromatic color. It marks actions, links, tags, the active state, and the one emphasized word in a headline.
-- **Editorial contrast.** A refined serif (PP Editorial New) gives personal and service pages a magazine-like voice, while the variable sans (Mona Sans) carries the blog, UI, and all body copy.
+- **One warm signal.** A single soft orange (Ember, `#fdba74`) is the only chromatic color. It marks actions, links, tags, the active state, and the one emphasized word in a headline.
+- **Editorial contrast.** A refined serif (PP Editorial New) gives personal and service pages a magazine-like voice, while a variable sans (Mona Sans) carries the blog, UI, and all body copy.
 
 Generous negative space, tight negative tracking on headlines, and slow, eased motion keep the tone composed rather than flashy.
 
-The site has three page families, and each family has its own layout shell:
+The system defines two page families, and each family has its own layout shell:
 
-- **Personal** (`/`) and **Services** (`/services/**`) use `SiteLayout`: a transparent header over an animated backdrop of drifting ember "orbs" and a cursor-reactive dot grid. Display headings use PP Editorial New.
-- **Blog** (`/blog/**`) uses `BlogLayout`: a sticky, blurred header over a flat gradient, with no ambient animation, so reading stays the focus. Every heading uses Mona Sans.
+- **Showcase pages** (home, about, services, landing pages) use a transparent header over an animated backdrop of drifting ember "orbs" and a cursor-reactive dot grid. Display headings use PP Editorial New.
+- **Reading pages** (blog index, articles) use a sticky, blurred header over a flat gradient, with no ambient animation, so reading stays the focus. Every heading uses Mona Sans.
 
-Styling is Tailwind CSS v4 utilities in Astro components, plus shared component classes in `src/styles/global.css`. Token values here mirror the Tailwind palette and scale used in code.
+All values are plain CSS and do not depend on any framework. The front-matter tokens are normative; the prose explains how to apply them. Lengths use `rem` with a 16px root.
 
 ## Colors
 
 The palette is high-contrast neutrals on a deep blue-black canvas, plus one warm accent.
 
-- **Ember (#fdba74, `primary`):** The only accent. Use it for primary buttons, inline links, tags, the active table-of-contents marker, focus rings, required-field asterisks, progress indicators, and one highlighted word in a display headline (`<em class="text-orange-300">`). Ember is a light color, so text on Ember backgrounds is always `on-primary` (#09090b).
+- **Ember (#fdba74, `primary`):** The only accent. Use it for primary buttons, inline links, tags, the active table-of-contents marker, focus rings, required-field asterisks, progress indicators, and one highlighted word in a display headline. Ember is a light color, so text on Ember backgrounds is always `on-primary` (#09090b).
 - **Ember Glow (#fed7aa, `primary-hover`):** Hover state for Ember buttons and for service and feature titles that warm up on hover.
 - **Ember Mist (#ffedd5, `primary-soft`):** Text on selected choice chips.
-- **Canvas (#0d1117, `surface`):** The base page color and browser `theme-color`. The full page background is a vertical gradient `#1c2128 → #22272e → #0d1117` (blog) or `#0d1117 → #11151d → #0d1117` (personal/services).
+- **Canvas (#0d1117, `surface`):** The base page color and browser `theme-color`. The full page background is a vertical gradient: `#1c2128 → #22272e → #0d1117` on reading pages, `#0d1117 → #11151d → #0d1117` on showcase pages.
 - **Raised and elevated surfaces (#161b22, #1c2128, #22272e):** Gradient stops for the sticky header and page background. They are not used as solid card fills.
-- **Overlay (#14181d, `surface-overlay`):** The desktop Services dropdown, at 96% opacity with a backdrop blur.
-- **Code (#18181b / #09090b):** Inline code (zinc-900) and code blocks (zinc-950).
-- **Translucent white tints:** Most containers are not filled. They sit on the canvas and use white at low alpha: 4% for callouts, inputs, and the audio player (`bg-white/4`); 8–14% for hover fills (`bg-white/10`); and 10% for hairline borders and dividers (`border-white/10`). Stronger outlines (20–35%) are reserved for hover borders and outlined cards. In code, always implement these as white with alpha so they adapt to the gradient behind them. The `surface-tint`, `surface-tint-hover`, `outline`, `outline-strong`, and `outline-light` tokens store the opaque result of that alpha composited over Canvas (or over white for `outline-light`), so tools can check contrast.
+- **Overlay (#14181d, `surface-overlay`):** Dropdown panels, at 96% opacity (`#14181df5`) with a backdrop blur.
+- **Code (#18181b / #09090b):** Inline code and code blocks.
+- **Translucent white tints:** Most containers are not filled. They sit on the canvas and use white at low alpha (see the table below). Always implement these as white with alpha so they adapt to the gradient behind them. The `surface-tint`, `surface-tint-hover`, `outline`, `outline-strong`, and `outline-light` tokens store the opaque result of that alpha composited over Canvas (or over white for `outline-light`), so tools can check contrast.
 
-Text uses a strict white-to-zinc ladder. Pick the step by role, not by taste:
-
-| Role | Token | Tailwind |
+| Alpha | Hex | Use |
 | --- | --- | --- |
-| Headlines, titles, primary nav | `on-surface` #ffffff | `text-white` |
-| Emphasized words, nav links | `on-surface-strong` #f4f4f5 | `text-zinc-100` |
-| TL;DR, subtitles, form chips | `on-surface-emphasis` #e4e4e7 | `text-zinc-200` |
-| Post body, intros | `on-surface-body` #d4d4d8 | `text-zinc-300` |
-| Descriptions, secondary copy, meta, dates, captions | `on-surface-muted` #a1a1aa | `text-zinc-400` |
+| 4% | `#ffffff0a` | Resting fill for callouts, inputs, chips, and the audio player |
+| 6% | `#ffffff0f` | Ring around overlay panels |
+| 8% | `#ffffff14` | Input and chip borders, archive row separators |
+| 10% | `#ffffff1a` | Hairline dividers, media borders, hover fills |
+| 12% | `#ffffff1f` | Border of secondary buttons inside forms |
+| 14% | `#ffffff24` | Stronger hover fill |
+| 15% | `#ffffff26` | Header bottom rule, blockquote rule |
+| 16% | `#ffffff29` | Input hover border |
+| 20% | `#ffffff33` | Icon button hover border |
+| 25% | `#ffffff40` | Outlined card border |
+| 30% | `#ffffff4d` | Secondary button border |
+| 35% | `#ffffff59` | Secondary button hover border |
 
-`on-surface-muted` (zinc-400) is the lowest step allowed for text on dark surfaces. It keeps at least 5.9:1 contrast across the whole background gradient. `on-surface-subtle` (#71717a, zinc-500) falls to 3.1–3.9:1 on the dark gradient, so it is reserved for non-text details: the underline color of prose links (`decoration-zinc-500`) and icons on the light mobile sheet.
+Ember also appears with alpha: 10% (`#fdba741a`), 14% (`#fdba7424`), 20% (`#fdba7433`), 40% (`#fdba7466`), and 90% (`#fdba74e6`).
 
-**Light exception.** The mobile navigation sheet is the only light surface: white (`surface-light`) with zinc-700 links that darken to zinc-950 on hover, zinc-500 icons (4.8:1 on white), and `zinc-200/80` dividers. This is an intentional contrast moment and should not spread to other components.
+Text uses a strict white-to-gray ladder. Pick the step by role, not by taste:
+
+| Role | Token | Hex |
+| --- | --- | --- |
+| Headlines, titles, primary nav | `on-surface` | #ffffff |
+| Emphasized words, nav links | `on-surface-strong` | #f4f4f5 |
+| TL;DR, subtitles, form chips | `on-surface-emphasis` | #e4e4e7 |
+| Post body, intros | `on-surface-body` | #d4d4d8 |
+| Descriptions, secondary copy, meta, dates, captions | `on-surface-muted` | #a1a1aa |
+
+`on-surface-muted` (#a1a1aa) is the lowest step allowed for text on dark surfaces. It keeps at least 5.9:1 contrast across the whole background gradient. `on-surface-subtle` (#71717a) falls to 3.1–3.9:1 on the dark gradient, so it is reserved for non-text details: the underline color of prose links and icons on the light mobile sheet.
+
+**Light exception.** The mobile navigation sheet is the only light surface: white (`surface-light`) with #3f3f46 links that darken to #09090b on hover, #71717a icons (4.8:1 on white), and #e4e4e7 dividers at 80% (`#e4e4e7cc`). This is an intentional contrast moment and should not spread to other components.
 
 There is no error, success, or warning palette. Form validation relies on native browser behavior.
 
 ## Typography
 
-Two typefaces are self-hosted through Astro's font API:
+Self-host both typefaces and preload the ones each page uses.
 
-- **Mona Sans** (variable: weight 200–900, width 75–125%, optical size, italic), exposed as `--font-mona-sans` and mapped to Tailwind's `font-sans`. It is the default for everything. Stylistic sets `ss01`, `ss03`, and `ss05` and optical sizing are enabled globally on `<html>`. Italic uses `font-variation-settings: 'ital' 1` through the custom `italic` utility.
-- **PP Editorial New** (Regular 400, Bold 700, Bold Italic), exposed as `--font-editorial-new`. Apply it with `font-(family-name:--font-editorial-new)`. Pages that use it must preload it with `<Font cssVariable="--font-editorial-new" preload />`.
+- **Mona Sans** (variable: weight 200–900, width 75–125%, optical size, italic) is the default for everything. Stack: `"Mona Sans", ui-sans-serif, system-ui, sans-serif`. Enable `font-feature-settings: "ss01", "ss03", "ss05"` and `font-optical-sizing: auto` on the root element. Render italic with `font-variation-settings: "ital" 1`.
+- **PP Editorial New** (Regular 400, Bold 700, Bold Italic). Stack: `"PP Editorial New", ui-serif, Georgia, serif`. Preload it on every page that uses it.
 
-**Rule:** PP Editorial New is only for display and section headings on personal and services pages (home hero, "Who am I", service titles, landing-page section headings). The blog uses Mona Sans for every heading.
+**Rule:** PP Editorial New is only for display and section headings on showcase pages (home hero, about section, service titles, landing-page section headings). Reading pages use Mona Sans for every heading.
 
-Headline character comes from **heavy weights and tight negative tracking**. Mona Sans headings use non-standard variable weights (`font-[650]` through `font-[780]`) with tracking between `-0.03em` and `-0.055em`. Editorial headings use `tracking-tight`. Because Editorial New only ships 400 and 700, any weight above 600 renders as Bold.
+Headline character comes from **heavy weights and tight negative tracking**. Mona Sans headings use non-standard variable weights (650 through 780) with letter-spacing between `-0.03em` and `-0.055em`. Editorial headings use `-0.025em`. Because Editorial New only ships 400 and 700, any weight above 600 renders as Bold. Reuse an existing headline weight (650, 700, 720, 750, 760, 780) instead of adding a new one.
 
-Scale highlights:
+Scale highlights (display sizes use `line-height: 1`):
 
-- **Display:** Home hero `text-5xl → sm:text-6xl → lg:text-7xl`. Services hero up to `lg:text-8xl`. Blog index `text-5xl → sm:text-7xl`. Post title `text-4xl → lg:text-6xl`.
-- **Section headings:** `text-3xl → md:text-4xl → lg:text-6xl` (editorial) or `text-3xl → sm:text-4xl` (sans).
-- **Post content:** body `1.08rem / 2rem` in zinc-300; h2 `text-3xl` bold, `-0.04em`; h3 `text-2xl` 650, `-0.03em`; both `scroll-mt-28` so anchors clear the sticky header.
-- **Intros:** `text-lg / leading-8`, growing to `sm:text-[1.35rem] / sm:leading-9` on landing pages. Use `text-pretty` for intros.
-- **Eyebrows:** `text-sm font-semibold uppercase tracking-[0.18em]` in zinc-300, or Ember for the landing-page kicker.
-- **Tags:** `text-xs` (`0.68rem` compact) `font-medium uppercase tracking-tight`, always Ember.
-- **Emphasis in prose:** In marketing copy, key phrases are `<strong><em>` together in `font-bold text-zinc-100 italic`. In display headlines, one word or phrase is italicized and/or tinted Ember.
+- **Display:** Home hero 3rem, 3.75rem from 640px, 4.5rem from 1024px. Services hero up to 6rem from 1024px. Blog index 3rem, 4.5rem from 640px. Article title 2.25rem, 3.75rem from 1024px.
+- **Section headings:** 1.875rem, 2.25rem from 768px, 3.75rem from 1024px (editorial), or 1.875rem, 2.25rem from 640px (sans).
+- **Article content:** body `1.08rem / 2rem` in #d4d4d8. h2 is 1.875rem, weight 700, `-0.04em`. h3 is 1.5rem, weight 650, `-0.03em`. Both use `scroll-margin-top: 7rem` so anchors clear the sticky header.
+- **Intros:** `1.125rem / 2rem`, growing to `1.35rem / 2.25rem` from 640px on landing pages. Use `text-wrap: pretty`.
+- **Eyebrows:** `0.875rem / 1.25rem`, weight 600, uppercase, letter-spacing `0.18em`, in #d4d4d8, or Ember for the landing-page kicker.
+- **Tags:** `0.75rem / 1rem` (`0.68rem` when compact), weight 500, uppercase, letter-spacing `-0.025em`, always Ember.
+- **Emphasis in prose:** In marketing copy, key phrases are bold and italic together in #f4f4f5. In display headlines, one word or phrase is italicized and/or tinted Ember.
 
-Code uses the system monospace stack (`ui-monospace`, Tailwind default) at `text-sm`.
+Code uses the system monospace stack (`ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`) at `0.875rem / 1.25rem`.
 
 ## Layout
 
-- **Container:** `mx-auto w-full max-w-6xl` (72rem) with responsive gutters `px-5 sm:px-8 lg:px-10`. The header nav uses the same container, so the logo aligns with the content edge.
-- **Spacing scale:** Tailwind's 0.25rem base. Common steps are 0.5, 1, 1.5, 2.5, 3, and 5rem. Long-form prose uses a 1.5rem flow rhythm (`.post-content > * + * { mt-6 }`), with 3rem before h2s and 2.5rem before h3s.
-- **Hero spacing:** The home hero is pushed far down on desktop (`lg:mt-45 lg:mb-40`) to feel spacious. Services pages use `pt-18.25` to clear the transparent header.
+- **Breakpoints (min-width):** `sm` 640px, `md` 768px, `lg` 1024px, `xl` 1280px. 768px switches between the mobile menu and desktop nav. 1024px enables multi-column layouts and the table of contents. Below 768px, hide decorative imagery instead of shrinking it.
+- **Container:** centered, full width, `max-width: 72rem`, with horizontal padding of 1.25rem, 2rem from 640px, and 2.5rem from 1024px. The header nav uses the same container, so the logo aligns with the content edge.
+- **Spacing scale:** 0.25rem base. Common steps are 0.5, 1, 1.5, 2.5, 3, and 5rem. Long-form prose uses a 1.5rem flow rhythm between consecutive blocks, with 3rem before h2s and 2.5rem before h3s.
+- **Hero spacing:** The home hero sits far down on desktop (from 1024px: `margin-top: 11.25rem; margin-bottom: 10rem`) to feel spacious. Other showcase pages use `padding-top: 4.5625rem` to clear the transparent header.
 - **Grids:**
-  - Home hero: `lg:grid-cols-[minmax(0,1fr)_minmax(22rem,28rem)]` (copy + illustration).
-  - Recent posts: three columns separated by 3rem spacer columns that hold a 1px divider (`bg-white/10`, Ember on hover).
-  - Blog index: a lead post plus a stacked secondary list (`xl:grid-cols-2`). Secondary items use a 168px square thumbnail.
-  - Post page: content plus a sticky 16rem table of contents (`lg:grid-cols-[minmax(0,1fr)_16rem]`, `gap-12`, TOC `lg:sticky lg:top-28`).
-  - Services and feature lists: `sm:grid-cols-2` with `gap-x-12 lg:gap-x-16 gap-y-9`. Each item starts with a `border-t border-white/10 pt-7` rule.
-- **Breakpoints:** Tailwind defaults. `md` (768px) switches between the mobile menu and desktop nav. `lg` (1024px) enables multi-column layouts and the TOC. Mobile hides decorative imagery (`hidden md:block`) instead of shrinking it.
-- **Separation:** Prefer hairline rules (`border-white/10`) and whitespace over boxed cards. Sections are separated by space or by `Divider`, a centered 1px line with a pale-yellow radial glow.
+  - Home hero: from 1024px, `grid-template-columns: minmax(0, 1fr) minmax(22rem, 28rem)` (copy + illustration).
+  - Recent posts: three columns separated by 3rem spacer columns that hold a 1px divider (#ffffff1a, Ember on hover).
+  - Blog index: a lead post plus a stacked secondary list, two columns from 1280px. Secondary items use a 168px square thumbnail.
+  - Article: content plus a 16rem table of contents (from 1024px: `grid-template-columns: minmax(0, 1fr) 16rem; gap: 3rem`), with the table of contents `position: sticky; top: 7rem`.
+  - Services and feature lists: two columns from 640px, column gap 3rem (4rem from 1024px), row gap 2.25rem. Each item starts with a `1px solid #ffffff1a` top border and `padding-top: 1.75rem`.
+- **Separation:** Prefer hairline rules (`1px solid #ffffff1a`) and whitespace over boxed cards. Separate sections with space or with a divider: a centered 1px line (max width 76.25rem, horizontal padding 5rem, vertical margin 3.75rem, 7.5rem from 1024px) filled with a radial gradient of pale yellow `#ffffab3d` fading to transparent at the edges.
 
 ## Elevation & Depth
 
 The design is mostly flat. Depth comes from **light, blur, and translucency**, not stacked shadows.
 
-- **Ambient backdrop (personal/services only):** Three large blurred radial "orbs" in Ember at 7–28% alpha drift slowly (28–36s loops) behind content. A canvas dot grid (15px spacing, 1.2px white dots at 5.5% alpha) sits on top. On fine-pointer devices, dots bulge away from the cursor and an Ember glow follows it. Content sits above both (`z-index: 2`).
-- **Sticky header (blog):** A translucent gradient (`#0d1117fa → #161b22f7 → #1c2128f2`) with `backdrop-blur-md` and a `border-white/15` bottom rule.
-- **Overlays:** The Services dropdown uses `surface-overlay` at 96%, `backdrop-blur-xl`, `ring-1 ring-white/6`, and a deep soft shadow (`0 32px 80px -40px rgba(0,0,0,0.95)`). The mobile sheet uses a dark ambient shadow on its light surface.
-- **Imagery depth:** The home illustration uses a large drop shadow (`0 30px 80px rgba(0,0,0,0.45)`), an Ember blur halo behind it, and a bottom fade mask. Post hero images get a dark gradient overlay (zinc-950, 18% → 96%) so the title stays legible.
-- **Hover glow:** `.interactive-chip` adds a faint white under-glow on hover (`0 18px 30px -24px rgba(255,255,255,0.55)`), on fine pointers only.
-- **Hover lift:** Cards and post links translate up `-translate-y-1` over 300ms instead of gaining a shadow.
+- **Ambient backdrop (showcase pages only):** Three large blurred radial "orbs" in Ember at 7–28% alpha drift slowly (28–36s loops) behind content. A canvas dot grid (15px spacing, 1.2px white dots at 5.5% alpha, `#ffffff0e`) sits on top. On fine-pointer devices, dots bulge away from the cursor and an Ember glow follows it. Content sits above both (`z-index: 2`).
+- **Sticky header (reading pages):** A translucent gradient (`#0d1117fa → #161b22f7 → #1c2128f2`) with `backdrop-filter: blur(12px)` and a `1px solid #ffffff26` bottom rule.
+- **Overlays:** Dropdown panels use `#14181df5`, `backdrop-filter: blur(24px)`, a 1px `#ffffff0f` ring, and a deep soft shadow (`0 32px 80px -40px #000000f2`). The mobile sheet uses a dark ambient shadow on its light surface.
+- **Imagery depth:** The home illustration uses a large drop shadow (`0 30px 80px #00000073`), an Ember blur halo behind it, and a bottom fade mask. Article hero images get a dark gradient overlay (`#09090b2e → #09090bf5`) so the title stays legible.
+- **Hover glow:** Interactive chips add a faint white under-glow on hover (`0 18px 30px -24px #ffffff8c`), on fine pointers only.
+- **Hover lift:** Cards and post links translate up 0.25rem (4px) over 300ms instead of gaining a shadow.
 
 ## Shapes
 
 Shape language is **pill actions, softly rounded media, square-edged text structures**.
 
-- **Pills (`rounded-full`):** Every button, nav chip, icon button, share button, choice chip, and avatar.
-- **Media and containers:** `rounded-xl` (0.75rem) for post hero frames, thumbnails, icon tiles, and the mobile sheet top. `rounded-2xl` (1rem) for the featured blog image and code blocks. `rounded-lg` (0.5rem) for inputs, post navigation cards, and dropdown panels. `rounded-md` for inline code and the audio player.
-- **Square edges:** Callouts (TL;DR, blockquotes), dividers, TOC items, and section rules stay sharp and are marked with a left or top border instead of a radius.
-- Media frames always pair the radius with `overflow-hidden` and a `border border-white/10` hairline.
+- **Pills (`rounded.full`, 9999px):** Every button, nav chip, icon button, share button, choice chip, and avatar.
+- **Media and containers:** `rounded.xl` (0.75rem) for article hero frames, thumbnails, icon tiles, and the mobile sheet top. `rounded.2xl` (1rem) for the featured blog image and code blocks. `rounded.lg` (0.5rem) for inputs, post navigation cards, and dropdown panels. `rounded.md` (0.375rem) for inline code and the audio player.
+- **Square edges:** Callouts (TL;DR, blockquotes), dividers, table-of-contents items, and section rules stay sharp and are marked with a left or top border instead of a radius.
+- Media frames always pair the radius with `overflow: hidden` and a `1px solid #ffffff1a` hairline.
 
 ## Components
 
-All interactive pieces follow a few shared rules: Ember fill for the single primary action, translucent white for everything secondary, `transition` with 200–300ms ease-out, and Ember focus rings.
+All interactive pieces follow a few shared rules: Ember fill for the single primary action, translucent white for everything secondary, transitions of 200–300ms with ease-out, and Ember focus rings.
 
-- **Primary button:** `rounded-full bg-orange-300 px-5 py-3 text-sm font-semibold text-zinc-950 hover:bg-orange-200` plus `interactive-chip`. Add a trailing Lucide `ArrowRight` (16px, stroke 2.5) with `cta-with-arrow` (nudges 4px right on hover) or `cta-with-rotate` (rotates 90°). Use full width on mobile and auto width from `md` up.
-- **Secondary button:** Pill, `border border-white/30 bg-white/10 text-white`, hover `border-white/35 bg-white/14` (for example, "View archive"). In forms: transparent background, `border-white/12`, zinc-200 text.
-- **Ghost nav chip:** Pill, transparent, `text-sm font-semibold text-zinc-100`, hover `bg-white/10 text-white`. Icon variant: 40×40 circle with a 20px icon in zinc-300.
-- **Share and audio icon buttons:** 36–40px circles, `border border-white/10`, zinc-400 icon, hover `border-white/20 text-white`.
-- **Inputs, selects, textareas:** `bg-white/4`, `border-white/8`, `rounded-lg`, min-height 2.75rem, white text, zinc-400 placeholder. Hover border `white/16`. Focus border Ember at 90% with a `0.2rem` Ember ring at 14% and no outline. Labels are white, `1.05rem`, weight 760, tracking `-0.03em`. Required marks are Ember.
-- **Choice chips (forms):** Pills, `bg-white/4 border-white/8`, zinc-200 text. Selected: Ember border, Ember 14% fill, `#ffedd5` text, Ember focus outline.
-- **Post card:** Unboxed. Date (zinc-400, `text-sm`, unchanged on hover), then title (`title-card`, white → zinc-200 on hover), description (zinc-400 → zinc-300), and an Ember "Read post →" link that keeps its color on hover. The whole card lifts 4px on hover.
-- **Archive row:** Date column in zinc-400 that brightens to zinc-300 on hover. Rows are separated by `border-white/8` and lift 4px on hover.
+- **Primary button:** Pill, background #fdba74, text #09090b, `0.875rem` weight 600, padding `0.75rem 1.25rem`, hover background #fed7aa, plus the hover glow. Add a trailing arrow icon (16px, stroke 2.5) that either nudges 4px right or rotates 90° on hover. Full width below 768px, auto width from 768px up.
+- **Secondary button:** Pill, `1px solid #ffffff4d` border, #ffffff1a fill, white text. Hover: border #ffffff59, fill #ffffff24. Inside forms: transparent fill, #ffffff1f border, #e4e4e7 text.
+- **Ghost nav chip:** Pill, transparent, `0.875rem` weight 600, #f4f4f5 text. Hover: #ffffff1a fill, white text. Icon variant: 40×40px circle with a 20px icon in #d4d4d8.
+- **Share and audio icon buttons:** 36–40px circles, `1px solid #ffffff1a` border, #a1a1aa icon. Hover: border #ffffff33, white icon.
+- **Inputs, selects, textareas:** #ffffff0a fill, `1px solid #ffffff14` border, 0.5rem radius, min height 2.75rem, white text, #a1a1aa placeholder. Hover border #ffffff29. Focus: border #fdba74e6, `box-shadow: 0 0 0 0.2rem #fdba7424`, no outline. Labels are white, 1.05rem, weight 760, letter-spacing `-0.03em`. Required marks are Ember.
+- **Choice chips (forms):** Pills, #ffffff0a fill, #ffffff14 border, #e4e4e7 text. Selected: Ember border, #fdba7424 fill, #ffedd5 text, Ember focus outline.
+- **Post card:** Unboxed. Date (#a1a1aa, 0.875rem, unchanged on hover), then title (`title-card`, white → #e4e4e7 on hover), description (#a1a1aa → #d4d4d8), and an Ember "Read post →" link that keeps its color on hover. The whole card lifts 4px on hover.
+- **Archive row:** Date column in #a1a1aa that brightens to #d4d4d8 on hover. Rows are separated by `1px solid #ffffff14` and lift 4px on hover.
 - **Tags:** Uppercase Ember text with no background, chip, or border.
-- **TL;DR callout:** `border-l-4 border-orange-300 bg-white/4 px-5 py-4`. "TL;DR" label in weight 650, body in zinc-200.
-- **Blockquote:** `border-l-4 border-white/15 pl-5` with italic zinc-400 text.
-- **Inline link (prose):** Ember, medium weight, underline on hover with an Ember decoration and `underline-offset-4`. External links get a trailing `↗` automatically.
-- **Table of contents:** `text-sm` zinc-400 links with a 2px transparent left border. The active item gets an Ember border, white text, and medium weight.
-- **Post meta bar:** Top and bottom hairlines, a 56px round avatar, author name in white, a dot-separated reading time and date in zinc-400, and share buttons aligned right.
-- **Post navigation:** Two outlined cards (`rounded-lg border-white/25`, hover `border-white`) with a zinc-400 "Previous/Next" eyebrow and a white title.
-- **Audio player:** A `rounded-md bg-white/4 border-white/10` bar with a waveform (zinc-400 unplayed, zinc-600 played), an Ember playhead, and a tabular-nums timestamp.
-- **Icon tile (feature lists):** 44px `rounded-xl` square, `bg-orange-300/10`, Ember icon, `ring-1 ring-inset ring-orange-300/20`. On hover the fill rises to 20% and the ring to 40%.
-- **Process timeline:** A 14px Ember dot with an `animate-ping` halo, connected by a 1px line fading from Ember to white/8.
-- **Header:** The logo "Juan Turk" is plain text, weight 650, tracking `-0.02em`. The desktop nav has Services (dropdown), Blog, GitHub, and LinkedIn. Below `md`, a hamburger opens the light sheet.
-- **Icons:** Lucide (`@lucide/astro`) for UI glyphs. Brand icons (GitHub, LinkedIn, X, Facebook) are local SVGs in `src/assets/icons`, rendered through `astro-icon`.
+- **TL;DR callout:** `4px solid #fdba74` left border, #ffffff0a fill, padding `1rem 1.25rem`. The "TL;DR" label uses weight 650; the body uses #e4e4e7.
+- **Blockquote:** `4px solid #ffffff26` left border, `padding-left: 1.25rem`, italic #a1a1aa text.
+- **Inline link (prose):** Ember, weight 500. On hover, underline with an Ember decoration and `text-underline-offset: 4px`. External links get a trailing `↗` automatically.
+- **Table of contents:** 0.875rem #a1a1aa links with a 2px transparent left border. The active item gets an Ember border, white text, and weight 500.
+- **Post meta bar:** Top and bottom hairlines, a 56px round avatar, author name in white, a dot-separated reading time and date in #a1a1aa, and share buttons aligned right.
+- **Post navigation:** Two outlined cards (0.5rem radius, `1px solid #ffffff40`, hover border white) with a #a1a1aa "Previous/Next" eyebrow and a white title.
+- **Audio player:** A bar with 0.375rem radius, #ffffff0a fill, and `1px solid #ffffff1a` border. It has a waveform (#a1a1aa unplayed, #52525b played), an Ember playhead, and a timestamp with `font-variant-numeric: tabular-nums`.
+- **Icon tile (feature lists):** 44px square, 0.75rem radius, #fdba741a fill, Ember icon, and an inset 1px #fdba7433 ring (`box-shadow: inset 0 0 0 1px`). On hover the fill rises to #fdba7433 and the ring to #fdba7466.
+- **Process timeline:** A 14px Ember dot with a pulsing halo (scale to 2× while fading to transparent, 1s loop), connected by a 1px line fading from Ember to #ffffff14.
+- **Header:** The logo is a plain-text wordmark, weight 650, letter-spacing `-0.02em`. The desktop nav holds a services dropdown, a blog link, and social profile links. Below 768px, a menu button opens the light sheet.
+- **Icons:** Outline UI glyphs in the Lucide style. Brand icons (GitHub, LinkedIn, X, Facebook) are single-color SVGs that inherit `currentColor`.
 
 ## Motion
 
-Motion is slow, eased, and always optional.
+Motion is slow, eased, and always optional. The shared easing curve is `cubic-bezier(0.22, 1, 0.36, 1)`.
 
-- **Page entrance:** `.motion-enter` fades and lifts elements 18px with a slight scale (0.985 → 1) over 720ms using `cubic-bezier(0.22, 1, 0.36, 1)`. Stagger with `--motion-step` (65ms per step after a 120ms base delay). Use `.motion-fade` to drop the translate.
-- **Hover:** 200–300ms color transitions, a 4px card lift, and arrow nudges at 280ms with the same easing curve.
-- **Page transitions:** Astro's `ClientRouter` with a fade on `<main>`. The header persists across navigations.
-- **Reduced motion:** Every animation, transition, orb drift, and cursor effect must be disabled under `prefers-reduced-motion: reduce`. Cursor-driven effects run only on `(hover: hover) and (pointer: fine)`.
+- **Page entrance:** Elements fade in, rise 18px, and scale slightly (0.985 → 1) over 720ms. Stagger them by 65ms per step after a 120ms base delay. A fade-only variant drops the translate.
+- **Hover:** 200–300ms color transitions, a 4px card lift, and arrow nudges at 280ms on the shared curve.
+- **Page transitions:** Cross-fade the main content region between navigations. The header persists.
+- **Reduced motion:** Disable every animation, transition, orb drift, and cursor effect under `prefers-reduced-motion: reduce`. Run cursor-driven effects only under `(hover: hover) and (pointer: fine)`.
 
 ## Imagery
 
-Blog hero images are dark industrial editorial illustrations: near-monochrome graphite and steel, with a single amber-gold or white energy path, and no text, logos, or people. Follow `.agents/skills/blogpost-image/SKILL.md` when creating them. The home page uses a transparent illustration (hands on a laptop) faded into the background. Images are served through Astro's `<Image>` as WebP with explicit `widths` and `sizes`.
+Blog hero images are dark industrial editorial illustrations: near-monochrome graphite and steel, with a single amber-gold or white energy path, and no text, logos, or people. The home page uses a transparent illustration (hands on a laptop) faded into the background. Serve images as WebP with explicit responsive widths and `sizes`.
 
 ## Do's and Don'ts
 
 - Do keep Ember as the only accent color. Use it for one primary action per view and for one emphasized word in a display headline.
-- Do pick text colors from the white-to-zinc ladder by role (headline, emphasis, body, muted) instead of inventing new grays.
-- Do separate content with hairlines (`border-white/10`) and whitespace before reaching for filled cards or shadows.
-- Do use `rounded-full` for every button and chip, and `rounded-lg`/`xl`/`2xl` only for inputs, cards, and media.
-- Do use PP Editorial New only for display and section headings on personal and services pages, and preload it on those pages.
+- Do pick text colors from the white-to-gray ladder by role (headline, emphasis, body, muted) instead of inventing new grays.
+- Do separate content with hairlines (`1px solid #ffffff1a`) and whitespace before reaching for filled cards or shadows.
+- Do use pills (9999px radius) for every button and chip, and 0.5–1rem radii only for inputs, cards, and media.
+- Do use PP Editorial New only for display and section headings on showcase pages, and preload it on those pages.
 - Do give every interactive element an Ember focus state and honor `prefers-reduced-motion`.
 - Do keep the mobile menu as the only light surface.
-- Don't use Editorial New anywhere in the blog, or for body text, buttons, or labels.
-- Don't put white or zinc text on Ember backgrounds. Text on Ember is always zinc-950.
-- Don't add new hues (blue, green, purple) for status or decoration. Only the zinc ladder and Ember exist.
-- Don't use heavy drop shadows on cards. Express hover with a lift, a color shift, or the faint `interactive-chip` glow.
-- Don't add the animated orb backdrop or dot grid to blog pages. They belong to `SiteLayout` only.
-- Don't use `text-zinc-500` or darker grays for text on dark surfaces. They fail WCAG AA (below 4.5:1). Use zinc-400 as the floor for dates, captions, and metadata.
-- **Known inconsistency:** On `/blog/`, tag wrappers apply `text-emerald-300/90` and `text-fuchsia-300`, but `PostTags` sets Ember on each `<li>`, so those classes have no effect. Tags render Ember. Remove the dead classes rather than reviving the extra hues.
-- **Known inconsistency:** Headline weights are arbitrary variable values (650, 720, 750, 760, 780) applied per page instead of a fixed set. Reuse the closest existing value for new headings instead of adding another.
-- **Known inconsistency:** Form styles in `apply.astro` use raw `rgb()` values in scoped CSS instead of Tailwind utilities. They match the tokens above, so keep them aligned if either side changes.
+- Don't use Editorial New on reading pages, or for body text, buttons, or labels.
+- Don't put white or gray text on Ember backgrounds. Text on Ember is always #09090b.
+- Don't add new hues (blue, green, purple) for status or decoration. Only the gray ladder and Ember exist.
+- Don't use heavy drop shadows on cards. Express hover with a lift, a color shift, or the faint chip glow.
+- Don't add the animated orb backdrop or dot grid to reading pages. They belong to showcase pages only.
+- Don't use #71717a or darker grays for text on dark surfaces. They fail WCAG AA (below 4.5:1). Use #a1a1aa as the floor for dates, captions, and metadata.
